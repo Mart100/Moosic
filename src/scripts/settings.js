@@ -16,14 +16,7 @@ $(() => {
 
   // import from spotify
   $('#importData-spotify-button').on('click', () => {
-    let scopes = {
-      "playlist-read-private": true,
-      "playlist-read-collaborative": true
-    }
-    let EUC = encodeURIComponent
-    let link = `https://accounts.spotify.com/authorize`
-    let spotifyAuthWindow = window.open(`${link}?response_type=code&client_id=${spotify_clientID}&scope=${EUC(scopes)}&redirect_uri=${EUC('./index.html')}`, 
-    'Spotify Authentication', 'frame=true')
+    spotifyLink()
 
   })
 
