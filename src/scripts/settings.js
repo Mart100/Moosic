@@ -74,15 +74,10 @@ $(() => {
     })
   })
 
-  $('#deleteData-button').on('click', () => {
+  $('#deleteData-button').on('click', async () => {
     let confirm = window.confirm('Are you sure you want to delete all your data?')
     if(!confirm) return
-    let database = {
-      "songs": {},
-      "collections": []
-    }
-
-    saveData(database)
+    await createEmptyDatabase()
 
     musicPlayer.stop()
 

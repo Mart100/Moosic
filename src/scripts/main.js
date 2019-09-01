@@ -13,7 +13,7 @@ const ipc = require('electron').ipcRenderer
 const musicPlayer = new MusicPlayer()
 
 // storage position
-let storagePos = './resources/app/src/storage'
+let storagePos = './storage'
 if(isDev()) storagePos = './src/storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
