@@ -6,6 +6,8 @@ const BrowserWindow = electron.BrowserWindow
 const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 
+const { autoUpdater } = require("electron-updater")
+
 try {
   require('electron-reload')(__dirname, {
     ignored: /node_modules|storage|[\/\\]\./
@@ -15,6 +17,8 @@ catch(e) {}
 
 
 app.on('ready', () => {
+
+  autoUpdater.checkForUpdatesAndNotify()
 
   // Create the browser window.
   let window = new BrowserWindow({

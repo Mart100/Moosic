@@ -6,6 +6,7 @@
   "author": "Mart van Enckevort",
   "license": "ISC",
   "dependencies": {
+    "electron-updater": "^4.1.2",
     "file-saver": "^2.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^8.1.0",
@@ -24,9 +25,15 @@
     "start": "npm install && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "publish": "electron-builder build -p always"
   },
   "build": {
-    "appId": "com.moosic.app"
+    "appId": "com.moosic.app",
+    "publish": [{
+      "provider": "github",
+      "owner": "Mart100",
+      "repo": "Moosic"
+    }]
   }
 }
