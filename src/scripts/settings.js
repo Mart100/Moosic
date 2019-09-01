@@ -84,6 +84,8 @@ $(() => {
 
     saveData(database)
 
+    musicPlayer.stop()
+
     fs.emptyDir(storagePos+'/songs') 
   })
 })

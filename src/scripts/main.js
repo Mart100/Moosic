@@ -3,10 +3,7 @@ const ytdl = require('ytdl-core')
 const ffmpeg = require('fluent-ffmpeg')
 const FileSaver = require('file-saver')
 const jsonfile = require('jsonfile')
-const ioHook = require('iohook')
-const { URL, URLSearchParams } = require('url')
 const remote = require('electron').remote
-const fetch = require('node-fetch')
 const open = require('open')
 const Spotify = require('spotify-web-api-js')
 const spotifyApi = new Spotify()
@@ -31,3 +28,10 @@ function isDev() {
   catch(e) { return false }
   return true
 }
+
+$(() => {
+	$(document).on("keydown", (e) => {
+		if(e.keyCode === 123) remote.getCurrentWindow().toggleDevTools()
+		else if (e.keyCode === 116) location.reload()
+	})
+})
