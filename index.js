@@ -24,7 +24,7 @@ app.on('ready', () => {
     webPreferences: {
       nodeIntegration: true
     },
-    icon: './Logo.png'
+    icon: './icon.ico'
   })
   
   window.setMenu(null)

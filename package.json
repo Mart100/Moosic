@@ -1,44 +1,32 @@
 {
   "name": "moosic",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "index.js",
+  "author": "Mart van Enckevort",
+  "license": "ISC",
   "dependencies": {
-    "electron-packager": "^14.0.5",
     "file-saver": "^2.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^8.1.0",
-    "iohook": "^0.6.1",
     "jquery": "^3.4.1",
     "jsonfile": "^5.0.0",
-    "node-fetch": "^2.6.0",
     "open": "^6.4.0",
     "spotify-web-api-js": "^1.2.0",
-    "tooltip.js": "^1.3.2",
     "ytdl-core": "^0.29.5"
   },
   "devDependencies": {
+    "electron": "^6.0.3",
     "electron-builder": "^21.2.0",
-    "electron-reload": "^1.5.0",
-    "electron": "^6.0.3"
+    "electron-reload": "^1.5.0"
   },
   "scripts": {
-    "start": "npm install && electron ."
+    "start": "npm install && electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
-  "author": "Mart van Enckevort",
-  "license": "ISC",
-  "iohook": {
-    "targets": [
-      "node-64",
-      "electron-73"
-    ],
-    "platforms": [
-      "win32",
-      "darwin"
-    ],
-    "arches": [
-      "x64",
-      "ia32"
-    ]
+  "build": {
+    "appId": "com.moosic.app"
   }
 }

@@ -3,10 +3,7 @@ const ytdl = require('ytdl-core')
 const ffmpeg = require('fluent-ffmpeg')
 const FileSaver = require('file-saver')
 const jsonfile = require('jsonfile')
-const ioHook = require('iohook')
-const { URL, URLSearchParams } = require('url')
 const remote = require('electron').remote
-const fetch = require('node-fetch')
 const open = require('open')
 const Spotify = require('spotify-web-api-js')
 const spotifyApi = new Spotify()
@@ -16,7 +13,7 @@ const ipc = require('electron').ipcRenderer
 const musicPlayer = new MusicPlayer()
 
 // storage position
-let storagePos = './resources/app/src/storage'
+let storagePos = './storage'
 if(isDev()) storagePos = './src/storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
@@ -31,3 +28,10 @@ function isDev() {
   catch(e) { return false }
   return true
 }
+
+$(() => {
+	$(document).on("keydown", (e) => {
+		if(e.keyCode === 123) remote.getCurrentWindow().toggleDevTools()
+		else if (e.keyCode === 116) location.reload()
+	})
+})

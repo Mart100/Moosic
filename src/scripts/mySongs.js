@@ -48,6 +48,11 @@ async function showSongs(songs) {
 
   songsElem.append(songsHtml)
 
+  for(let song of songs) {
+    console.log(song)
+    if(song.liked) $(`.songs #song-${song.youtubeID} .buttons .like`).attr('src', './images/red-heart.png')
+  }
+
   console.log('SHUW SONGS')
 
   $('.song').on('click', (e) => { onSongClick(e, songs) })

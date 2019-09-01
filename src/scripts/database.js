@@ -2,9 +2,52 @@ let databaseFileLoc = storagePos + '/database.json'
 
 function getData() {
   return new Promise((resolve, reject) => {
-    jsonfile.readFile(databaseFileLoc, (err, obj) => {
-      if (err) console.error(err)
+    jsonfile.readFile(databaseFileLoc, async (err, obj) => {
+      if(err) {
+        console.error(err)
+        if(err.toString().includes('no such file or directory')) {
+          await createEmptyDatabase()
+          resolve(await getData())
+        }
+      }
       resolve(obj)
+    })
+  })
+}
+
+function createStorageFolder() {
+  return new Promise((resolve, reject) => {
+
+    // create /storage
+    fs.ensureDir(storagePos, err => {
+      console.error(err)
+
+      // create /storage/songs
+      fs.ensureDir(storagePos+'/songs', async (err) => {
+        console.error(err)
+        
+        // create /storage/database.json
+        await createEmptyDatabase()
+
+        resolve()
+      })
+    })
+  })
+}
+function createEmptyDatabase() {
+  return new Promise((resolve, reject) => {
+
+    let obj = {
+      "songs": {},
+      "collections": []
+    }
+
+    jsonfile.writeFile(databaseFileLoc, obj, async (err) => {
+      if(err) {
+        console.error(err)
+        if(err.toString().includes('no such file or directory')) await createStorageFolder()
+      }
+      resolve()
     })
   })
 }
