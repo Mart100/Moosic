@@ -1,0 +1,48 @@
+#currentSong {
+  height: 50px;
+  width: 100%;
+  position: absolute;
+  bottom: 50px;
+  background-color: rgb(20, 20, 20);
+}
+
+#currentSong .image {
+  height: 50px;
+  width: 50px;
+}
+
+#currentSong .title {
+  color: white;
+  position: absolute;
+  top: 5px;
+  width: 250px;
+  height: 14px;
+  overflow-y: hidden;
+  font-size: 14px;
+  left: 55px;
+}
+
+#currentSong .controls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+#currentSong #progress {
+  background-color: rgb(255, 0, 0);
+  position: absolute;
+  height: 2px;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+}
+
+#currentSong .play_pause img {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: none;
+  right: 0px;
+  position: absolute;
+  padding: 5px;
+}

@@ -1,0 +1,10 @@
+{
+  "dest": "dist/installers/",
+  "src": "dist/Moosic-win32-x64/",
+  "icon": "logo.ico",
+  "tags": [
+    "Utility",
+    "Music",
+    "Youtube"
+  ]
+}

@@ -1,0 +1,30 @@
+#navigator {
+  height: 50px;
+  bottom: 0px;
+  width: 100%;
+  position: absolute;
+  background-color: rgb(15, 15, 15);
+  display: flex;
+  list-style: none;
+}
+
+#navigator li {
+  flex: 1 1 100%;
+  color: white;
+  text-align: center;
+  height: 20px;
+  font-size: 20px;
+  padding: 10px 0px;
+  user-select: none;
+  transition-duration: 0.5s;
+  cursor: pointer;
+  box-sizing: content-box;
+  border: 5px rgba(0,0,0,0) solid;
+}
+
+#navigator li.selected {
+  border-bottom: 5px rgb(255, 0, 0) solid;
+}
+#navigator li:hover {
+  background-color: rgb(25, 25, 25);
+}

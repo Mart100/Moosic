@@ -1,0 +1,5 @@
+node_modules/
+node_modules/fs-extra
+./node_modules
+*.mp3
+dist
