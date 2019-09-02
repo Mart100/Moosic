@@ -3,6 +3,4 @@ node_modules/fs-extra
 ./node_modules
 *.mp3
 dist
-./src/storage
-./src/storage/songs
-./src/storage/database.json
+src/storage/database.json
