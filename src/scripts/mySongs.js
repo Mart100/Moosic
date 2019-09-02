@@ -31,6 +31,9 @@ let currentSongList = []
 
 async function showSongs(songs) {
 
+  songs = await refreshSongs(songs)
+  console.log('9999', songs)
+
   let songsElem = $(Object.values($('.songs')).filter(e => $(e).hasClass('songs') && $(e).css('display') != 'none')[0])
 
   if(songsElem == undefined) return console.log('ERR: 564')
@@ -55,12 +58,17 @@ async function showSongs(songs) {
 
   console.log('SHUW SONGS')
 
-  $('.song').on('click', (e) => { onSongClick(e, songs) })
-  $('.song .like').on('click', async (e) => {
-    console.log('YASS')
+  $('.song').off().on('click', (e) => { onSongClick(e, songs) })
+  $('.song .like').off().on('click', async (e) => {
     let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', '')))
-    song.like()
-    e.target.src = './images/red-heart.png'
+    if(song.liked) {
+      await song.dislike()
+      e.target.src = './images/heart.png'
+    }
+    else {
+      await song.like()
+      e.target.src = './images/red-heart.png'
+    }
   })
 
   $('.song .more').on('click', async (event) => {
@@ -130,6 +138,21 @@ async function showSongs(songs) {
 
     })
   })
+}
+
+async function refreshSongs(songs) {
+  let newSongs = []
+  let database = await getData()
+  for(let songID in songs) {
+    let song = songs[songID]
+    let songDB = database.songs[songID]
+    let newSong
+    if(songDB != undefined) newSong = new Song(songDB)
+    else newSong = new Song(song)
+    newSongs.push(newSong)
+  }
+
+  return newSongs
 }
 
 async function loadCollections() {

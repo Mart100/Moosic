@@ -8,7 +8,8 @@ class Song {
     this.downloadLocation = data.downloadLocation
     this.title = data.title
     this.author = data.author
-    this.liked = false
+    this.liked = data.liked
+    if(this.liked == undefined) this.liked = false
     this.order = 0
 
     return this
@@ -35,11 +36,23 @@ class Song {
     await this.save()
     await this.download()
   }
+  async dislike() {
+    this.liked = false
+    await this.save()
+    await this.removeDownload()
+  }
   async save() {
     this.saveDate = Date.now()
     await saveData1((database) => {
       database.songs[this.youtubeID] = this.getObject()
       return database
+    })
+  }
+  async removeDownload() {
+    let downloadLoc = storagePos + `/songs/${this.youtubeID}.mp3`
+    fs.remove(downloadLoc, err => {
+      if(err) console.error(err)
+      return
     })
   }
   download() {
