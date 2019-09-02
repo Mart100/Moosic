@@ -6,6 +6,7 @@ const jsonfile = require('jsonfile')
 const remote = require('electron').remote
 const open = require('open')
 const Spotify = require('spotify-web-api-js')
+const pj = require('../package.json')
 const spotifyApi = new Spotify()
 const spotify_clientID = '11063f81cfec4398aeb571cff3bb819d'
 const globalShortcut = remote.globalShortcut
@@ -18,7 +19,9 @@ if(isDev()) storagePos = './src/storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 
-
+$(() => {
+  $('#moosicVersion').html('Version: ' + process.env.npm_package_version)
+})
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }

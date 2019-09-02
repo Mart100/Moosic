@@ -28,6 +28,8 @@ $(() => {
 
     if(name == 'settings') {
       $('#settings').fadeIn()
+      $('#settings .thing1').hide()
+      $('#settings-main').fadeIn(250)
     }
   })
 })

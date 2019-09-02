@@ -80,6 +80,12 @@ $(() => {
     })
   })
 
+  $('#info-button').on('click', async () => {
+    $('#settings-main').fadeOut(250, () => {
+      $('#info').fadeIn(250)
+    })
+  })
+
   $('#deleteData-button').on('click', async () => {
     let confirm = window.confirm('Are you sure you want to delete all your data?')
 

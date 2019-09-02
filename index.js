@@ -1,5 +1,6 @@
 let $ = require('jquery')
 
+const { dialog } = require('electron')
 const electron = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
@@ -18,7 +19,14 @@ catch(e) {}
 
 app.on('ready', () => {
 
-  autoUpdater.checkForUpdatesAndNotify()
+  try {
+    autoUpdater.checkForUpdatesAndNotify() 
+  }
+  catch(e) {
+    console.error(e)
+    dialog.showMessageBox(e)
+    throw e
+  }
 
   // Create the browser window.
   let window = new BrowserWindow({
