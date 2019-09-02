@@ -73,6 +73,8 @@ async function showSongs(songs) {
 
   $('.song .more').on('click', async (event) => {
 
+    if($(event.target.parentElement).find('.tooltip')[0] != undefined) return
+
     let song = new Song(songs.find(s => s.youtubeID == event.target.parentElement.parentElement.id.replace('song-', '')))
 
     let html1 = $(`
