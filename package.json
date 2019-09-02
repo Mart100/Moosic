@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "index.js",
   "author": "Mart van Enckevort",
@@ -30,10 +30,12 @@
   },
   "build": {
     "appId": "com.moosic.app",
-    "publish": [{
-      "provider": "github",
-      "owner": "Mart100",
-      "repo": "Moosic"
-    }]
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "Mart100",
+        "repo": "Moosic"
+      }
+    ]
   }
 }
