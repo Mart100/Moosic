@@ -1,4 +1,4 @@
-src/storage/database.json
+src/storage/
 node_modules/
 node_modules/fs-extra
 ./node_modules
