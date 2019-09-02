@@ -31,7 +31,6 @@ function getSpotifyAccessToken() {
         webRequest.onBeforeRequest(filter, async ({
             url
         }) => {
-            console.log(url)
             resolve(parseURL(url))
             destroyAuthWin();
         });
@@ -67,4 +66,42 @@ function getAuthenticationURL() {
     let EUC = encodeURIComponent
     let link = `https://accounts.spotify.com/authorize`
     return `${link}?response_type=token&client_id=${clientId}&scope=${EUC(scopes)}&redirect_uri=${EUC(redirectUri)}`
+}
+
+
+async function loadPlaylists(accessToken) {
+    let rawPlaylists = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${accessToken}`
+        }
+      })
+      .then(res => res.json())
+    if(rawPlaylists == null) return 'failed to retrieve playlists'
+    let fetchPromises = []
+    for(let item of rawPlaylists.items) {
+        fetchPromises.push(fetch(item.href, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }).then(res => res.json()))
+    }
+    let playlists = await Promise.all(fetchPromises)
+    let playlistsHTML = ``
+    console.log(playlists)
+    for(let playlist of playlists) {
+        playlistsHTML += `
+        <div class="playlist" id="${playlist.id}">
+            <div class="image"><img src="${playlist.images[0].url}"/></div>
+            <div class="buttons">
+                <img class="import" src="./images/import.png"/>
+            </div>
+            <div class="title">${playlist.name}</div>
+            <br>
+            <div class="owner">${playlist.owner.display_name}</div>
+        </div>
+        `
+    }
+    $('#playlistImportList').append(playlistsHTML)
 }

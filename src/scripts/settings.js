@@ -17,16 +17,10 @@ $(() => {
   // import from spotify
   $('#importData-spotify-button').on('click', async () => {
     let accessToken = await getSpotifyAccessToken()
-    fetch(`https://api.spotify.com/v1/me/playlists`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      })
-      .then(res => res.json())
-      .then(info => {
-        console.log(info)
-      })
+    await loadPlaylists(accessToken)
+    $('#settings').hide()
+    $('#playlistImportSpotify').fadeIn()
+
 
   })
 

@@ -12,6 +12,7 @@
     <link rel="stylesheet" type="text/css" href="styles/settings.css">
     <link rel="stylesheet" type="text/css" href="styles/currentQueue.css">
     <link rel="stylesheet" type="text/css" href="styles/songList.css">
+    <link rel="stylesheet" type="text/css" href="styles/playlistImport.css">
 
     <!-- Libraries -->
     <script>window.$ = window.jQuery = require('jquery');</script>
@@ -92,6 +93,12 @@
           <div class="button1" id="importData-headset-button">Import headset save</div>
           <div class="button1" id="importData-spotify-button">Import from Spotify</div>
         </div>
+      </div>
+      <div id="playlistImportSpotify" style="display: none;">
+        <div class="importHeader">
+          <b>Import spotify playlists (It might not be able to find all the songs):</b>
+        </div>
+        <div id="playlistImportList" class="spotifyPlaylists"></div>
       </div>
     </div>
     <div id="currentSong">
