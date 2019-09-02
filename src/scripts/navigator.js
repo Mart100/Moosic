@@ -9,6 +9,7 @@ $(() => {
     $('#mySongs').hide()
     $('#settings').hide()
     $('#currentQueue').hide()
+    $('#playlistImportSpotify').hide()
     $('.songs').hide()
 
 
