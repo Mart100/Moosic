@@ -3,7 +3,12 @@
   "version": "1.0.3",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "index.js",
-  "author": "Mart van Enckevort",
+  "author": "Mart van Enckevort <marvanenck@gmail.com>",
+  "homepage": "https://martve.me/Moosic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mart100/Moosic.git"
+  },
   "license": "ISC",
   "dependencies": {
     "electron-updater": "^4.1.2",

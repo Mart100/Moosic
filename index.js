@@ -19,15 +19,6 @@ catch(e) {}
 
 app.on('ready', () => {
 
-  try {
-    autoUpdater.checkForUpdatesAndNotify() 
-  }
-  catch(e) {
-    console.error(e)
-    dialog.showMessageBox(e)
-    throw e
-  }
-
   // Create the browser window.
   let window = new BrowserWindow({
     width: 400,
@@ -46,6 +37,11 @@ app.on('ready', () => {
   window.loadFile('./src/index.html')
 
   if(isDev()) window.webContents.openDevTools()
+
+  setTimeout(() => {
+    autoUpdater.checkForUpdatesAndNotify()
+  }, 2000)
+
 
   window.on('closed', () => { win = null })
 
