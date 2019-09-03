@@ -1,16 +1,3 @@
-.songs .song {
-  width: 100%;
-  padding: 10px;
-  height: 80px;
-  border: 1px rgb(30, 30, 30) solid;
-  transition-duration: 0.3s;
-  cursor: pointer;
-}
-
-.songs .song:hover {
-  border-left: 5px rgb(255, 0, 0) solid;
-}
-
 .songs {
   height: 100%;
   overflow-y: auto;
@@ -19,7 +6,44 @@
   width: 100%;
 }
 
-.songs .song .image {
+.songs .topBar {
+  height: 40px;
+  width: 100%;
+  background-color: rgb(20, 20, 20);
+}
+
+.topBar .search {
+  width: 300px;
+  height: 40px;
+  font-size: 20px;
+  background-color: rgb(18, 18, 18);
+  border: 0px solid;
+  padding: 10px;
+  color: rgb(255, 255, 255);
+}
+
+.songList {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.songList .song {
+  width: 100%;
+  padding: 10px;
+  height: 80px;
+  border: 1px rgb(30, 30, 30) solid;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+
+.songList .song:hover {
+  border-left: 5px rgb(255, 0, 0) solid;
+}
+
+.songList .song .image {
   position: relative;
   width: 80px;     
   height: 80px;
@@ -29,7 +53,7 @@
   pointer-events: none;
 }
 
-.songs .song .image img {
+.songList .song .image img {
   position: absolute;
   display: inline-block;
   height: 100px;
@@ -39,7 +63,7 @@
   transform: translate( -50%, -50%);
 }
 
-.songs .song .title {
+.songList .song .title {
   color: white;
   display: inline-block;
   max-width: 200px;
@@ -47,13 +71,13 @@
   font-size: 15px;
   pointer-events: none;
 }
-.songs .song .channel {
+.songList .song .channel {
   color: rgb(180, 180, 180);
   margin-left: 10px;
   display: inline-block;
   pointer-events: none;
 }
-.songs .song .buttons {
+.songList .song .buttons {
   position: absolute;
   margin-top: 0px;
   right: 55px;
@@ -63,7 +87,7 @@
   border-radius: 10%;
   text-align: center;
 }
-.songs .song .more {
+.songList .song .more {
   position: absolute;
   top: 30px;
   width: 30px;
@@ -71,7 +95,7 @@
   transition-duration: 0.3s;
   border-radius: 10%;
 }
-.songs .song .like {
+.songList .song .like {
   position: absolute;
   top: 0px;
   width: 20px;
@@ -80,14 +104,14 @@
   transition-duration: 0.3s;
   border-radius: 10%;
 }
-.songs .song .like:hover {
+.songList .song .like:hover {
   background-color: rgb(45, 45, 45);
 }
-.songs .song .more:hover {
+.songList .song .more:hover {
   background-color: rgb(45, 45, 45);
 }
 
-.songs .song .tooltip {
+.songList .song .tooltip {
   width: 150px;
   height: auto;
   padding: 5px;
@@ -99,7 +123,7 @@
   transform: translateX(-100%);
 }
 
-.songs .song .tooltip button {
+.songList .song .tooltip button {
   width: 100%;
   text-align: center;
   border-radius: 4px;
@@ -109,7 +133,7 @@
   padding-bottom: 2px;
   transition-duration: 0.3s;
 }
-.songs .song .tooltip button:hover {
+.songList .song .tooltip button:hover {
   background-color: rgba(0,0,0,0.5);
   cursor: pointer;
 }
