@@ -35,7 +35,6 @@ function getYoutubeResults() {
       q: q,
       part: 'snippet',
       type: 'video',
-      videoSyndicated: 'true',
       topicId: '/m/04rlf',
       maxResults: 50
     })

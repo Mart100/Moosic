@@ -25,7 +25,8 @@ app.on('ready', () => {
     height: 800,
     frame: false,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      nodeIntegrationInWorker: true
     },
     icon: './icon.ico'
   })

@@ -145,9 +145,11 @@ class MusicPlayer extends EventEmitter {
     e.target.playVideo()
     this.setVolume(this.volume)
   }
-  onYTerror(e) {
+  async onYTerror(e) {
     console.log('ERROR', e)
-    if(e.data == 150) this.nextInQueue()
+    if(e.data == 150) await this.currentSong.download()
+
+    this.nextInQueue()
   }
   onEndListenerMp3() {
     this.HowlSound.on('end', () => {

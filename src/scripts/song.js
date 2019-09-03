@@ -55,19 +55,23 @@ class Song {
       return
     })
   }
-  download() {
-    console.log(this)
-    let stream = ytdl(`http://www.youtube.com/watch?v=${this.youtubeID}`, {
-      quality: 'highestaudio',
-      filter: 'audio',
+  async download() {
+    return new Promise(async (resolve, reject) => {
+      let downloadWorker = new Worker('./scripts/downloadSong.js')
+      downloadWorker.postMessage({
+        songID: this.youtubeID, 
+        storagePos: storagePos
+      })
+
+      downloadWorker.onmessage = async () => {
+        console.log('HMMMM')
+        resolve()
+      }
+
+      let downloadLoc = storagePos + `/songs/${this.youtubeID}.mp3`
+      this.downloadLocation = downloadLoc.replace('/src', '')
+      await this.save()
     })
-
-    let downloadLoc = storagePos + `/songs/${this.youtubeID}.mp3`
-
-    ffmpeg(stream).save(downloadLoc)
-
-    this.downloadLocation = downloadLoc.replace('/src', '')
-    this.save()
   }
   getObject() {
     return JSON.parse(JSON.stringify(this))
