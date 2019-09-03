@@ -18,6 +18,10 @@ async function showSongs(songs, options) {
     `)
   }
 
+  if(options.topBar == false) {
+    songsElem.find('.topBar').remove()
+  }
+
   if(songsElem.find('.songList')[0] == undefined) {
     songsElem.append(`<div class="songList"></div>`)
   }
@@ -32,8 +36,9 @@ async function showSongs(songs, options) {
 
   currentSongList = songs
 
-  let searchTxt = songsElem.find('.topBar .search').val().toLowerCase()
-  let filter = searchTxt != ""
+  let searchTxt = songsElem.find('.topBar .search').val()
+  if(searchTxt) searchTxt = searchTxt.toLowerCase()
+  let filter = (searchTxt != undefined) && (searchTxt != "")
 
   let songsHtml = ''
   for(let songObj of songs) {

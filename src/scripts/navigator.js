@@ -17,7 +17,7 @@ $(() => {
       $('#search .songs').show()
       $('#search').fadeIn()
       $('#search .input').focus()
-      if(searchResults) showSongs(searchResults)
+      if(searchResults) showSongs(searchResults, {topBar: false})
     }
 
     if(name == 'mySongs') {
