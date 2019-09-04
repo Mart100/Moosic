@@ -1,4 +1,6 @@
 let currentSongList = []
+let filters = {}
+resetFilters()
 
 async function showSongs(songs, options) {
 
@@ -14,8 +16,29 @@ async function showSongs(songs, options) {
     songsElem.append(`    
       <div class="topBar">
         <input class="search" placeholder="Search songs"></input>
+        <img class="filterButton" src="images/filter.png"/>
+        <div class="filters">
+          <div class="sortBy">
+            <span class="title">Sort by:</span>
+            <hr>
+            <div id="sortby-lastadded" class="button2">Last added</div>
+            <div id="sortby-alphabetic" class="button2">Alphabetic</div>
+            <div id="sortby-lastplayed" class="button2">Last played</div>
+          </div>
+          <div class="filter">
+            <span class="title">Filter:</span>
+            <hr>
+            <div id="filter-downloaded" class="button2">Downloaded</div>
+            <div id="filter-liked" class="button2">Liked</div>
+          </div>
+        </div>
       </div>
     `)
+    $('.button2').each((i, a) => {
+      let b = a.id.split('-')
+      let c = filters[b[0]][b[1]]
+      if(c) $(a).addClass('selected')
+    })
   }
 
   if(options.topBar == false) {
@@ -38,18 +61,23 @@ async function showSongs(songs, options) {
 
   let searchTxt = songsElem.find('.topBar .search').val()
   if(searchTxt) searchTxt = searchTxt.toLowerCase()
-  let filter = (searchTxt != undefined) && (searchTxt != "")
+  let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
   let songsHtml = ''
   for(let songObj of songs) {
     let song = new Song(songObj)
-    if(filter) {
-      let filterOut = false
+    let filterOut = false
+
+    if(searchFilter) {
       let songTxt = (song.title + ' ' + song.author).toLowerCase()
       if(songTxt.includes(searchTxt) == false) filterOut = true
-
-      if(filterOut) continue
     }
+
+    if(filters.filter.liked) if(!song.liked) continue
+    if(filters.filter.downloaded) if(song.downloadLocation == undefined) continue
+    console.log(song)
+
+    if(filterOut) continue
     songsHtml += song.getHTML()
   }
 
@@ -59,8 +87,33 @@ async function showSongs(songs, options) {
     if(song.liked) $(`.songs #song-${song.youtubeID} .buttons .like`).attr('src', './images/red-heart.png')
   }
 
-  songsElem.find('.topBar .search').off().on('input', () => {
+  let topBar = songsElem.find('.topBar')
+
+  topBar.find('.search').off().on('input', () => {
     showSongs(songs)
+  })
+
+  $('.button2').off().on('click', (e) => {
+    $(e.target).toggleClass('selected')
+
+    let a = e.target.id.split('-')[0]
+    let b = e.target.id.split('-')[1]
+
+    if($(e.target).hasClass('selected')) {
+      filters[a][b] = true
+
+    }
+    else {
+      filters[a][b] = false
+    }
+
+    showSongs(songs)
+  })
+
+  let filterButton = topBar.find('.filterButton')
+  let filtersDiv = topBar.find('.filters')
+  filterButton.off().on('click', () => {
+    filtersDiv.toggleClass('expanded')
   })
 
   console.log('SHUW SONGS')
@@ -147,4 +200,18 @@ async function showSongs(songs, options) {
 
     })
   })
+}
+
+function resetFilters() {
+  filters = {
+    filter: {
+      downloaded: false,
+      liked: false,
+    },
+    sortby: {
+      lastadded: true,
+      alphabetic: false,
+      lastplayed: false
+    }
+  }
 }

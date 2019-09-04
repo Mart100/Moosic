@@ -11,6 +11,7 @@ $(() => {
     $('#currentQueue').hide()
     $('#playlistImportSpotify').hide()
     $('.songs').hide()
+    resetFilters()
 
 
     if(name == 'search') {

@@ -10,10 +10,56 @@
   height: 40px;
   width: 100%;
   background-color: rgb(20, 20, 20);
+  position: absolute;
+  z-index: 15;
+}
+
+.songs .topBar .filters {
+  height: 0px;
+  background-color: rgb(20, 20, 20);
+  transition-duration: 0.4s;
+  width: 100%;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+}
+
+.songs .topBar .filters.expanded {
+  height: 150px;
+}
+
+.songs .topBar .filters .sortBy {
+  width: 40%;
+  padding: 5%;
+  float: left;
+}
+
+.songs .topBar .filters .filter {
+  width: 40%;
+  padding: 5%;
+  float: right;
+}
+
+.songs .topBar .filters .button2 {
+  background-color: rgb(22, 22, 22);
+  font-size: 18px;
+  padding: 1px;
+  border-radius: 5px;
+  margin: 2px;
+  color: rgb(150, 150, 150);
+  cursor: pointer;
+}
+
+.songs .topBar .filters .button2.selected {
+  color: white;
+}
+.songs .topBar .filters .button2:hover {
+  background-color: rgb(30, 30, 30);
 }
 
 .topBar .search {
-  width: 300px;
+  width: 350px;
   height: 40px;
   font-size: 20px;
   background-color: rgb(18, 18, 18);
@@ -22,9 +68,23 @@
   color: rgb(255, 255, 255);
 }
 
+.topBar .filterButton {
+  float: right;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 5px 10px;
+  transition-duration: 0.3s;
+}
+.topBar .filterButton:hover {
+  background-color: rgb(40, 40, 40);
+}
+
+
 .songList {
   height: calc(100% - 40px);
   overflow-y: auto;
+  top: 40px;
   overflow-x: hidden;
   position: absolute;
   width: 100%;
