@@ -9,8 +9,10 @@ class Song {
     this.title = data.title
     this.author = data.author
     this.liked = data.liked
+    this.saved = true
     if(this.liked == undefined) this.liked = false
     this.order = 0
+    this.lastPlayed = data.lastPlayed
 
     return this
   }
@@ -23,6 +25,7 @@ class Song {
     this.title = video.snippet.title
     this.author = video.snippet.channelTitle
     this.liked = false
+    this.saved = false
     this.order = 0
 
     return this

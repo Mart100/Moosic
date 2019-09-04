@@ -36,6 +36,11 @@ class MusicPlayer extends EventEmitter {
     this.isPaused = false
     this.emit('play')
 
+    if(this.currentSong.saved) {
+      this.currentSong.lastPlayed = Date.now()
+      this.currentSong.save()
+    }
+
     if(songDB != undefined && songDB.downloadLocation != undefined) this.playMp3(songDB.downloadLocation)
     else this.playYT(song.youtubeID)
 

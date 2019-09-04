@@ -59,6 +59,21 @@ async function showSongs(songs, options) {
 
   currentSongList = songs
 
+  // shuffle songs
+  songs.sort((a, b) => Math.random()-0.5)
+
+  // sort songs 
+  if(filters.sortby.lastadded) songs.sort((a,b) => a.saveDate - b.saveDate)
+  if(filters.sortby.lastplayed) songs.sort((a,b) => a.lastPlayed - b.lastPlayed)
+  if(filters.sortby.alphabetic) {
+    let alphabet = 'abcdefghijklmnopqrstuvxyz'
+     songs.sort((a,b) => {
+      if(a.title > b.title) return 1
+      if(b.title > a.title) return -1
+      return 0
+    })
+  }
+
   let searchTxt = songsElem.find('.topBar .search').val()
   if(searchTxt) searchTxt = searchTxt.toLowerCase()
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
@@ -75,7 +90,6 @@ async function showSongs(songs, options) {
 
     if(filters.filter.liked) if(!song.liked) continue
     if(filters.filter.downloaded) if(song.downloadLocation == undefined) continue
-    console.log(song)
 
     if(filterOut) continue
     songsHtml += song.getHTML()
@@ -102,9 +116,22 @@ async function showSongs(songs, options) {
     if($(e.target).hasClass('selected')) {
       filters[a][b] = true
 
+      if(a == 'sortby') {
+        $('.sortby .button2').removeClass('selected')
+        $(e.target).addClass('selected')
+        filters.sortby.alphabetic = false
+        filters.sortby.lastplayed = false
+        filters.sortby.lastadded = false
+        filters[a][b] = true
+      }
+
     }
     else {
       filters[a][b] = false
+
+      if(a == 'sortby') {
+        $(e.target).trigger('click')
+      }
     }
 
     showSongs(songs)
