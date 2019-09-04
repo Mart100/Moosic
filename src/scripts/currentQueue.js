@@ -21,7 +21,7 @@ $(() => {
     $('#currentQueue').animate({'top': '125%'}, 500, () => {
       $('#currentQueue').hide()
       $('#currentQueue').css('top', '0px')
-      $('#queue').hide()
+      $('#queue').html('')
     })
   })
 })
@@ -62,5 +62,5 @@ function updateSongFocus() {
   // set queue
   $('#queue').html('')
   let queue = musicPlayer.queue
-  showSongs(queue)
+  showSongs(queue, {topBar: false})
 }
