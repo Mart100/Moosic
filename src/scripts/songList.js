@@ -12,6 +12,8 @@ async function showSongs(songs, options) {
 
   if(songsElem == undefined) return console.log('ERR: 564')
 
+  if(songsElem[0].parentElement.id == 'search') options.topBar = false
+
   if(songsElem.find('.topBar')[0] == undefined) {
     songsElem.append(`    
       <div class="topBar">
@@ -116,7 +118,7 @@ async function showSongs(songs, options) {
   let topBar = songsElem.find('.topBar')
 
   topBar.find('.search').off().on('input', () => {
-    showSongs(songs)
+    showSongs(songs, options)
   })
 
   $('.button2').off().on('click', (e) => {
@@ -146,7 +148,7 @@ async function showSongs(songs, options) {
       }
     }
 
-    showSongs(songs)
+    showSongs(songs, options)
   })
 
   let filterButton = topBar.find('.filterButton')
@@ -159,7 +161,8 @@ async function showSongs(songs, options) {
 
   $('.song').off().on('click', (e) => { onSongClick(e, refinedSongs) })
   $('.song .like').off().on('click', async (e) => {
-    let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', '')))
+    let song = refinedSongs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''))
+    console.log(song.liked)
     if(song.liked) {
       await song.dislike()
       e.target.src = './images/heart.png'
@@ -168,7 +171,6 @@ async function showSongs(songs, options) {
       await song.like()
       e.target.src = './images/red-heart.png'
     }
-    showSongs(songs)
   })
 
   $('.song .more').off().on('click', async (event) => {
@@ -220,7 +222,7 @@ async function showSongs(songs, options) {
     tooltip.find('.deleteSong').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
       song.delete()
-      showSongs(songs)
+      showSongs(songs, options)
     })
 
     tooltip.find('.playSimularSongs').on('click', async (e) => {

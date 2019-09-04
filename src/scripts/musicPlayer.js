@@ -102,7 +102,7 @@ class MusicPlayer extends EventEmitter {
     this.emit('unshuffle')
   }
   stop() {
-    if(this.YTplayer != undefined) this.YTplayer.stopVideo()
+    if(this.YTplayer != undefined && this.YTplayer.stopVideo != undefined) this.YTplayer.stopVideo()
     if(this.HowlSound != undefined) this.HowlSound.stop()
 
     this.YTplayer = undefined
@@ -158,7 +158,7 @@ class MusicPlayer extends EventEmitter {
     console.log('ERROR', e)
 
     this.nextInQueue()
-    if(e.data == 150) await this.currentSong.download()
+    if(e.data == 150) if(this.currentSong) this.currentSong.download()
   }
   onEndListenerMp3() {
     this.HowlSound.on('end', () => {

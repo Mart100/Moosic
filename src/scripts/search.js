@@ -14,6 +14,8 @@ $(() => {
 
     $('#search .results').html('')
 
+    console.log('HMMM')
+
     searchResults = []
 
     if($('#search .input').val() == '') return
