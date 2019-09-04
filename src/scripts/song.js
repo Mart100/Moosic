@@ -37,12 +37,14 @@ class Song {
   async like() {
     this.liked = true
     await this.save()
-    await this.download()
+    this.download()
+    return
   }
   async dislike() {
     this.liked = false
     await this.save()
-    await this.removeDownload()
+    this.removeDownload()
+    return
   }
   async save() {
     this.saveDate = Date.now()
@@ -75,6 +77,18 @@ class Song {
       this.downloadLocation = downloadLoc.replace('/src', '')
       await this.save()
     })
+  }
+  async delete() {
+    console.log('TEST-TEST')
+    console.log(this)
+
+    if(this.downloadLocation) await this.removeDownload()
+    await saveData1((database) => {
+      delete database.songs[this.youtubeID]
+      return database
+    })
+
+    return
   }
   getObject() {
     return JSON.parse(JSON.stringify(this))

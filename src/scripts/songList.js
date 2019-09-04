@@ -168,6 +168,7 @@ async function showSongs(songs, options) {
       await song.like()
       e.target.src = './images/red-heart.png'
     }
+    showSongs(songs)
   })
 
   $('.song .more').off().on('click', async (event) => {
@@ -182,6 +183,7 @@ async function showSongs(songs, options) {
       <button class="openInYoutube">Open in youtube</button>
       <button class="addToCollection">Add to collection</button>
       <button class="playSimularSongs">Play simular songs</button>
+      <button class="deleteSong">Delete songs</button>
     </div>
     `)
 
@@ -214,6 +216,12 @@ async function showSongs(songs, options) {
         parent[0].parentElement.remove()
       })
     }
+
+    tooltip.find('.deleteSong').on('click', async (e) => {
+      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
+      song.delete()
+      showSongs(songs)
+    })
 
     tooltip.find('.playSimularSongs').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
