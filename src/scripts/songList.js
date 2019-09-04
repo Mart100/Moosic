@@ -8,7 +8,7 @@ async function showSongs(songs, options) {
 
   songs = await refreshSongs(songs)
 
-  let songsElem = $(Object.values($('.songs')).filter(e => $(e).hasClass('songs') && $(e).css('display') != 'none')[0])
+  let songsElem = getCurrentSongsElement()
 
   if(songsElem == undefined) return console.log('ERR: 564')
 
@@ -100,6 +100,8 @@ async function showSongs(songs, options) {
   for(let song of songs) {
     if(song.liked) $(`.songs #song-${song.youtubeID} .buttons .like`).attr('src', './images/red-heart.png')
   }
+
+  scrollToCurrentSong()
 
   let topBar = songsElem.find('.topBar')
 
@@ -241,4 +243,19 @@ function resetFilters() {
       lastplayed: false
     }
   }
+}
+
+function getCurrentSongsElement() {
+  return $(Object.values($('.songs')).filter(e => $(e).hasClass('songs') && $(e).css('display') != 'none')[0])
+}
+
+function scrollToCurrentSong() {
+  let currentSong = musicPlayer.currentSong
+  if(currentSong == undefined) return
+  let songElem = $(`#song-${currentSong.youtubeID}`)
+  let songHeight = $(`#song-${currentSong.youtubeID}`).scrollTop()
+  let songsContainer = getCurrentSongsElement().find('.songList')
+  songsContainer.animate({
+    scrollTop: songElem.offset().top - songsContainer.offset().top + songsContainer.scrollTop()
+  })
 }

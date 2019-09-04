@@ -44,7 +44,10 @@ class MusicPlayer extends EventEmitter {
     if(songDB != undefined && songDB.downloadLocation != undefined) this.playMp3(songDB.downloadLocation)
     else this.playYT(song.youtubeID)
 
-    this.setVolume(this.volume)
+    setTimeout(() => {
+      this.setVolume(this.volume)
+      scrollToCurrentSong()
+    }, 100)
 
   }
   setQueue(newQueue) {
