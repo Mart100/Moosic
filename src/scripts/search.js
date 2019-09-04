@@ -5,7 +5,7 @@ $(() => {
   // load youtube api
   setTimeout(() => {
     gapi.client.load('youtube', 'v3', () => {
-      gapi.client.setApiKey('AIzaSyC_aHKYFGGEZ_dShlVukoYmlR1ZufAIbzA')
+      gapi.client.setApiKey('AIzaSyCIM4EzNqi1in22f4Z3Ru3iYvLaY8tc3bo') //AIzaSyC_aHKYFGGEZ_dShlVukoYmlR1ZufAIbzA
     })
   }, 1000)
 
