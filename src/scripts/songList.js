@@ -60,7 +60,7 @@ async function showSongs(songs, options) {
   currentSongList = songs
 
   // shuffle songs
-  songs.sort((a, b) => Math.random()-0.5)
+  if(!filters.sortby.none) songs.sort((a, b) => Math.random()-0.5)
 
   // sort songs 
   if(filters.sortby.lastadded) songs.sort((a,b) => a.saveDate - b.saveDate)
@@ -171,6 +171,7 @@ async function showSongs(songs, options) {
       <button class="download">Download</button>
       <button class="openInYoutube">Open in youtube</button>
       <button class="addToCollection">Add to collection</button>
+      <button class="playSimularSongs">Play simular songs</button>
     </div>
     `)
 
@@ -204,6 +205,16 @@ async function showSongs(songs, options) {
       })
     }
 
+    tooltip.find('.playSimularSongs').on('click', async (e) => {
+      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
+      let relatedVideos = await getRelatedVideosYT(song.youtubeID)
+      console.log(relatedVideos)
+      let relatedSongs = []
+      for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
+      setSortByNone()
+      musicPlayer.setQueue(relatedSongs)
+      musicPlayer.nextInQueue()
+    })
     tooltip.find('.download').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
       song.download()
@@ -240,11 +251,18 @@ function resetFilters() {
     sortby: {
       lastadded: true,
       alphabetic: false,
-      lastplayed: false
+      lastplayed: false,
+      none: false
     }
   }
 }
 
+function setSortByNone() {
+  filters.lastadded = false
+  filters.alphabetic = false
+  filters.lastplayed = false
+  filters.none = true
+}
 function getCurrentSongsElement() {
   return $(Object.values($('.songs')).filter(e => $(e).hasClass('songs') && $(e).css('display') != 'none')[0])
 }
@@ -253,7 +271,7 @@ function scrollToCurrentSong() {
   let currentSong = musicPlayer.currentSong
   if(currentSong == undefined) return
   let songElem = $(`#song-${currentSong.youtubeID}`)
-  let songHeight = $(`#song-${currentSong.youtubeID}`).scrollTop()
+  if(songElem == undefined) return
   let songsContainer = getCurrentSongsElement().find('.songList')
   songsContainer.animate({
     scrollTop: songElem.offset().top - songsContainer.offset().top + songsContainer.scrollTop()

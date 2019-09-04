@@ -56,6 +56,7 @@ class MusicPlayer extends EventEmitter {
     for(let song of newQueue) this.queue.push(new Song(song))
     this.queuePosition = 0
     this.isShuffled = false
+    showSongs(this.queue)
   }
   nextInQueue() {
     if(!this.repeat) this.queuePosition++
