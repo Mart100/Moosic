@@ -1,8 +1,7 @@
-FIX LAGG
+Fix Lagg
 Spotify importer
 Fix YT error 150
 clean code
 Adding to collection stops playing
-Play simular songs
-Arrow back in my songs
 Delete songs
+Fix showSongs matching up with musicPlayer queue
