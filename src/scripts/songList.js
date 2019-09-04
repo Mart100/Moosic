@@ -60,27 +60,19 @@ async function showSongs(songs, options) {
   currentSongList = songs
 
   // shuffle songs
-  if(!filters.sortby.none) songs.sort((a, b) => Math.random()-0.5)
+  /*
+  if(!filters.sortby.none) songs.sort((a, b) => Math.random()-0.5)*/
 
-  // sort songs 
-  if(filters.sortby.lastadded) songs.sort((a,b) => a.saveDate - b.saveDate)
-  if(filters.sortby.lastplayed) songs.sort((a,b) => a.lastPlayed - b.lastPlayed)
-  if(filters.sortby.alphabetic) {
-    let alphabet = 'abcdefghijklmnopqrstuvxyz'
-     songs.sort((a,b) => {
-      if(a.title > b.title) return 1
-      if(b.title > a.title) return -1
-      return 0
-    })
-  }
+  let refinedSongs = []
 
   let searchTxt = songsElem.find('.topBar .search').val()
   if(searchTxt) searchTxt = searchTxt.toLowerCase()
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
-  let songsHtml = ''
-  for(let songObj of songs) {
-    let song = new Song(songObj)
+
+  // construct refinedSongs
+  for(let s of songs) {
+    let song = new Song(s)
     let filterOut = false
 
     if(searchFilter) {
@@ -92,8 +84,26 @@ async function showSongs(songs, options) {
     if(filters.filter.downloaded) if(song.downloadLocation == undefined) continue
 
     if(filterOut) continue
-    songsHtml += song.getHTML()
+    
+    refinedSongs.push(song)
   }
+
+  // sort songs 
+  if(filters.sortby.lastadded) refinedSongs.sort((a,b) => a.saveDate - b.saveDate)
+  if(filters.sortby.lastplayed) refinedSongs.sort((a,b) => a.lastPlayed - b.lastPlayed)
+  if(filters.sortby.alphabetic) {
+    let alphabet = 'abcdefghijklmnopqrstuvxyz'
+     refinedSongs.sort((a,b) => {
+      if(a.title > b.title) return 1
+      if(b.title > a.title) return -1
+      return 0
+    })
+  }
+
+
+
+  let songsHtml = ''
+  for(let s of refinedSongs) songsHtml += s.getHTML()
 
   songListElem.append(songsHtml)
 
@@ -147,7 +157,7 @@ async function showSongs(songs, options) {
 
   console.log('SHUW SONGS')
 
-  $('.song').off().on('click', (e) => { onSongClick(e, songs) })
+  $('.song').off().on('click', (e) => { onSongClick(e, refinedSongs) })
   $('.song .like').off().on('click', async (e) => {
     let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', '')))
     if(song.liked) {
@@ -273,6 +283,8 @@ function scrollToCurrentSong() {
   let songElem = $(`#song-${currentSong.youtubeID}`)
   if(songElem == undefined) return
   let songsContainer = getCurrentSongsElement().find('.songList')
+  if(songsContainer.offset() == undefined) return
+  if(songElem.offset() == undefined) return
   songsContainer.animate({
     scrollTop: songElem.offset().top - songsContainer.offset().top + songsContainer.scrollTop()
   })

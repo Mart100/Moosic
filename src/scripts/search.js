@@ -24,7 +24,8 @@ $(() => {
       let song = new Song().importFromYoutube(video)
       searchResults[song.youtubeID] = song
     }
-    showSongs(Object.values(searchResults), {topBar: false})
+    setSortByNone()
+    showSongs(searchResults, {topBar: false})
   })
 })
 

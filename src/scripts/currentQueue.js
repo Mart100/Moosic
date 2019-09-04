@@ -22,6 +22,7 @@ $(() => {
       $('#currentQueue').hide()
       $('#currentQueue').css('top', '0px')
       $('#queue').html('')
+      $('#queue').hide()
     })
   })
 })

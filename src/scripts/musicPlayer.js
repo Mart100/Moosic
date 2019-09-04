@@ -156,9 +156,9 @@ class MusicPlayer extends EventEmitter {
   }
   async onYTerror(e) {
     console.log('ERROR', e)
-    if(e.data == 150) await this.currentSong.download()
 
     this.nextInQueue()
+    if(e.data == 150) await this.currentSong.download()
   }
   onEndListenerMp3() {
     this.HowlSound.on('end', () => {
