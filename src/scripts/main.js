@@ -22,9 +22,6 @@ if(isDev()) storagePos = './src/storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 
-$(() => {
-  $('#moosicVersion').html('Version: ' + process.env.npm_package_version)
-})
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }

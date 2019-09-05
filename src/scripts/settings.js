@@ -82,6 +82,9 @@ $(() => {
   $('#info-button').on('click', async () => {
     $('#settings-main').fadeOut(250, () => {
       $('#info').fadeIn(250)
+
+      let appVersion = require('electron').remote.app.getVersion()
+      $('#moosicVersion').html('Version: ' + appVersion)
     })
   })
 

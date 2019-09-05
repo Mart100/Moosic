@@ -43,7 +43,9 @@
       }
     ],
     "win": {
-      "files": ["!src/storage/*"]
+      "files": [
+        "!src/storage/*"
+      ]
     }
   }
 }
