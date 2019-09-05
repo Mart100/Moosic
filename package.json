@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",

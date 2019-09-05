@@ -1,24 +1,21 @@
+let ytdl = require('ytdl-core')
+let fs = require('fs-extra')
 
 onmessage = async function(e) {
+
+  let start = Date.now()
 
   let songID = e.data.songID
   let storagePos = e.data.storagePos
 
-  let ytdl = require('ytdl-core')
-  let ffmpeg = require('fluent-ffmpeg')
-
-
   let stream = ytdl(`http://www.youtube.com/watch?v=${songID}`, {
-    quality: 'highestaudio',
     filter: 'audio',
   })
 
   let downloadLoc = storagePos + `/songs/${songID}.mp3`
 
-  await ffmpeg(stream)
-    .save(downloadLoc)
-    .on('end', () => {
-      postMessage('1')
-    })
+  let ws = fs.createWriteStream(downloadLoc)
+  stream.pipe(ws)
+  ws.on('finish', () => { postMessage('1') })
 
 }
