@@ -1,7 +1,17 @@
 async function createNewCollection() {
   let database = await getData()
+
+  // get name for collection
+  let avaibleName = ''
+  let avaibleNameI = 0
+  while(avaibleName == '') {
+    let name = 'Collection - '+avaibleNameI
+    if(database.collections.find(c => c.name == name) == undefined) avaibleName = name
+    avaibleNameI++
+  }
+
   let collection = {
-    name: 'Collection - '+database.collections.length,
+    name: avaibleName,
     songs: []
   }
 
