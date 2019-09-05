@@ -61,14 +61,19 @@ $(() => {
           songs[trackID] = song.getObject()
         }
 
-        let database = await getData()
-        let mergedSongs = {
-          ...database.songs,
-          ...songs
-        }
-        database.songs = mergedSongs
-        saveData(database)
-        console.log('Done importing songs')
+        let collName = await createNewCollection('Headset save')
+
+        await saveData1((database) => {
+
+          let mergedSongs = { ...database.songs, ...songs}
+          database.songs = mergedSongs
+
+          database.collections.find(c => c.name == collName).songs = Object.keys(songs)
+
+          return database
+        })
+        
+        console.log('Done importing songs from headset')
 
       })
     })

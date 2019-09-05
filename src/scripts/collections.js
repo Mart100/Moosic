@@ -1,22 +1,28 @@
-async function createNewCollection() {
+async function createNewCollection(nameOption) {
   let database = await getData()
 
+  if(nameOption == undefined) nameOption = 'Collection'
+
   // get name for collection
-  let avaibleName = ''
-  let avaibleNameI = 0
-  while(avaibleName == '') {
-    let name = 'Collection - '+avaibleNameI
-    if(database.collections.find(c => c.name == name) == undefined) avaibleName = name
-    avaibleNameI++
+  let availableName = ''
+  let availableNameI = 0
+  while(availableName == '') {
+    let name = nameOption+' - '+availableNameI
+    if(database.collections.find(c => c.name == name) == undefined) availableName = name
+    availableNameI++
   }
 
   let collection = {
-    name: avaibleName,
+    name: availableName,
     songs: []
   }
 
-  database.collections.push(collection)
-  saveData(database)
+  await saveData1((database1) => {
+    database1.collections.push(collection)
+    return database1
+  })
+
+  return availableName
 }
 
 async function addSongToCollection(song, collectionIDX) {

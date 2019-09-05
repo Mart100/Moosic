@@ -14,6 +14,7 @@ const spotify_clientID = '11063f81cfec4398aeb571cff3bb819d'
 const globalShortcut = remote.globalShortcut
 const ipc = require('electron').ipcRenderer
 const musicPlayer = new MusicPlayer()
+const songDownloader = new SongDownloader()
 
 // storage position
 let storagePos = './storage'
