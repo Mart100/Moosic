@@ -7,3 +7,6 @@
 #settings {
   color: white;
 }
+#setStoragePos-button input {
+  pointer-events: none;
+}

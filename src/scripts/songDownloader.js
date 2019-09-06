@@ -73,7 +73,7 @@ class SongDownloader {
       let downloadWorker = new Worker('./scripts/downloadSong.js')
       downloadWorker.postMessage({
         songID: songID, 
-        storagePos: storagePos
+        songStoragePos: songStoragePos
       })
 
       // when worker returns finished download

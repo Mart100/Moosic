@@ -17,10 +17,19 @@ const musicPlayer = new MusicPlayer()
 const songDownloader = new SongDownloader()
 
 // storage position
-let storagePos = './storage'
-if(isDev()) storagePos = './src/storage'
+let storagePos = __dirname + '\\storage'
+if(isDev()) storagePos = __dirname + '\\storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
+
+let songStoragePos = storagePos+'\\songs'
+
+async function getSongStoragePos() {
+  let database =  await getData()
+  if(database.songStoragePos != undefined) {
+    songStoragePos = database.songStoragePos
+  }
+}
 
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
@@ -37,4 +46,6 @@ $(() => {
 		if(e.keyCode === 123) remote.getCurrentWindow().toggleDevTools()
 		else if (e.keyCode === 116) location.reload()
 	})
+
+  getSongStoragePos()
 })

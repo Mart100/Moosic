@@ -24,6 +24,28 @@ $(() => {
 
   })
 
+  $('#setStoragePos-button').on('click', () => { 
+    let elem = $('<input type="file" webkitdirectory directory/>')
+    elem.trigger('click')
+
+    elem.on('change', async (event) => {
+      let newStoragePos = elem.prop('files')[0].path
+
+      fs.copy(songStoragePos, newStoragePos, async (err) => {
+        if (err) return console.error(err)
+        console.log('success!')
+
+        await saveData1((database) => {
+          database.songStoragePos = newStoragePos
+          return database
+        })
+
+        songStoragePos = newStoragePos
+      })
+    })
+  })
+
+
   // import likes from headset
   $('#importData-headset-button').on('click', () => {
     $('body').append('<input id="fileInput" type="file" accept=".json"/>')

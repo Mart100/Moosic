@@ -5,7 +5,6 @@ class Song {
     
     this.image = data.image
     this.youtubeID = data.youtubeID
-    this.downloadLocation = data.downloadLocation
     this.title = data.title
     this.author = data.author
     this.liked = data.liked
@@ -21,7 +20,6 @@ class Song {
 
     this.image = video.snippet.thumbnails.default.url
     this.youtubeID = video.id.videoId
-    this.downloadLocation = undefined
     this.title = video.snippet.title
     this.author = video.snippet.channelTitle
     this.liked = false
@@ -54,8 +52,7 @@ class Song {
     })
   }
   async removeDownload() {
-    let downloadLoc = storagePos + `/songs/${this.youtubeID}.mp3`
-    fs.remove(downloadLoc, err => {
+    fs.remove(this.getDownloadLocation(), err => {
       if(err) console.error(err)
       return
     })
@@ -68,11 +65,19 @@ class Song {
       return
     })
   }
+  async getDownloadLocation() {
+    return songStoragePos+'\\'+this.youtubeID+'.mp3'
+  }
+  async isDownloaded() {
+    let songLoc = this.getDownloadLocation()
+    let mp3Exists = await fs.pathExists(songLoc)
+    return mp3Exists
+  }
   async delete() {
     console.log('TEST-TEST')
     console.log(this)
 
-    if(this.downloadLocation) await this.removeDownload()
+    if(this.isDownloaded()) await this.removeDownload()
     await saveData1((database) => {
       delete database.songs[this.youtubeID]
       return database

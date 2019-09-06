@@ -41,7 +41,12 @@ class MusicPlayer extends EventEmitter {
       this.currentSong.save()
     }
 
-    if(songDB != undefined && songDB.downloadLocation != undefined) this.playMp3(songDB.downloadLocation)
+    let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
+    let mp3Exists = await song.isDownloaded()
+
+    console.log(songLoc)
+
+    if(songDB != undefined && mp3Exists) this.playMp3(songLoc)
     else this.playYT(song.youtubeID)
 
     setTimeout(() => {
