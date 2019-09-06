@@ -77,7 +77,7 @@ class Song {
     console.log('TEST-TEST')
     console.log(this)
 
-    if(this.isDownloaded()) await this.removeDownload()
+    if(await this.isDownloaded()) await this.removeDownload()
     await saveData1((database) => {
       delete database.songs[this.youtubeID]
       return database

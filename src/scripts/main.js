@@ -49,3 +49,14 @@ $(() => {
 
   getSongStoragePos()
 })
+
+async function getSongs() {
+  let database = await getData()
+  let rawSongs = Object.values(database.songs)
+  let songs = {}
+  for(let rawSong of rawSongs) {
+    let song = new Song(rawSong)
+    songs[song.youtubeID] = song
+  }
+  return songs
+}

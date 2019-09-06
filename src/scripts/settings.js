@@ -102,11 +102,24 @@ $(() => {
   })
 
   $('#info-button').on('click', async () => {
-    $('#settings-main').fadeOut(250, () => {
+    $('#settings-main').fadeOut(250, async () => {
       $('#info').fadeIn(250)
 
       let appVersion = require('electron').remote.app.getVersion()
       $('#moosicVersion').html('Version: ' + appVersion)
+      
+      let songs = await getSongs()
+      let vSongs = Object.values(songs)
+
+      $('#info-savedSongs').html('Saved Songs: '+vSongs.length)
+
+
+      // get downloaded amount
+      fs.readdir(songStoragePos, (err, files) => { 
+        if(err) console.error(err)
+        $('#info-downloadedSongs').html('Downloaded Songs: '+files.length)
+      })
+
     })
   })
 
