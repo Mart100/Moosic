@@ -1,7 +1,12 @@
 let databaseFileLoc = storagePos + '/database.json'
 
 function getData() {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+
+    if(!await fs.pathExists(storagePos+'\\database.json')) {
+      await createEmptyDatabase()
+    }
+
     jsonfile.readFile(databaseFileLoc, async (err, obj) => {
       if(err) {
         console.error(err)
