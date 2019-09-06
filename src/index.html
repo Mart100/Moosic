@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="styles/currentQueue.css">
     <link rel="stylesheet" type="text/css" href="styles/songList.css">
     <link rel="stylesheet" type="text/css" href="styles/playlistImport.css">
+    <link rel="stylesheet" type="text/css" href="styles/other.css">
 
     <!-- Libraries -->
     <script>window.$ = window.jQuery = require('jquery');</script>
@@ -54,9 +55,7 @@
           <img class="image">
           <div class="progressBackground"><div class="progress"></div></div>
         </div>
-        <div id="queue" class="songs">
-
-        </div>
+        <div id="queue" class="songs"></div>
         <div id="musicControls">
           <div class="bar_wrapper">
             <img class="repeat" src="./images/repeat.png"/>
@@ -74,6 +73,9 @@
             <img class="high_volume" src="./images/high-volume.png">
           </div>
         </div>
+      </div>
+      <div id="songsPopup">
+        <div class="songs"></div>
       </div>
       <div id="search" style="display: none;">
         <input class="input" type="text" placeholder="Search youtube">

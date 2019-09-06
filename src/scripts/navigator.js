@@ -11,6 +11,7 @@ $(() => {
     $('#currentQueue').hide()
     $('#playlistImportSpotify').hide()
     $('.songs').hide()
+    $('#songsPopup').hide()
     resetFilters()
 
 

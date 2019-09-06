@@ -231,6 +231,8 @@ async function showSongs(songs, options) {
       console.log(relatedVideos)
       let relatedSongs = []
       for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
+      $('#songsPopup').fadeIn()
+      $('#songsPopup .songs').fadeIn()
       setSortByNone()
       musicPlayer.setQueue(relatedSongs)
       musicPlayer.nextInQueue()
