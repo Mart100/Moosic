@@ -17,7 +17,7 @@ const musicPlayer = new MusicPlayer()
 const songDownloader = new SongDownloader()
 
 // storage position
-let storagePos = __dirname + '\\storage'
+let storagePos = __dirname.replace('\\resources\\app.asar', '') + '\\storage'
 if(isDev()) storagePos = __dirname + '\\storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
@@ -25,7 +25,7 @@ spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 let songStoragePos = storagePos+'\\songs'
 
 async function getSongStoragePos() {
-  let database =  await getData()
+  let database = await getData()
   if(database.songStoragePos != undefined) {
     songStoragePos = database.songStoragePos
   }
