@@ -28,6 +28,7 @@ $(() => {
     }
     setSortByNone()
     showSongs(searchResults, {topBar: false})
+    $('#queue').hide()
   })
 })
 
