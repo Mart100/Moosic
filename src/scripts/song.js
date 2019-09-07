@@ -58,12 +58,12 @@ class Song {
     })
   }
   async download(options) {
-    return new Promise(async (resolve, reject) => {
 
-      await songDownloader.queueNewDownload(this.youtubeID, options)
+    if(await this.isDownloaded()) return
 
-      return
-    })
+    await songDownloader.queueNewDownload(this.youtubeID, options)
+
+    return
   }
   async getDownloadLocation() {
     return songStoragePos+'\\'+this.youtubeID+'.mp3'
