@@ -66,10 +66,10 @@ class Song {
     return
   }
   async getDownloadLocation() {
-    return songStoragePos+'\\'+this.youtubeID+'.mp3'
+    return songStoragePos+'/'+this.youtubeID+'.mp3'
   }
   async isDownloaded() {
-    let songLoc = this.getDownloadLocation()
+    let songLoc = await this.getDownloadLocation()
     let mp3Exists = await fs.pathExists(songLoc)
     return mp3Exists
   }

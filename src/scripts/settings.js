@@ -26,10 +26,10 @@ $(() => {
 
   $('#setStoragePos-button').on('click', () => { 
     let elem = $('<input type="file" webkitdirectory directory/>')
-    elem.trigger('click')
 
     elem.on('change', async (event) => {
       let newStoragePos = elem.prop('files')[0].path
+      newStoragePos = newStoragePos.replace(/\\/g, '/')
 
       fs.copy(songStoragePos, newStoragePos, async (err) => {
         if (err) return console.error(err)
@@ -41,6 +41,30 @@ $(() => {
         })
 
         songStoragePos = newStoragePos
+      })
+    })
+
+    elem.trigger('click')
+  })
+
+  // import from Moosic save
+  $('#importData-moosic-button').on('click', () => {
+   $('body').append('<input id="fileInput" type="file" accept=".json"/>')
+    let input = $('#fileInput')
+
+    input.trigger('click')
+
+    input.on('change', (event) => {
+      let url = $('#fileInput').prop('files')[0].path
+
+      // read file
+      fs.readJson(url, async (err, obj) => {
+        if(err) console.error(err)
+        if(obj == undefined || obj.songs == undefined) return window.alert('Not a valid Moosic save file!')
+        saveData1((data) => {
+          return obj
+        })
+        songStoragePos = obj.songStoragePos
       })
     })
   })
@@ -57,7 +81,7 @@ $(() => {
       let url = $('#fileInput').prop('files')[0].path
 
       // read file
-      jsonfile.readFile(url, async (err, obj) => {
+      fs.readJson(url, async (err, obj) => {
         if (err) console.error(err)
         if (obj == undefined) return
         if (obj.collections == undefined) return
@@ -65,7 +89,7 @@ $(() => {
         let tracks = obj.collections.likes.tracks
 
         console.log(tracks)
-
+ 
         let songs = {}
 
         for (let trackID in tracks) {
@@ -118,6 +142,13 @@ $(() => {
       fs.readdir(songStoragePos, (err, files) => { 
         if(err) console.error(err)
         $('#info-downloadedSongs').html('Downloaded Songs: '+files.length)
+      })
+      
+      require('get-folder-size')(songStoragePos, (err, size) => {
+        if(err) throw err
+
+        let songStorageSize = (size / 1024 / 1024).toFixed(2)
+        $('#info-downloadedSongsStorageSize').html('Downloaded Songs storage size: ' + songStorageSize + ' MB')
       })
 
     })

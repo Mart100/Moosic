@@ -41,7 +41,7 @@ class MusicPlayer extends EventEmitter {
       this.currentSong.save()
     }
 
-    let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
+    let songLoc = songStoragePos+'/'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
 
     console.log(songLoc)
