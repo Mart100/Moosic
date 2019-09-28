@@ -101,6 +101,7 @@ $(() => {
             title: track.title,
             author: track.artist,
             liked: false,
+            order: obj.collections.likes.order[trackID],
             saveDate: Date.now()
           }
           let song = new Song(trackData)

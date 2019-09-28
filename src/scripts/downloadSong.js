@@ -8,16 +8,18 @@ onmessage = async function(e) {
   let songID = e.data.songID
   let songStoragePos = e.data.songStoragePos
 
-  if(await fs.pathExists(songStoragePos)) return postMessage('1')
+  let songLoc = songStoragePos + `\\${songID}.mp3`
 
-  let stream = ytdl(`http://www.youtube.com/watch?v=${songID}`, {
+  if(await fs.pathExists(songLoc)) return postMessage('1')
+
+  let stream = ytdl(`https://www.youtube.com/watch?v=${songID}`, {
     filter: 'audio',
   })
 
-  let songLoc = songStoragePos + `\\${songID}.mp3`
-
   let ws = fs.createWriteStream(songLoc)
   stream.pipe(ws)
-  ws.on('finish', () => { postMessage('1') })
+  ws.on('finish', () => { 
+    postMessage('1')
+  })
 
 }

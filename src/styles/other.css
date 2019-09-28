@@ -6,3 +6,8 @@
   z-index: 25;
   background-color: rgb(25, 25, 25);
 }
+
+#player {
+  position: absolute;
+  top: 0px;
+}

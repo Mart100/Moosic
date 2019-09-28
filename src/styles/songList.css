@@ -92,7 +92,7 @@
 .songList .song {
   width: 100%;
   padding: 10px;
-  height: 80px;
+  height: 60px;
   border: 1px rgb(30, 30, 30) solid;
   transition-duration: 0.3s;
   cursor: pointer;
@@ -104,8 +104,8 @@
 
 .songList .song .image {
   position: relative;
-  width: 80px;     
-  height: 80px;
+  width: 60px;     
+  height: 60px;
   overflow: hidden;
   float: left;
   border-radius: 10%;
@@ -115,7 +115,7 @@
 .songList .song .image img {
   position: absolute;
   display: inline-block;
-  height: 100px;
+  height: 80px;
   width: auto;
   top: 50%;     
   left: 50%;
@@ -127,12 +127,13 @@
   display: inline-block;
   max-width: 200px;
   margin-left: 10px;
-  font-size: 15px;
+  font-size: 14px;
   pointer-events: none;
 }
 .songList .song .channel {
   color: rgb(180, 180, 180);
   margin-left: 10px;
+  font-size: 12px;
   display: inline-block;
   pointer-events: none;
 }

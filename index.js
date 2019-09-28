@@ -9,6 +9,8 @@ const ipcMain = electron.ipcMain
 
 const { autoUpdater } = require("electron-updater")
 
+require('v8-compile-cache')
+
 try {
   require('electron-reload')(__dirname, {
     ignored: /node_modules|storage|[\/\\]\./
@@ -30,6 +32,10 @@ app.on('ready', () => {
     },
     icon: './icon.ico'
   })
+
+  window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
+      callback({responseHeaders: Object.fromEntries(Object.entries(details.responseHeaders).filter(header => !/x-frame-options/i.test(header[0])))});
+  });
   
   window.setMenu(null)
   window.setMaximizable(false)
@@ -37,7 +43,11 @@ app.on('ready', () => {
 
   window.loadFile('./src/index.html')
 
-  if(isDev()) window.webContents.openDevTools()
+  if(isDev()) {
+    window.webContents.once('dom-ready', () => {
+      window.webContents.openDevTools()
+    })
+  }
 
   setTimeout(() => {
     autoUpdater.checkForUpdatesAndNotify()

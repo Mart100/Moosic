@@ -89,10 +89,24 @@ async function showSongs(songs, options) {
     
     refinedSongs.push(song)
   }
-
+  // first sort by order
+  refinedSongs.sort((a,b) => a.order - b.order)
   // sort songs 
-  if(filters.sortby.lastadded) refinedSongs.sort((a,b) => a.saveDate - b.saveDate)
-  if(filters.sortby.lastplayed) refinedSongs.sort((a,b) => a.lastPlayed - b.lastPlayed)
+  if(filters.sortby.lastadded) {
+    refinedSongs.sort((a,b) => b.saveDate - a.saveDate)
+  }
+  if(filters.sortby.lastplayed) {
+    refinedSongs.sort((a,b) => {
+
+      let lastA = a.lastPlayed
+      if(!lastA) a.lastPlayed = 0
+
+      let lastB = b.lastPlayed
+      if(!lastB) b.lastPlayed = 0
+
+      return lastB - lastA
+    })
+  }
   if(filters.sortby.alphabetic) {
     let alphabet = 'abcdefghijklmnopqrstuvxyz'
      refinedSongs.sort((a,b) => {
@@ -107,7 +121,7 @@ async function showSongs(songs, options) {
   let songsHtml = ''
   for(let s of refinedSongs) songsHtml += s.getHTML()
 
-  songListElem.append(songsHtml)
+  songListElem[0].innerHTML = songsHtml
 
   for(let song of songs) {
     if(song.liked) $(`.songs #song-${song.youtubeID} .buttons .like`).attr('src', './images/red-heart.png')
@@ -162,7 +176,6 @@ async function showSongs(songs, options) {
   $('.song').off().on('click', (e) => { onSongClick(e, refinedSongs) })
   $('.song .like').off().on('click', async (e) => {
     let song = refinedSongs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''))
-    console.log(song.liked)
     if(song.liked) {
       await song.dislike()
       e.target.src = './images/heart.png'
@@ -228,7 +241,6 @@ async function showSongs(songs, options) {
     tooltip.find('.playSimularSongs').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
       let relatedVideos = await getRelatedVideosYT(song.youtubeID)
-      console.log(relatedVideos)
       let relatedSongs = []
       for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
       $('#songsPopup').fadeIn()

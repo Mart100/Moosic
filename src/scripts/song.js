@@ -10,7 +10,7 @@ class Song {
     this.liked = data.liked
     this.saved = true
     if(this.liked == undefined) this.liked = false
-    this.order = 0
+    this.order = data.order
     this.lastPlayed = data.lastPlayed
 
     return this
@@ -89,9 +89,11 @@ class Song {
     return JSON.parse(JSON.stringify(this))
   }
   getHTML() {
-    if(this.title == undefined) return console.log('WHAT: ', this)
     let title = this.title
-    if(title.length > 50) title = title.split('').splice(0, 50).join('') + '...'
+    if(title.length > 20) title = title.split('').splice(0, 20).join('') + '...'
+
+    let channel = this.author
+    if(channel.length > 20) channel = channel.split('').splice(0, 20).join('') + '...'
 
     let html = `
     <div class="song" id="song-${this.youtubeID}">

@@ -38,16 +38,21 @@ class MusicPlayer extends EventEmitter {
 
     if(this.currentSong.saved) {
       this.currentSong.lastPlayed = Date.now()
+      console.log(this.currentSong.lastPlayed)
       this.currentSong.save()
     }
 
-    let songLoc = songStoragePos+'/'+song.youtubeID+'.mp3'
+    let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
 
     console.log(songLoc)
 
     if(songDB != undefined && mp3Exists) this.playMp3(songLoc)
-    else this.playYT(song.youtubeID)
+    else {
+      this.playYT(song.youtubeID)
+      await this.currentSong.download({priority: true})
+      musicPlayer.play(this.currentSong)
+    }
 
     setTimeout(() => {
       this.setVolume(this.volume)
@@ -155,7 +160,7 @@ class MusicPlayer extends EventEmitter {
     this.currentPlayer = 'YT'
 
   }
-  onYTready(e) {
+  async onYTready(e) {
     e.target.playVideo()
     this.setVolume(this.volume)
   }
@@ -164,7 +169,7 @@ class MusicPlayer extends EventEmitter {
 
     if(e.data == 150) {
       if(this.currentSong) {
-        await this.currentSong.download()
+        await this.currentSong.download({priority: true})
         musicPlayer.play(this.currentSong)
       }
     }

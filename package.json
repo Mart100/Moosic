@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -13,13 +13,12 @@
   "dependencies": {
     "electron-updater": "^4.1.2",
     "file-saver": "^2.0.2",
-    "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^8.1.0",
     "get-folder-size": "^2.0.1",
     "jquery": "^3.4.1",
-    "jsonfile": "^5.0.0",
     "open": "^6.4.0",
     "spotify-web-api-js": "^1.2.0",
+    "v8-compile-cache": "^2.1.0",
     "ytdl-core": "^0.29.5"
   },
   "devDependencies": {
