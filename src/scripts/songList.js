@@ -93,7 +93,9 @@ async function showSongs(songs, options) {
   refinedSongs.sort((a,b) => a.order - b.order)
   // sort songs 
   if(filters.sortby.lastadded) {
-    refinedSongs.sort((a,b) => b.saveDate - a.saveDate)
+    refinedSongs.sort((a,b) => {
+      return b.saveDate - a.saveDate
+    })
   }
   if(filters.sortby.lastplayed) {
     refinedSongs.sort((a,b) => {
@@ -234,7 +236,8 @@ async function showSongs(songs, options) {
 
     tooltip.find('.deleteSong').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      song.delete()
+      await song.delete()
+      songs = await refreshSongs(songs, {inDB: true})
       showSongs(songs, options)
     })
 

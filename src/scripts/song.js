@@ -8,10 +8,11 @@ class Song {
     this.title = data.title
     this.author = data.author
     this.liked = data.liked
-    this.saved = true
+    this.saved = data.saved
     if(this.liked == undefined) this.liked = false
     this.order = data.order
     this.lastPlayed = data.lastPlayed
+    this.saveDate = data.saveDate
 
     return this
   }
@@ -45,16 +46,22 @@ class Song {
     return
   }
   async save() {
+    //console.trace()
     this.saveDate = Date.now()
+    this.saved = true
     await saveData1((database) => {
       database.songs[this.youtubeID] = this.getObject()
       return database
     })
   }
   async removeDownload() {
-    fs.remove(this.getDownloadLocation(), err => {
-      if(err) console.error(err)
-      return
+    return new Promise((resolve, reject) => {
+      let downloadPos = this.getDownloadLocation()
+      console.log(downloadPos)
+      fs.remove(downloadPos, err => {
+        if(err) console.error(err)
+        resolve()
+      })
     })
   }
   async download(options) {
@@ -65,7 +72,7 @@ class Song {
 
     return
   }
-  async getDownloadLocation() {
+  getDownloadLocation() {
     return songStoragePos+'/'+this.youtubeID+'.mp3'
   }
   async isDownloaded() {
@@ -74,8 +81,6 @@ class Song {
     return mp3Exists
   }
   async delete() {
-    console.log('TEST-TEST')
-    console.log(this)
 
     if(await this.isDownloaded()) await this.removeDownload()
     await saveData1((database) => {

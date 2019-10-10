@@ -45,9 +45,9 @@ class MusicPlayer extends EventEmitter {
     let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
 
-    console.log(songLoc)
+    console.log(songLoc, mp3Exists)
 
-    if(songDB != undefined && mp3Exists) this.playMp3(songLoc)
+    if(mp3Exists) this.playMp3(songLoc)
     else {
       this.playYT(song.youtubeID)
       await this.currentSong.download({priority: true})
