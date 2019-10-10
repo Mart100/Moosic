@@ -27,15 +27,24 @@ $(() => {
 })
 
 
-async function refreshSongs(songs) {
+async function refreshSongs(songs, options) {
+  if(!options) {
+    options = {
+      inDB: false
+    }
+  }
   let newSongs = []
   let database = await getData()
-  for(let songID in songs) {
-    let song = songs[songID]
+  for(let i in songs) {
+    let song = songs[i]
+    let songID = song.youtubeID
     let songDB = database.songs[songID]
     let newSong
     if(songDB != undefined) newSong = new Song(songDB)
-    else newSong = new Song(song)
+    else {
+      if(options.inDB) continue
+      else newSong = new Song(song)
+    }
     newSongs.push(newSong)
   }
 
