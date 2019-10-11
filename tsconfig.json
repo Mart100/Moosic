@@ -3,7 +3,7 @@
     "module": "commonjs",
     "removeComments": true,
     "sourceMap": true,
-    "outDir": "./compiled",
+    "outDir": "./compiled"
   },
   "exclude": [
     "node_modules"
