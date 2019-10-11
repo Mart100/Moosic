@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "sourceMap": true,
+  },
+  "files": [
+    "index.ts"
+  ],
+  "include": [
+    "src/scripts/"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

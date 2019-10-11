@@ -27,7 +27,7 @@
     "electron-reload": "^1.5.0"
   },
   "scripts": {
-    "start": "npm install && electron .",
+    "start": "npm install && tsc -w && electron .",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",
