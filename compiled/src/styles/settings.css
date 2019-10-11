@@ -1,0 +1,12 @@
+#deleteData-button {
+  background-color: rgb(50, 10, 10);
+}
+#deleteData-button:hover {
+  background-color: rgb(200, 10, 10);
+}
+#settings {
+  color: white;
+}
+#setStoragePos-button input {
+  pointer-events: none;
+}

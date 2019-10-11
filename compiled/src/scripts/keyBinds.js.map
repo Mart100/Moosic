@@ -1,0 +1,1 @@
+{"version":3,"file":"keyBinds.js","sourceRoot":"","sources":["../../../src/scripts/keyBinds.ts"],"names":[],"mappings":"AAAA,SAAS,gBAAgB;IACvB,IAAG,WAAW,CAAC,QAAQ;QAAE,WAAW,CAAC,OAAO,EAAE,CAAA;;QACzC,WAAW,CAAC,KAAK,EAAE,CAAA;AAC1B,CAAC;AACD,SAAS,oBAAoB;IAC3B,WAAW,CAAC,eAAe,EAAE,CAAA;AAC/B,CAAC;AACD,SAAS,gBAAgB;IACvB,WAAW,CAAC,WAAW,EAAE,CAAA;AAC3B,CAAC"}

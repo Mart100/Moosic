@@ -1,0 +1,199 @@
+.songs {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.songs .topBar {
+  height: 40px;
+  width: 100%;
+  background-color: rgb(20, 20, 20);
+}
+
+.songs .topBar .filters {
+  height: 0px;
+  position: absolute;
+  background-color: rgb(20, 20, 20);
+  transition-duration: 0.4s;
+  width: 100%;
+  overflow: hidden;
+  color: white;
+  text-align: center;
+  font-size: 20px;
+  z-index: 100;
+}
+
+.songs .topBar .filters.expanded {
+  height: 150px;
+}
+
+.songs .topBar .filters .sortBy {
+  width: 40%;
+  padding: 5%;
+  float: left;
+}
+
+.songs .topBar .filters .filter {
+  width: 40%;
+  padding: 5%;
+  float: right;
+}
+
+.songs .topBar .filters .button2 {
+  background-color: rgb(22, 22, 22);
+  font-size: 18px;
+  padding: 1px;
+  border-radius: 5px;
+  margin: 2px;
+  color: rgb(150, 150, 150);
+  cursor: pointer;
+}
+
+.songs .topBar .filters .button2.selected {
+  color: white;
+}
+.songs .topBar .filters .button2:hover {
+  background-color: rgb(30, 30, 30);
+}
+
+.topBar .search {
+  width: 350px;
+  height: 40px;
+  font-size: 20px;
+  background-color: rgb(18, 18, 18);
+  border: 0px solid;
+  padding: 10px;
+  color: rgb(255, 255, 255);
+}
+
+.topBar .filterButton {
+  float: right;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 5px 10px;
+  transition-duration: 0.3s;
+}
+.topBar .filterButton:hover {
+  background-color: rgb(40, 40, 40);
+}
+
+
+.songList {
+  height: calc(100% - 40px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.songList .song {
+  width: 100%;
+  padding: 10px;
+  height: 60px;
+  border: 1px rgb(30, 30, 30) solid;
+  transition-duration: 0.3s;
+  cursor: pointer;
+}
+
+.songList .song:hover {
+  border-left: 5px rgb(255, 0, 0) solid;
+}
+
+.songList .song .image {
+  position: relative;
+  width: 60px;     
+  height: 60px;
+  overflow: hidden;
+  float: left;
+  border-radius: 10%;
+  pointer-events: none;
+}
+
+.songList .song .image img {
+  position: absolute;
+  display: inline-block;
+  height: 80px;
+  width: auto;
+  top: 50%;     
+  left: 50%;
+  transform: translate( -50%, -50%);
+}
+
+.songList .song .title {
+  color: white;
+  display: inline-block;
+  max-width: 200px;
+  margin-left: 10px;
+  font-size: 14px;
+  pointer-events: none;
+}
+.songList .song .channel {
+  color: rgb(180, 180, 180);
+  margin-left: 10px;
+  font-size: 12px;
+  display: inline-block;
+  pointer-events: none;
+}
+.songList .song .buttons {
+  position: absolute;
+  margin-top: 0px;
+  right: 55px;
+  width: 0px;
+  height: 80px;
+  transition-duration: 0.3s;
+  border-radius: 10%;
+  text-align: center;
+}
+.songList .song .more {
+  position: absolute;
+  top: 30px;
+  width: 30px;
+  height: 30px;
+  transition-duration: 0.3s;
+  border-radius: 10%;
+}
+.songList .song .like {
+  position: absolute;
+  top: 0px;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  transition-duration: 0.3s;
+  border-radius: 10%;
+}
+.songList .song .like:hover {
+  background-color: rgb(45, 45, 45);
+}
+.songList .song .more:hover {
+  background-color: rgb(45, 45, 45);
+}
+
+.songList .song .tooltip {
+  width: 150px;
+  height: auto;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 20px;
+  box-shadow: 1px 2px 10px rgba(255, 255, 255, .5);
+  text-align: center;
+  transform: translateX(-100%);
+}
+
+.songList .song .tooltip button {
+  width: 100%;
+  text-align: center;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0);
+  border: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  transition-duration: 0.3s;
+}
+.songList .song .tooltip button:hover {
+  background-color: rgba(0,0,0,0.5);
+  cursor: pointer;
+}

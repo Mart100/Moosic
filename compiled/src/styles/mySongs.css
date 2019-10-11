@@ -1,0 +1,57 @@
+#mySongs .songs {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#mySongs .collection-button .options {
+  width: 150px;
+  height: auto;
+  position: absolute;
+  padding: 5px;
+  margin-top: -5px;
+  z-index: 15;
+  right: 75px;
+  border-radius: 5px;
+  background-color: white;
+  font-size: 20px;
+  box-shadow: 1px 2px 10px rgba(255, 255, 255, .5);
+  text-align: center;
+}
+
+#mySongs .collection-button .options button {
+  width: 100%;
+  text-align: center;
+  border-radius: 4px;
+  background-color: rgba(0,0,0,0);
+  border: none;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  transition-duration: 0.3s;
+}
+#mySongs .collection-button .options button:hover {
+  background-color: rgba(0,0,0,0.5);
+  cursor: pointer;
+}
+
+#mySongs .collection-button .name {
+  pointer-events: none;
+}
+
+#mySongs .collection-button .options-button {
+  position: absolute;
+  z-index: 10;
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  right: 60px;
+  margin-top: 9px;
+  background-color: rgb(20,20,20,20);
+  transition-duration: 0.3s;
+  border-radius: 4px;
+  transform: translateY(-50%);
+}
+#mySongs .collection-button .options-button:hover {
+  background-color: rgb(40,40,40,40);
+  cursor: pointer;
+}
