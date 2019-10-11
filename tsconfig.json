@@ -1,17 +1,14 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "noImplicitAny": false,
     "removeComments": true,
     "sourceMap": true,
+    "outDir": "./compiled",
   },
-  "files": [
-    "index.ts"
-  ],
-  "include": [
-    "src/scripts/"
-  ],
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "./"
   ]
 }

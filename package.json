@@ -2,7 +2,7 @@
   "name": "moosic",
   "version": "1.2.4",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
-  "main": "index.js",
+  "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
   "homepage": "https://martve.me/Moosic",
   "repository": {
@@ -27,7 +27,9 @@
     "electron-reload": "^1.5.0"
   },
   "scripts": {
-    "start": "npm install && tsc -w && electron .",
+    "start": "npm install && npm run copy_src_to_compiled && npm run compile && electron .",
+    "compile": "Start tsc -w",
+    "copy_src_to_compiled": "node copy_src_to_compiled.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps",

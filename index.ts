@@ -33,15 +33,16 @@ app.on('ready', () => {
     icon: './icon.ico'
   })
 
+/*
   window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
       callback({responseHeaders: Object.fromEntries(Object.entries(details.responseHeaders).filter(header => !/x-frame-options/i.test(header[0])))});
-  });
+  });*/
   
   window.setMenu(null)
   window.setMaximizable(false)
   window.setResizable(false)
 
-  window.loadFile('./src/index.html')
+  window.loadFile('./compiled/src/index.html')
 
   if(isDev()) {
     window.webContents.once('dom-ready', () => {
