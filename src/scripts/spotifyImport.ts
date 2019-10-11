@@ -4,7 +4,7 @@ const redirectUri = `file://callback`;
 
 let win = null;
 
-function getSpotifyAccessToken() {
+function getSpotifyAccessToken(): Promise<string> {
     return new Promise((resolve, reject) => {
         destroyAuthWin();
 
@@ -69,7 +69,7 @@ function getAuthenticationURL() {
 }
 
 
-async function loadPlaylists(accessToken) {
+async function loadPlaylists(accessToken:string) {
     let rawPlaylists = await fetch(`https://api.spotify.com/v1/me/playlists?limit=50`, {
         method: 'GET',
         headers: {

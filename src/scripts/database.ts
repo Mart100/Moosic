@@ -1,6 +1,13 @@
+interface database {
+  songs: Song[]
+  collections: any[]
+  songStoragePos: string
+
+}
+
 let databaseFileLoc = storagePos + '/database.json'
 
-function getData() {
+function getData(): Promise<any> {
   return new Promise(async (resolve, reject) => {
 
     if(!await fs.pathExists(storagePos+'\\database.json')) {
@@ -17,8 +24,23 @@ function getData() {
           resolve(await getData())
         }
       }
-      obj = JSON.parse(obj)
-      resolve(obj)
+      let objParsed:any = JSON.parse(obj)
+
+      let DBsongs: Song[] = []
+
+      for(let songID in objParsed.songs) {
+        let songObj = objParsed.songs[songID]
+        DBsongs.push(new Song(songObj))
+      }
+
+
+      let database:database = {
+        songs: DBsongs,
+        collections: objParsed.collections,
+        songStoragePos: objParsed.songStoragePos
+      }
+
+      resolve(database)
     })
   })
 }

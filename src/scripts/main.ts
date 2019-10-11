@@ -1,22 +1,25 @@
 const fs = require('fs-extra')
 const ytdl = require('ytdl-core')
 const FileSaver = require('file-saver')
+declare const Howl:any
+declare const YT:any
+declare const gapi:any
 const cp = require('child_process')
 const worker = require('worker_threads')
 const remote = require('electron').remote
-const open = require('open')
+const openURL = require('open')
 const Spotify = require('spotify-web-api-js')
-const pj = require('../package.json')
 const spotifyApi = new Spotify()
 const spotify_clientID = '11063f81cfec4398aeb571cff3bb819d'
-const globalShortcut = remote.globalShortcut
+//const globalShortcut = remote.globalShortcut
 const ipc = require('electron').ipcRenderer
 const musicPlayer = new MusicPlayer()
 const songDownloader = new SongDownloader()
 
 // storage position
-let storagePos = __dirname.replace('\\resources\\app.asar', '') + '\\storage'
+let storagePos:string = __dirname.replace('\\resources\\app.asar', '') + '\\storage'
 if(isDev()) storagePos = __dirname + '\\storage'
+console.log(storagePos)
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 

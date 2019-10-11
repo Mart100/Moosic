@@ -1,4 +1,4 @@
-async function createNewCollection(nameOption) {
+async function createNewCollection(nameOption?: string) {
   let database = await getData()
 
   if(nameOption == undefined) nameOption = 'Collection'

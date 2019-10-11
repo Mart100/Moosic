@@ -1,12 +1,12 @@
 let currentSongList = []
-let filters = {}
+let filters:any = {}
 resetFilters()
 
 async function showSongs(songs, options) {
 
   if(!options) options = {}
 
-  songs = await refreshSongs(songs)
+  songs = await refreshSongs(songs, {})
 
   let songsElem = getCurrentSongsElement()
 
@@ -57,7 +57,7 @@ async function showSongs(songs, options) {
 
   songs = Object.values(songs)
 
-  let database = await getData()
+  let database:any = await getData()
 
   currentSongList = songs
 
@@ -74,7 +74,7 @@ async function showSongs(songs, options) {
 
   // construct refinedSongs
   for(let s of songs) {
-    let song = new Song(s)
+    let song: Song = new Song(s)
     let filterOut = false
 
     if(searchFilter) {
@@ -83,7 +83,7 @@ async function showSongs(songs, options) {
     }
 
     if(filters.filter.liked) if(!song.liked) continue
-    if(filters.filter.downloaded) if(song.downloadLocation == undefined) continue
+    if(filters.filter.downloaded) if(song.isDownloaded() == undefined) continue
 
     if(filterOut) continue
     
@@ -243,9 +243,9 @@ async function showSongs(songs, options) {
 
     tooltip.find('.playSimularSongs').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      let relatedVideos = await getRelatedVideosYT(song.youtubeID)
-      let relatedSongs = []
-      for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
+      let relatedVideos: any = await getRelatedVideosYT(song.youtubeID)
+      let relatedSongs: Song[] = []
+      for(let vid of relatedVideos) relatedSongs.push(new Song({}).importFromYoutube(vid))
       $('#songsPopup').fadeIn()
       $('#songsPopup .songs').fadeIn()
       setSortByNone()
@@ -254,11 +254,11 @@ async function showSongs(songs, options) {
     })
     tooltip.find('.download').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      song.download()
+      song.download({})
     })
     tooltip.find('.openInYoutube').on('click', async (e) => {
       let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      open(`https://youtube.com/watch?v=${song.youtubeID}`)
+      openURL(`https://youtube.com/watch?v=${song.youtubeID}`)
     })
     tooltip.find('.addToCollection').on('click', async (e) => {
       tooltip.html('')

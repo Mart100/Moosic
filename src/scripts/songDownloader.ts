@@ -1,4 +1,9 @@
 class SongDownloader {
+  pending: string[]
+  inProgress: string[]
+  finished: string[]
+  downloadWidth: number
+
   constructor() {
 
     this.pending = []
@@ -8,7 +13,7 @@ class SongDownloader {
     this.downloadWidth = 10
   }
 
-  async queueNewDownload(songID, options={}) {
+  async queueNewDownload(songID, options:any={}) {
     // push song to downloads queue
     this.pending.push(songID)
 
@@ -42,7 +47,7 @@ class SongDownloader {
     })
   }
 
-  async getSongDownloadStatus(songID) {
+  getSongDownloadStatus(songID) {
     // pending
     if(this.pending.includes(songID)) return 0
 

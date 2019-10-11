@@ -1,4 +1,15 @@
 class Song {
+  image: string
+  youtubeID: string
+  title: string
+  author: string
+  liked: boolean
+  saved: boolean
+  order: number
+  lastPlayed: number
+  saveDate: number
+  isDownloadedBool: boolean
+
   constructor(data) {
 
     if(data == undefined) return
@@ -13,6 +24,7 @@ class Song {
     this.order = data.order
     this.lastPlayed = data.lastPlayed
     this.saveDate = data.saveDate
+    this.isDownloadedBool = data.isDownloadedBool
 
     return this
   }
@@ -25,6 +37,7 @@ class Song {
     this.author = video.snippet.channelTitle
     this.liked = false
     this.saved = false
+    this.isDownloadedBool = false
     this.order = 0
 
     return this
@@ -36,7 +49,7 @@ class Song {
   async like() {
     this.liked = true
     await this.save()
-    this.download()
+    this.download({})
     return
   }
   async dislike() {
@@ -58,17 +71,22 @@ class Song {
     return new Promise((resolve, reject) => {
       let downloadPos = this.getDownloadLocation()
       console.log(downloadPos)
-      fs.remove(downloadPos, err => {
+      fs.remove(downloadPos, async err => {
         if(err) console.error(err)
+        this.isDownloadedBool = false
+        await this.save()
         resolve()
       })
     })
   }
-  async download(options) {
+  async download(options:object) {
 
     if(await this.isDownloaded()) return
 
     await songDownloader.queueNewDownload(this.youtubeID, options)
+
+    this.isDownloadedBool = true
+    await this.save()
 
     return
   }
@@ -76,9 +94,15 @@ class Song {
     return songStoragePos+'/'+this.youtubeID+'.mp3'
   }
   async isDownloaded() {
-    let songLoc = await this.getDownloadLocation()
-    let mp3Exists = await fs.pathExists(songLoc)
-    return mp3Exists
+    if(this.isDownloadedBool) return this.isDownloadedBool
+    else {
+      let songLoc = await this.getDownloadLocation()
+      let mp3Exists = await fs.pathExists(songLoc)
+
+      this.isDownloadedBool = mp3Exists
+      this.save()
+      return mp3Exists
+    }
   }
   async delete() {
 
@@ -94,6 +118,8 @@ class Song {
     return JSON.parse(JSON.stringify(this))
   }
   getHTML() {
+    console.log(this)
+    console.trace()
     let title = this.title
     if(title.length > 20) title = title.split('').splice(0, 20).join('') + '...'
 

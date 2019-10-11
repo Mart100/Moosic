@@ -16,7 +16,7 @@ $(() => {
 
   // import from spotify
   $('#importData-spotify-button').on('click', async () => {
-    let accessToken = await getSpotifyAccessToken()
+    let accessToken: string = await getSpotifyAccessToken()
     await loadPlaylists(accessToken)
     $('#settings').hide()
     $('#playlistImportSpotify').fadeIn()
