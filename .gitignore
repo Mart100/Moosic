@@ -5,7 +5,5 @@ node_modules/fs-extra
 ./node_modules
 *.mp3
 dist
-index.js
-index.js.map
 src/scripts/*.js
 src/scripts/*.js.map
