@@ -35,9 +35,9 @@
     "compileWatch": "npm run copy_src_to_compiled && Start tsc -w",
     "compile": "npm run copy_src_to_compiled && Start tsc",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
-    "dist": "npm compile && electron-builder build",
+    "dist": "npm run compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
-    "publish": "npm compile && electron-builder build -p always"
+    "publish": "npm run compile && electron-builder build -p always"
   },
   "build": {
     "appId": "com.moosic.app",
