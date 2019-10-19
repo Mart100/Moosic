@@ -39,7 +39,7 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, topBar, filterButton, filtersDiv;
+        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, topBar, filterButton, filtersDiv;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -76,9 +76,9 @@ function showSongs(songs, options) {
                     database = _b.sent();
                     currentSongList = songs;
                     refinedSongs = [];
-                    searchTxt = songsElem.find('.topBar .search').val().toString();
-                    if (searchTxt)
-                        searchTxt = searchTxt.toLowerCase();
+                    searchTxtVal = songsElem.find('.topBar .search').val();
+                    if (searchTxtVal)
+                        searchTxt = searchTxtVal.toString().toLowerCase();
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
                     for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
                         s = songs_1[_i];

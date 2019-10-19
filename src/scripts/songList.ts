@@ -68,8 +68,9 @@ async function showSongs(songs, options) {
   let refinedSongs = []
 
   
-  let searchTxt = songsElem.find('.topBar .search').val().toString()
-  if(searchTxt) searchTxt = searchTxt.toLowerCase()
+  let searchTxtVal = songsElem.find('.topBar .search').val()
+  let searchTxt:string
+  if(searchTxtVal) searchTxt = searchTxtVal.toString().toLowerCase()
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
 
