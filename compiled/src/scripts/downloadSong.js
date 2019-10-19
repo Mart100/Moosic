@@ -40,27 +40,20 @@ onmessage = function (e) {
     return __awaiter(this, void 0, void 0, function () {
         var start, songID, songStoragePos, songLoc, stream, ws;
         return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    start = Date.now();
-                    songID = e.data.songID;
-                    songStoragePos = e.data.songStoragePos;
-                    songLoc = songStoragePos + ("\\" + songID + ".mp3");
-                    console.log(songLoc);
-                    return [4, fs1.pathExists(songLoc)];
-                case 1:
-                    if (_a.sent())
-                        return [2, postMessage('1', undefined)];
-                    stream = ytdl1("https://www.youtube.com/watch?v=" + songID, {
-                        filter: 'audio',
-                    });
-                    ws = fs1.createWriteStream(songLoc);
-                    stream.pipe(ws);
-                    ws.on('finish', function () {
-                        postMessage('1', undefined);
-                    });
-                    return [2];
-            }
+            start = Date.now();
+            songID = e.data.songID;
+            songStoragePos = e.data.songStoragePos;
+            songLoc = songStoragePos + ("\\" + songID + ".mp3");
+            console.log(songLoc);
+            stream = ytdl1("https://www.youtube.com/watch?v=" + songID, {
+                filter: 'audio',
+            });
+            ws = fs1.createWriteStream(songLoc);
+            stream.pipe(ws);
+            ws.on('finish', function () {
+                postMessage('1', undefined);
+            });
+            return [2];
         });
     });
 };

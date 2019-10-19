@@ -236,12 +236,13 @@ function loadSong(idx, songs, songListElem) {
                     return [4, song.dislike()];
                 case 1:
                     _a.sent();
-                    e.target.src = './images/heart.png';
+                    console.log('test');
+                    $(e.target).attr('src', './images/heart.png');
                     return [3, 4];
                 case 2: return [4, song.like()];
                 case 3:
                     _a.sent();
-                    e.target.src = './images/red-heart.png';
+                    $(e.target).attr('src', './images/red-heart.png');
                     _a.label = 4;
                 case 4: return [2];
             }

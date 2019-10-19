@@ -106,6 +106,7 @@ function loadPlaylists(accessToken) {
                         .then(function (res) { return res.json(); })];
                 case 1:
                     rawPlaylists = _c.sent();
+                    console.log(rawPlaylists);
                     if (rawPlaylists == null)
                         return [2, 'failed to retrieve playlists'];
                     fetchPromises = [];

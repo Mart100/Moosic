@@ -173,7 +173,7 @@ function loadCollections() {
                                     renameInput = button.find('.renameInput');
                                     renameInput.focus();
                                     renameInput.on('change', function () {
-                                        var newName = renameInput.val();
+                                        var newName = renameInput.val().toString();
                                         renameInput.remove();
                                         button.find('.name').html(newName);
                                         button.find('.name').show();
