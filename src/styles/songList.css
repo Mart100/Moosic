@@ -180,7 +180,7 @@
   font-size: 20px;
   box-shadow: 1px 2px 10px rgba(255, 255, 255, .5);
   text-align: center;
-  transform: translateX(-100%);
+  transform: translateX(100%);
 }
 
 .songList .song .tooltip button {

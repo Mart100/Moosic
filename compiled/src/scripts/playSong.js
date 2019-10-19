@@ -38,19 +38,17 @@ var player;
 var songDurationInterval;
 function onSongClick(event, queue) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, database, songs, song;
+        var id, song;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     id = event.target.id.replace('song-', '');
                     if (id == undefined || id == '')
                         return [2];
-                    return [4, getData()];
+                    return [4, getSongByID(id)];
                 case 1:
-                    database = _a.sent();
-                    songs = database.songs;
-                    song = new Song(songs[id]);
-                    if (song.youtubeID == undefined)
+                    song = _a.sent();
+                    if (song == undefined || song.youtubeID == undefined)
                         song = new Song(searchResults[id]);
                     if (queue != undefined) {
                         musicPlayer.setQueue(queue);
@@ -70,8 +68,7 @@ function getSongByID(id) {
                 case 1:
                     database = _a.sent();
                     songs = database.songs;
-                    console.log(songs, id, songs[id]);
-                    song = new Song(songs[id]);
+                    song = songs.find(function (s) { return s.youtubeID == id; });
                     return [2, song];
             }
         });
@@ -83,7 +80,6 @@ $(function () {
         $('#currentSong .pause').fadeOut();
         $('#musicControls .play').fadeIn();
         $('#musicControls .pause').fadeOut();
-        console.log('HALLO');
     });
     musicPlayer.on('unpause', function () {
         $('#currentSong .play').fadeOut();

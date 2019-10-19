@@ -1,18 +1,21 @@
+
+
+
 class Song {
   image: string
   youtubeID: string
   title: string
   author: string
-  liked: boolean
-  saved: boolean
-  order: number
-  lastPlayed: number
-  saveDate: number
-  isDownloadedBool: boolean
+  liked?: boolean
+  saved?: boolean
+  order?: number
+  lastPlayed?: number
+  saveDate?: number
+  isDownloadedBool?: boolean
 
-  constructor(data) {
+  constructor(data?) {
 
-    if(data == undefined) return
+    if(data == undefined || Object.values(data).length == 0) return
     
     this.image = data.image
     this.youtubeID = data.youtubeID
@@ -59,7 +62,6 @@ class Song {
     return
   }
   async save() {
-    //console.trace()
     this.saveDate = Date.now()
     this.saved = true
     await saveData1((database) => {
@@ -81,12 +83,15 @@ class Song {
   }
   async download(options:object) {
 
+    console.log(this.title)
+
     if(await this.isDownloaded()) return
 
     await songDownloader.queueNewDownload(this.youtubeID, options)
 
     this.isDownloadedBool = true
-    await this.save()
+
+    if(this.saved) await this.save()
 
     return
   }
@@ -100,7 +105,7 @@ class Song {
       let mp3Exists = await fs.pathExists(songLoc)
 
       this.isDownloadedBool = mp3Exists
-      this.save()
+      if(this.saved) this.save()
       return mp3Exists
     }
   }
@@ -118,8 +123,6 @@ class Song {
     return JSON.parse(JSON.stringify(this))
   }
   getHTML() {
-    console.log(this)
-    console.trace()
     let title = this.title
     if(title.length > 20) title = title.split('').splice(0, 20).join('') + '...'
 
@@ -129,7 +132,7 @@ class Song {
     let html = `
     <div class="song" id="song-${this.youtubeID}">
       <div class="image"><img src="${this.image}"/></div>
-        <div class="buttons">
+      <div class="buttons">
         <img class="more" src="./images/options.png"/>
         <img class="like" src="./images/heart.png"/>
       </div>

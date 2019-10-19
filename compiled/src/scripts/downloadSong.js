@@ -34,8 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var ytdl = require('ytdl-core');
-var fs = require('fs-extra');
+var fs1 = require("fs-extra");
+var ytdl1 = require("ytdl-core");
 onmessage = function (e) {
     return __awaiter(this, void 0, void 0, function () {
         var start, songID, songStoragePos, songLoc, stream, ws;
@@ -46,17 +46,18 @@ onmessage = function (e) {
                     songID = e.data.songID;
                     songStoragePos = e.data.songStoragePos;
                     songLoc = songStoragePos + ("\\" + songID + ".mp3");
-                    return [4, fs.pathExists(songLoc)];
+                    console.log(songLoc);
+                    return [4, fs1.pathExists(songLoc)];
                 case 1:
                     if (_a.sent())
-                        return [2, postMessage('1', './')];
-                    stream = ytdl("https://www.youtube.com/watch?v=" + songID, {
-                        filter: 'audio'
+                        return [2, postMessage('1', undefined)];
+                    stream = ytdl1("https://www.youtube.com/watch?v=" + songID, {
+                        filter: 'audio',
                     });
-                    ws = fs.createWriteStream(songLoc);
+                    ws = fs1.createWriteStream(songLoc);
                     stream.pipe(ws);
                     ws.on('finish', function () {
-                        postMessage('1', './');
+                        postMessage('1', undefined);
                     });
                     return [2];
             }

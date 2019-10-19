@@ -89,6 +89,9 @@ $(function () {
             location.reload();
     });
     getSongStoragePos();
+    setTimeout(function () {
+        $('#navigator .mySongs').trigger('click');
+    }, 100);
 });
 function getSongs() {
     return __awaiter(this, void 0, void 0, function () {

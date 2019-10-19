@@ -1,5 +1,5 @@
-let ytdl = require('ytdl-core')
-let fs = require('fs-extra')
+let fs1 = require("fs-extra")
+let ytdl1 = require("ytdl-core")
 
 onmessage = async function(e) {
 
@@ -10,16 +10,18 @@ onmessage = async function(e) {
 
   let songLoc = songStoragePos + `\\${songID}.mp3`
 
-  if(await fs.pathExists(songLoc)) return postMessage('1', './')
+  console.log(songLoc)
 
-  let stream = ytdl(`https://www.youtube.com/watch?v=${songID}`, {
+  if(await fs1.pathExists(songLoc)) return postMessage('1', undefined)
+
+  let stream = ytdl1(`https://www.youtube.com/watch?v=${songID}`, {
     filter: 'audio',
   })
 
-  let ws = fs.createWriteStream(songLoc)
+  let ws = fs1.createWriteStream(songLoc)
   stream.pipe(ws)
   ws.on('finish', () => { 
-    postMessage('1', './')
+    postMessage('1', undefined)
   })
 
 }

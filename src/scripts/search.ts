@@ -14,8 +14,6 @@ $(() => {
 
     $('#search .results').html('')
 
-    console.log('HMMM')
-
     searchResults = []
 
     if($('#search .input').val() == '') return
@@ -23,7 +21,7 @@ $(() => {
     let results: any = await getYoutubeResults()
 
     for(let video of results) {
-      let song = new Song({}).importFromYoutube(video)
+      let song = new Song().importFromYoutube(video)
       searchResults[song.youtubeID] = song
     }
     setSortByNone()

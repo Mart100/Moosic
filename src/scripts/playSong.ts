@@ -4,26 +4,23 @@ let songDurationInterval
 async function onSongClick(event, queue) {
   let id = event.target.id.replace('song-', '')
   if(id == undefined || id == '') return
-  let database = await getData()
-  let songs = database.songs
-  let song = new Song(songs[id])
 
-  if(song.youtubeID == undefined) song = new Song(searchResults[id])
+  let song = await getSongByID(id)
 
+  if(song == undefined || song.youtubeID == undefined) song = new Song(searchResults[id])
 
   if(queue != undefined) {
     musicPlayer.setQueue(queue)
   }
   song.play()
-
-
 }
+
+
 
 async function getSongByID(id) {
   let database = await getData()
   let songs = database.songs
-  console.log(songs, id, songs[id])
-  let song = new Song(songs[id])
+  let song = songs.find(s => s.youtubeID == id)
   return song
 }
 
@@ -33,7 +30,6 @@ $(() => {
     $('#currentSong .pause').fadeOut()
     $('#musicControls .play').fadeIn()
     $('#musicControls .pause').fadeOut()
-    console.log('HALLO')
   })
 
   musicPlayer.on('unpause', () => {

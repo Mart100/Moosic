@@ -67,17 +67,13 @@ var MusicPlayer = (function (_super) {
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var database, songs, songDB, queueIDlist, idx, songLoc, mp3Exists;
+            var queueIDlist, idx, songLoc, mp3Exists;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.stop();
-                        return [4, getData()];
-                    case 1:
-                        database = _a.sent();
-                        songs = database.songs;
-                        songDB = songs[song.youtubeID];
+                        console.log(song);
                         queueIDlist = Array.from(this.queue, function (s) { return s.youtubeID; });
                         idx = queueIDlist.indexOf(song.youtubeID);
                         if (idx != -1)
@@ -87,25 +83,18 @@ var MusicPlayer = (function (_super) {
                         this.emit('play');
                         if (this.currentSong.saved) {
                             this.currentSong.lastPlayed = Date.now();
-                            console.log(this.currentSong.lastPlayed);
                             this.currentSong.save();
                         }
                         songLoc = songStoragePos + '\\' + song.youtubeID + '.mp3';
                         return [4, song.isDownloaded()];
-                    case 2:
+                    case 1:
                         mp3Exists = _a.sent();
                         console.log(songLoc, mp3Exists);
-                        if (!mp3Exists) return [3, 3];
-                        this.playMp3(songLoc);
-                        return [3, 5];
-                    case 3:
-                        this.playYT(song.youtubeID);
-                        return [4, this.currentSong.download({ priority: true })];
-                    case 4:
-                        _a.sent();
-                        musicPlayer.play(this.currentSong);
-                        _a.label = 5;
-                    case 5:
+                        if (mp3Exists)
+                            this.playMp3(songLoc);
+                        else {
+                            this.playYT(song.youtubeID);
+                        }
                         setTimeout(function () {
                             _this.setVolume(_this.volume);
                             scrollToCurrentSong();

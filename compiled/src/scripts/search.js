@@ -48,7 +48,6 @@ $(function () {
             switch (_a.label) {
                 case 0:
                     $('#search .results').html('');
-                    console.log('HMMM');
                     searchResults = [];
                     if ($('#search .input').val() == '')
                         return [2];
@@ -57,7 +56,7 @@ $(function () {
                     results = _a.sent();
                     for (_i = 0, results_1 = results; _i < results_1.length; _i++) {
                         video = results_1[_i];
-                        song = new Song({}).importFromYoutube(video);
+                        song = new Song().importFromYoutube(video);
                         searchResults[song.youtubeID] = song;
                     }
                     setSortByNone();

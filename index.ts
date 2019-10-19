@@ -1,4 +1,4 @@
-let $ = require('jquery')
+//let $ = require('jquery')
 
 const { dialog } = require('electron')
 const electron = require('electron')
@@ -44,7 +44,7 @@ app.on('ready', () => {
 
   window.loadFile('./compiled/src/index.html')
 
-  if(isDev()) {
+  if(isDevv()) {
     window.webContents.once('dom-ready', () => {
       window.webContents.openDevTools()
     })
@@ -69,7 +69,7 @@ app.on('ready', () => {
   })
 })
 
-function isDev() {
+function isDevv() {
   try { require('electron-builder')}
   catch(e) { return false }
   return true

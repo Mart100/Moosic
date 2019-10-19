@@ -34,6 +34,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var databaseCache;
+var databaseCacheValid = false;
 var databaseFileLoc = storagePos + '/database.json';
 function getData() {
     var _this = this;
@@ -41,7 +43,10 @@ function getData() {
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4, fs.pathExists(storagePos + '\\database.json')];
+                case 0:
+                    if (databaseCacheValid)
+                        return [2, resolve(databaseCache)];
+                    return [4, fs.pathExists(storagePos + '\\database.json')];
                 case 1:
                     if (!!(_a.sent())) return [3, 3];
                     return [4, createEmptyDatabase()];
@@ -72,6 +77,8 @@ function getData() {
                                     DBsongs = [];
                                     for (songID in objParsed.songs) {
                                         songObj = objParsed.songs[songID];
+                                        if (songObj.youtubeID == undefined)
+                                            continue;
                                         DBsongs.push(new Song(songObj));
                                     }
                                     database = {
@@ -79,6 +86,8 @@ function getData() {
                                         collections: objParsed.collections,
                                         songStoragePos: objParsed.songStoragePos
                                     };
+                                    databaseCache = database;
+                                    databaseCacheValid = true;
                                     resolve(database);
                                     return [2];
                             }
@@ -184,6 +193,7 @@ function saveData1(func) {
                 case 4:
                     _a.sent();
                     savingStatus = false;
+                    databaseCacheValid = false;
                     return [2];
             }
         });

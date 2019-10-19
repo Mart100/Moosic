@@ -43,7 +43,7 @@ function getSpotifyAccessToken() {
         destroyAuthWin();
         win = new remote.BrowserWindow({
             width: 1000,
-            height: 600
+            height: 600,
         });
         win.loadURL(getAuthenticationURL());
         var webRequest = win.webContents.session.webRequest;

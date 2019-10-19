@@ -39,16 +39,15 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, _b, songs_2, song, topBar, filterButton, filtersDiv;
-        var _this = this;
-        return __generator(this, function (_c) {
-            switch (_c.label) {
+        var songsElem, songListElem, database, refinedSongs, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, topBar, filterButton, filtersDiv;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
                 case 0:
                     if (!options)
                         options = {};
                     return [4, refreshSongs(songs, {})];
                 case 1:
-                    songs = _c.sent();
+                    songs = _b.sent();
                     songsElem = getCurrentSongsElement();
                     if (songsElem == undefined)
                         return [2, console.log('ERR: 564')];
@@ -74,10 +73,10 @@ function showSongs(songs, options) {
                     songs = Object.values(songs);
                     return [4, getData()];
                 case 2:
-                    database = _c.sent();
+                    database = _b.sent();
                     currentSongList = songs;
                     refinedSongs = [];
-                    searchTxt = songsElem.find('.topBar .search').val();
+                    searchTxt = songsElem.find('.topBar .search').val().toString();
                     if (searchTxt)
                         searchTxt = searchTxt.toLowerCase();
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
@@ -130,14 +129,15 @@ function showSongs(songs, options) {
                     songsHtml = '';
                     for (_a = 0, refinedSongs_1 = refinedSongs; _a < refinedSongs_1.length; _a++) {
                         s = refinedSongs_1[_a];
-                        songsHtml += s.getHTML();
+                        songsHtml += "<div class=\"song\" id=\"song-" + s.youtubeID + "\"></div>";
                     }
                     songListElem[0].innerHTML = songsHtml;
-                    for (_b = 0, songs_2 = songs; _b < songs_2.length; _b++) {
-                        song = songs_2[_b];
-                        if (song.liked)
-                            $(".songs #song-" + song.youtubeID + " .buttons .like").attr('src', './images/red-heart.png');
-                    }
+                    songListElem.on('scroll', function () {
+                        var songNum = Math.floor(songListElem.scrollTop() / 82);
+                        for (var i = -2; i < 10; i++)
+                            loadSong(songNum + i, refinedSongs, songListElem);
+                    });
+                    songListElem.trigger('scroll');
                     scrollToCurrentSong();
                     topBar = songsElem.find('.topBar');
                     topBar.find('.search').off().on('input', function () {
@@ -172,160 +172,6 @@ function showSongs(songs, options) {
                         filtersDiv.toggleClass('expanded');
                     });
                     console.log('SHUW SONGS');
-                    $('.song').off().on('click', function (e) { onSongClick(e, refinedSongs); });
-                    $('.song .like').off().on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                        var song;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
-                                case 0:
-                                    song = refinedSongs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''); });
-                                    if (!song.liked) return [3, 2];
-                                    return [4, song.dislike()];
-                                case 1:
-                                    _a.sent();
-                                    e.target.src = './images/heart.png';
-                                    return [3, 4];
-                                case 2: return [4, song.like()];
-                                case 3:
-                                    _a.sent();
-                                    e.target.src = './images/red-heart.png';
-                                    _a.label = 4;
-                                case 4: return [2];
-                            }
-                        });
-                    }); });
-                    $('.song .more').off().on('click', function (event) { return __awaiter(_this, void 0, void 0, function () {
-                        var song, html1, currentColl, showRemoveFromColl, parent, tooltip, moreButton;
-                        var _this = this;
-                        return __generator(this, function (_a) {
-                            if ($(event.target.parentElement).find('.tooltip')[0] != undefined)
-                                return [2];
-                            song = new Song(songs.find(function (s) { return s.youtubeID == event.target.parentElement.parentElement.id.replace('song-', ''); }));
-                            html1 = $("\n    <div class=\"tooltip\">\n      <button class=\"download\">Download</button>\n      <button class=\"openInYoutube\">Open in youtube</button>\n      <button class=\"addToCollection\">Add to collection</button>\n      <button class=\"playSimularSongs\">Play simular songs</button>\n      <button class=\"deleteSong\">Delete songs</button>\n    </div>\n    ");
-                            currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
-                            showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
-                            if (showRemoveFromColl)
-                                html1.append('<button class="removeFromColl">Remove from this collection</button>');
-                            $(event.target.parentElement).append(html1);
-                            parent = $(event.target.parentElement);
-                            tooltip = parent.find('.tooltip');
-                            moreButton = parent.find('.more');
-                            tooltip.on('mouseleave', function () {
-                                tooltip.remove();
-                            });
-                            moreButton.on('mouseleave', function () {
-                                if (parent.find('.tooltip:hover').length != 0)
-                                    return;
-                                tooltip.remove();
-                            });
-                            if (showRemoveFromColl) {
-                                tooltip.find('.removeFromColl').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
-                                    return __generator(this, function (_a) {
-                                        switch (_a.label) {
-                                            case 0: return [4, saveData1(function (data) {
-                                                    var currentColl1 = data.collections.find(function (c) { return c.name == currentCollection; });
-                                                    var idx = currentColl1.songs.indexOf(song.youtubeID);
-                                                    currentColl1.songs.splice(idx, 1);
-                                                    return data;
-                                                })];
-                                            case 1:
-                                                _a.sent();
-                                                parent[0].parentElement.remove();
-                                                return [2];
-                                        }
-                                    });
-                                }); });
-                            }
-                            tooltip.find('.deleteSong').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                                var song;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            song = new Song(songs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', ''); }));
-                                            return [4, song["delete"]()];
-                                        case 1:
-                                            _a.sent();
-                                            return [4, refreshSongs(songs, { inDB: true })];
-                                        case 2:
-                                            songs = _a.sent();
-                                            showSongs(songs, options);
-                                            return [2];
-                                    }
-                                });
-                            }); });
-                            tooltip.find('.playSimularSongs').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                                var song, relatedVideos, relatedSongs, _i, relatedVideos_1, vid;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            song = new Song(songs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', ''); }));
-                                            return [4, getRelatedVideosYT(song.youtubeID)];
-                                        case 1:
-                                            relatedVideos = _a.sent();
-                                            relatedSongs = [];
-                                            for (_i = 0, relatedVideos_1 = relatedVideos; _i < relatedVideos_1.length; _i++) {
-                                                vid = relatedVideos_1[_i];
-                                                relatedSongs.push(new Song({}).importFromYoutube(vid));
-                                            }
-                                            $('#songsPopup').fadeIn();
-                                            $('#songsPopup .songs').fadeIn();
-                                            setSortByNone();
-                                            musicPlayer.setQueue(relatedSongs);
-                                            musicPlayer.nextInQueue();
-                                            return [2];
-                                    }
-                                });
-                            }); });
-                            tooltip.find('.download').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                                var song;
-                                return __generator(this, function (_a) {
-                                    song = new Song(songs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', ''); }));
-                                    song.download({});
-                                    return [2];
-                                });
-                            }); });
-                            tooltip.find('.openInYoutube').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                                var song;
-                                return __generator(this, function (_a) {
-                                    song = new Song(songs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', ''); }));
-                                    openURL("https://youtube.com/watch?v=" + song.youtubeID);
-                                    return [2];
-                                });
-                            }); });
-                            tooltip.find('.addToCollection').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                                var collections, _loop_1, collectionNum;
-                                var _this = this;
-                                return __generator(this, function (_a) {
-                                    switch (_a.label) {
-                                        case 0:
-                                            tooltip.html('');
-                                            return [4, getData()];
-                                        case 1:
-                                            database = _a.sent();
-                                            collections = database.collections;
-                                            _loop_1 = function (collectionNum) {
-                                                var collection = collections[collectionNum];
-                                                tooltip.append("<button id=\"addTo-coll-" + collectionNum + "\">Add to \"" + collection.name + "\"</button>");
-                                                var addToCollButt = $("#addTo-coll-" + collectionNum);
-                                                addToCollButt.off().on('click', function (e1) { return __awaiter(_this, void 0, void 0, function () {
-                                                    var song;
-                                                    return __generator(this, function (_a) {
-                                                        song = new Song(songs.find(function (s) { return s.youtubeID == e1.target.parentElement.parentElement.parentElement.id.replace('song-', ''); }));
-                                                        addSongToCollection(song, collectionNum);
-                                                        return [2];
-                                                    });
-                                                }); });
-                                            };
-                                            for (collectionNum in collections) {
-                                                _loop_1(collectionNum);
-                                            }
-                                            return [2];
-                                    }
-                                });
-                            }); });
-                            return [2];
-                        });
-                    }); });
                     return [2];
             }
         });
@@ -335,7 +181,7 @@ function resetFilters() {
     filters = {
         filter: {
             downloaded: false,
-            liked: false
+            liked: false,
         },
         sortby: {
             lastadded: true,
@@ -368,6 +214,170 @@ function scrollToCurrentSong() {
         return;
     songsContainer.animate({
         scrollTop: songElem.offset().top - songsContainer.offset().top + songsContainer.scrollTop()
+    });
+}
+function loadSong(idx, songs, songListElem) {
+    var _this = this;
+    var song = songs[idx];
+    if (song == undefined)
+        return;
+    var songHTML = $(song.getHTML());
+    if (song.liked)
+        songHTML.find(" .buttons .like").attr('src', './images/red-heart.png');
+    songListElem.find("#song-" + song.youtubeID).replaceWith(songHTML);
+    songHTML.on('click', function (e) { onSongClick(e, songs); });
+    songHTML.find('.like').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+        var song;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    song = songs.find(function (s) { return s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''); });
+                    if (!song.liked) return [3, 2];
+                    return [4, song.dislike()];
+                case 1:
+                    _a.sent();
+                    e.target.src = './images/heart.png';
+                    return [3, 4];
+                case 2: return [4, song.like()];
+                case 3:
+                    _a.sent();
+                    e.target.src = './images/red-heart.png';
+                    _a.label = 4;
+                case 4: return [2];
+            }
+        });
+    }); });
+    songHTML.find('.more').on('click', function (event) { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            showTooltipForSong(song);
+            return [2];
+        });
+    }); });
+}
+function showTooltipForSong(song) {
+    return __awaiter(this, void 0, void 0, function () {
+        var database, songsElem, songElem, tooltipHTML, currentColl, showRemoveFromColl, parent, tooltip, moreButton;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    console.log('teststst');
+                    return [4, getData()];
+                case 1:
+                    database = _a.sent();
+                    songsElem = getCurrentSongsElement();
+                    songElem = songsElem.find('#song-' + song.youtubeID);
+                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play simular songs</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
+                    showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
+                    if (showRemoveFromColl)
+                        tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>');
+                    songElem.append(tooltipHTML);
+                    parent = songElem.parent();
+                    tooltip = parent.find('.tooltip');
+                    moreButton = parent.find('.more');
+                    tooltip.on('mouseleave', function () {
+                        tooltip.remove();
+                    });
+                    moreButton.on('mouseleave', function () {
+                        if (parent.find('.tooltip:hover').length != 0)
+                            return;
+                        tooltip.remove();
+                    });
+                    if (showRemoveFromColl) {
+                        tooltip.find('.removeFromColl').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4, saveData1(function (data) {
+                                            var currentColl1 = data.collections.find(function (c) { return c.name == currentCollection; });
+                                            var idx = currentColl1.songs.indexOf(song.youtubeID);
+                                            currentColl1.songs.splice(idx, 1);
+                                            return data;
+                                        })];
+                                    case 1:
+                                        _a.sent();
+                                        parent[0].parentElement.remove();
+                                        return [2];
+                                }
+                            });
+                        }); });
+                    }
+                    tooltip.find('.deleteSong').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4, song.delete()];
+                                case 1:
+                                    _a.sent();
+                                    showSongs(currentSongList, {});
+                                    return [2];
+                            }
+                        });
+                    }); });
+                    tooltip.find('.playSimularSongs').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        var relatedVideos, relatedSongs, _i, relatedVideos_1, vid;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4, getRelatedVideosYT(song.youtubeID)];
+                                case 1:
+                                    relatedVideos = _a.sent();
+                                    relatedSongs = [];
+                                    for (_i = 0, relatedVideos_1 = relatedVideos; _i < relatedVideos_1.length; _i++) {
+                                        vid = relatedVideos_1[_i];
+                                        relatedSongs.push(new Song().importFromYoutube(vid));
+                                    }
+                                    $('#songsPopup').fadeIn();
+                                    $('#songsPopup .songs').fadeIn();
+                                    setSortByNone();
+                                    musicPlayer.setQueue(relatedSongs);
+                                    musicPlayer.nextInQueue();
+                                    return [2];
+                            }
+                        });
+                    }); });
+                    tooltip.find('.download').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            song.download({});
+                            return [2];
+                        });
+                    }); });
+                    tooltip.find('.openInYoutube').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            openURL("https://youtube.com/watch?v=" + song.youtubeID);
+                            return [2];
+                        });
+                    }); });
+                    tooltip.find('.addToCollection').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        var collections, _loop_1, collectionNum;
+                        var _this = this;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    tooltip.html('');
+                                    return [4, getData()];
+                                case 1:
+                                    database = _a.sent();
+                                    collections = database.collections;
+                                    _loop_1 = function (collectionNum) {
+                                        var collection = collections[collectionNum];
+                                        tooltip.append("<button id=\"addTo-coll-" + collectionNum + "\">Add to \"" + collection.name + "\"</button>");
+                                        var addToCollButt = $("#addTo-coll-" + collectionNum);
+                                        addToCollButt.off().on('click', function (e1) { return __awaiter(_this, void 0, void 0, function () {
+                                            return __generator(this, function (_a) {
+                                                addSongToCollection(song, collectionNum);
+                                                return [2];
+                                            });
+                                        }); });
+                                    };
+                                    for (collectionNum in collections) {
+                                        _loop_1(collectionNum);
+                                    }
+                                    return [2];
+                            }
+                        });
+                    }); });
+                    return [2];
+            }
+        });
     });
 }
 //# sourceMappingURL=songList.js.map

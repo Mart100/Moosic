@@ -67,13 +67,15 @@ async function showSongs(songs, options) {
 
   let refinedSongs = []
 
-  let searchTxt = songsElem.find('.topBar .search').val()
+  
+  let searchTxt = songsElem.find('.topBar .search').val().toString()
   if(searchTxt) searchTxt = searchTxt.toLowerCase()
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
 
   // construct refinedSongs
   for(let s of songs) {
+    //if(s.image == undefined) console.log(s)
     let song: Song = new Song(s)
     let filterOut = false
 
@@ -121,13 +123,16 @@ async function showSongs(songs, options) {
 
 
   let songsHtml = ''
-  for(let s of refinedSongs) songsHtml += s.getHTML()
+  for(let s of refinedSongs) songsHtml += `<div class="song" id="song-${s.youtubeID}"></div>`
 
   songListElem[0].innerHTML = songsHtml
 
-  for(let song of songs) {
-    if(song.liked) $(`.songs #song-${song.youtubeID} .buttons .like`).attr('src', './images/red-heart.png')
-  }
+  songListElem.on('scroll', () => {
+    let songNum = Math.floor(songListElem.scrollTop()/82)
+    for(let i=-2;i<10;i++) loadSong(songNum+i, refinedSongs, songListElem)
+  })
+
+  songListElem.trigger('scroll')
 
   scrollToCurrentSong()
 
@@ -174,109 +179,6 @@ async function showSongs(songs, options) {
   })
 
   console.log('SHUW SONGS')
-
-  $('.song').off().on('click', (e) => { onSongClick(e, refinedSongs) })
-  $('.song .like').off().on('click', async (e) => {
-    let song = refinedSongs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''))
-    if(song.liked) {
-      await song.dislike()
-      e.target.src = './images/heart.png'
-    }
-    else {
-      await song.like()
-      e.target.src = './images/red-heart.png'
-    }
-  })
-
-  $('.song .more').off().on('click', async (event) => {
-
-    if($(event.target.parentElement).find('.tooltip')[0] != undefined) return
-
-    let song = new Song(songs.find(s => s.youtubeID == event.target.parentElement.parentElement.id.replace('song-', '')))
-
-    let html1 = $(`
-    <div class="tooltip">
-      <button class="download">Download</button>
-      <button class="openInYoutube">Open in youtube</button>
-      <button class="addToCollection">Add to collection</button>
-      <button class="playSimularSongs">Play simular songs</button>
-      <button class="deleteSong">Delete songs</button>
-    </div>
-    `)
-
-    // if part of collection
-    let currentColl = database.collections.find(c => c.name == currentCollection)
-    let showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID)
-    if(showRemoveFromColl) html1.append('<button class="removeFromColl">Remove from this collection</button>')
-
-    $(event.target.parentElement).append(html1)
-
-    let parent = $(event.target.parentElement)
-    let tooltip = parent.find('.tooltip')
-    let moreButton = parent.find('.more')
-
-    tooltip.on('mouseleave', () => {
-      tooltip.remove()
-    })
-    moreButton.on('mouseleave', () => {
-      if(parent.find('.tooltip:hover').length != 0) return
-      tooltip.remove()
-    })
-    if(showRemoveFromColl) {
-      tooltip.find('.removeFromColl').on('click', async () => {
-        await saveData1((data) => {
-          let currentColl1 = data.collections.find(c => c.name == currentCollection)
-          let idx = currentColl1.songs.indexOf(song.youtubeID)
-          currentColl1.songs.splice(idx, 1)
-          return data
-        })
-        parent[0].parentElement.remove()
-      })
-    }
-
-    tooltip.find('.deleteSong').on('click', async (e) => {
-      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      await song.delete()
-      songs = await refreshSongs(songs, {inDB: true})
-      showSongs(songs, options)
-    })
-
-    tooltip.find('.playSimularSongs').on('click', async (e) => {
-      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      let relatedVideos: any = await getRelatedVideosYT(song.youtubeID)
-      let relatedSongs: Song[] = []
-      for(let vid of relatedVideos) relatedSongs.push(new Song({}).importFromYoutube(vid))
-      $('#songsPopup').fadeIn()
-      $('#songsPopup .songs').fadeIn()
-      setSortByNone()
-      musicPlayer.setQueue(relatedSongs)
-      musicPlayer.nextInQueue()
-    })
-    tooltip.find('.download').on('click', async (e) => {
-      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      song.download({})
-    })
-    tooltip.find('.openInYoutube').on('click', async (e) => {
-      let song = new Song(songs.find(s => s.youtubeID == e.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-      openURL(`https://youtube.com/watch?v=${song.youtubeID}`)
-    })
-    tooltip.find('.addToCollection').on('click', async (e) => {
-      tooltip.html('')
-      database = await getData()
-      let collections = database.collections
-      
-      for(let collectionNum in collections) {
-        let collection = collections[collectionNum]
-        tooltip.append(`<button id="addTo-coll-${collectionNum}">Add to "${collection.name}"</button>`)
-        let addToCollButt = $(`#addTo-coll-${collectionNum}`)
-        addToCollButt.off().on('click', async (e1) => {
-          let song = new Song(songs.find(s => s.youtubeID == e1.target.parentElement.parentElement.parentElement.id.replace('song-', '')))
-          addSongToCollection(song, collectionNum)
-        })
-      }
-
-    })
-  })
 }
 
 function resetFilters() {
@@ -314,5 +216,124 @@ function scrollToCurrentSong() {
   if(songElem.offset() == undefined) return
   songsContainer.animate({
     scrollTop: songElem.offset().top - songsContainer.offset().top + songsContainer.scrollTop()
+  })
+}
+
+
+function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
+
+  let song = songs[idx]
+
+  if(song == undefined) return
+
+  let songHTML = $(song.getHTML())
+
+  if(song.liked) songHTML.find(` .buttons .like`).attr('src', './images/red-heart.png')
+
+  songListElem.find(`#song-${song.youtubeID}`).replaceWith(songHTML)
+
+  // on song click. Play song
+  songHTML.on('click', (e) => { onSongClick(e, songs) })
+
+  // like button
+  songHTML.find('.like').on('click', async (e) => {
+    let song = songs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''))
+    if(song.liked) {
+      await song.dislike()
+      e.target.src = './images/heart.png'
+    }
+    else {
+      await song.like()
+      e.target.src = './images/red-heart.png'
+    }
+  })
+
+  songHTML.find('.more').on('click', async (event) => {
+    showTooltipForSong(song)
+  })
+}
+
+async function showTooltipForSong(song:Song) {
+  console.log('teststst')
+
+  let database = await getData()
+  let songsElem = getCurrentSongsElement()
+  let songElem = songsElem.find('#song-'+song.youtubeID)
+
+  let tooltipHTML = $(`
+  <div class="tooltip">
+    <button class="download">Download</button>
+    <button class="openInYoutube">Open in youtube</button>
+    <button class="addToCollection">Add to collection</button>
+    <button class="playSimularSongs">Play simular songs</button>
+    <button class="deleteSong">Delete songs</button>
+  </div>
+  `)
+
+  // if part of collection
+  let currentColl = database.collections.find(c => c.name == currentCollection)
+  let showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID)
+  if(showRemoveFromColl) tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>')
+
+  songElem.append(tooltipHTML)
+
+  let parent = songElem.parent()
+  let tooltip = parent.find('.tooltip')
+  let moreButton = parent.find('.more')
+
+  tooltip.on('mouseleave', () => {
+    tooltip.remove()
+  })
+  moreButton.on('mouseleave', () => {
+    if(parent.find('.tooltip:hover').length != 0) return
+    tooltip.remove()
+  })
+  if(showRemoveFromColl) {
+    tooltip.find('.removeFromColl').on('click', async () => {
+      await saveData1((data) => {
+        let currentColl1 = data.collections.find(c => c.name == currentCollection)
+        let idx = currentColl1.songs.indexOf(song.youtubeID)
+        currentColl1.songs.splice(idx, 1)
+        return data
+      })
+      parent[0].parentElement.remove()
+    })
+  }
+
+  tooltip.find('.deleteSong').on('click', async (e) => {
+    await song.delete()
+    showSongs(currentSongList, {})
+  })
+
+  tooltip.find('.playSimularSongs').on('click', async (e) => {
+    let relatedVideos: any = await getRelatedVideosYT(song.youtubeID)
+    let relatedSongs: Song[] = []
+    for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
+    $('#songsPopup').fadeIn()
+    $('#songsPopup .songs').fadeIn()
+    setSortByNone()
+    musicPlayer.setQueue(relatedSongs)
+    musicPlayer.nextInQueue()
+  })
+  tooltip.find('.download').on('click', async (e) => {
+    song.download({})
+  })
+  tooltip.find('.openInYoutube').on('click', async (e) => {
+    openURL(`https://youtube.com/watch?v=${song.youtubeID}`)
+  })
+  tooltip.find('.addToCollection').on('click', async (e) => {
+    tooltip.html('')
+    database = await getData()
+    let collections = database.collections
+    
+    for(let collectionNum in collections) {
+      let collection = collections[collectionNum]
+      tooltip.append(`<button id="addTo-coll-${collectionNum}">Add to "${collection.name}"</button>`)
+      let addToCollButt = $(`#addTo-coll-${collectionNum}`)
+      addToCollButt.off().on('click', async (e1) => {
+        addSongToCollection(song, collectionNum)
+      })
+    }
+
   })
 }

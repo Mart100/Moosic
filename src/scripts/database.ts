@@ -1,3 +1,6 @@
+let databaseCache: database
+let databaseCacheValid: boolean = false
+
 interface database {
   songs: Song[]
   collections: any[]
@@ -9,6 +12,8 @@ let databaseFileLoc = storagePos + '/database.json'
 
 function getData(): Promise<any> {
   return new Promise(async (resolve, reject) => {
+
+    if(databaseCacheValid) return resolve(databaseCache)
 
     if(!await fs.pathExists(storagePos+'\\database.json')) {
       await createEmptyDatabase()
@@ -30,6 +35,7 @@ function getData(): Promise<any> {
 
       for(let songID in objParsed.songs) {
         let songObj = objParsed.songs[songID]
+        if(songObj.youtubeID == undefined) continue
         DBsongs.push(new Song(songObj))
       }
 
@@ -39,6 +45,9 @@ function getData(): Promise<any> {
         collections: objParsed.collections,
         songStoragePos: objParsed.songStoragePos
       }
+
+      databaseCache = database
+      databaseCacheValid = true
 
       resolve(database)
     })
@@ -110,6 +119,7 @@ async function saveData1(func) {
   let newData = await func(data)
   await saveData(newData)
   savingStatus = false
+  databaseCacheValid = false
   return
 }
 

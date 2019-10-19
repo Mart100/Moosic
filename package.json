@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -11,6 +11,8 @@
   },
   "license": "ISC",
   "dependencies": {
+    "browserify": "^16.5.0",
+    "common-js": "^0.3.8",
     "electron-updater": "^4.1.2",
     "file-saver": "^2.0.2",
     "fs-extra": "^8.1.0",
@@ -22,6 +24,8 @@
     "ytdl-core": "^0.29.5"
   },
   "devDependencies": {
+    "@types/fs-extra": "^8.0.0",
+    "@types/jquery": "^3.3.31",
     "electron": "^6.0.3",
     "electron-builder": "^21.2.0",
     "electron-reload": "^1.5.0"
@@ -30,8 +34,7 @@
     "start": "npm install && npm run copy_src_to_compiled && npm run compile && electron .",
     "compile": "Start tsc -w",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
+    "dist": "electron-builder build",
     "postinstall": "electron-builder install-app-deps",
     "publish": "electron-builder build -p always"
   },
@@ -46,7 +49,8 @@
     ],
     "win": {
       "files": [
-        "!src/storage/*"
+        "!**/src/storage/*",
+        "!**/compiled/src/storage/*"
       ]
     }
   }

@@ -1,4 +1,3 @@
-var $ = require('jquery');
 var dialog = require('electron').dialog;
 var electron = require('electron');
 var app = electron.app;
@@ -28,7 +27,7 @@ app.on('ready', function () {
     window.setMaximizable(false);
     window.setResizable(false);
     window.loadFile('./compiled/src/index.html');
-    if (isDev()) {
+    if (isDevv()) {
         window.webContents.once('dom-ready', function () {
             window.webContents.openDevTools();
         });
@@ -47,7 +46,7 @@ app.on('ready', function () {
         window.webContents.executeJavaScript("onMediaNextTrack()");
     });
 });
-function isDev() {
+function isDevv() {
     try {
         require('electron-builder');
     }

@@ -21,6 +21,9 @@ let storagePos:string = __dirname.replace('\\resources\\app.asar', '') + '\\stor
 if(isDev()) storagePos = __dirname + '\\storage'
 console.log(storagePos)
 
+
+
+
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 
 let songStoragePos = storagePos+'\\songs'
@@ -40,7 +43,7 @@ function isDev() {
   try { require('electron-builder')}
   catch(e) { return false }
   return true
-}
+} 
 
 $(() => {
 	$(document).on("keydown", (e) => {
@@ -49,11 +52,15 @@ $(() => {
 	})
 
   getSongStoragePos()
+
+  setTimeout(() => {
+    $('#navigator .mySongs').trigger('click')
+  }, 100)
 })
 
 async function getSongs() {
   let database = await getData()
-  let rawSongs = Object.values(database.songs)
+  let rawSongs:Song[] = Object.values(database.songs)
   let songs = {}
   for(let rawSong of rawSongs) {
     let song = new Song(rawSong)

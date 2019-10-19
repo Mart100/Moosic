@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var Song = (function () {
     function Song(data) {
-        if (data == undefined)
+        if (data == undefined || Object.values(data).length == 0)
             return;
         this.image = data.image;
         this.youtubeID = data.youtubeID;
@@ -53,7 +53,7 @@ var Song = (function () {
         return this;
     }
     Song.prototype.importFromYoutube = function (video) {
-        this.image = video.snippet.thumbnails["default"].url;
+        this.image = video.snippet.thumbnails.default.url;
         this.youtubeID = video.id.videoId;
         this.title = video.snippet.title;
         this.author = video.snippet.channelTitle;
@@ -146,7 +146,9 @@ var Song = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.isDownloaded()];
+                    case 0:
+                        console.log(this.title);
+                        return [4, this.isDownloaded()];
                     case 1:
                         if (_a.sent())
                             return [2];
@@ -154,10 +156,12 @@ var Song = (function () {
                     case 2:
                         _a.sent();
                         this.isDownloadedBool = true;
+                        if (!this.saved) return [3, 4];
                         return [4, this.save()];
                     case 3:
                         _a.sent();
-                        return [2];
+                        _a.label = 4;
+                    case 4: return [2];
                 }
             });
         });
@@ -180,13 +184,14 @@ var Song = (function () {
                     case 3:
                         mp3Exists = _a.sent();
                         this.isDownloadedBool = mp3Exists;
-                        this.save();
+                        if (this.saved)
+                            this.save();
                         return [2, mp3Exists];
                 }
             });
         });
     };
-    Song.prototype["delete"] = function () {
+    Song.prototype.delete = function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
@@ -213,15 +218,13 @@ var Song = (function () {
         return JSON.parse(JSON.stringify(this));
     };
     Song.prototype.getHTML = function () {
-        console.log(this);
-        console.trace();
         var title = this.title;
         if (title.length > 20)
             title = title.split('').splice(0, 20).join('') + '...';
         var channel = this.author;
         if (channel.length > 20)
             channel = channel.split('').splice(0, 20).join('') + '...';
-        var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n        <div class=\"buttons\">\n        <img class=\"more\" src=\"./images/options.png\"/>\n        <img class=\"like\" src=\"./images/heart.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
+        var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n      <div class=\"buttons\">\n        <img class=\"more\" src=\"./images/options.png\"/>\n        <img class=\"like\" src=\"./images/heart.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
         return html;
     };
     return Song;

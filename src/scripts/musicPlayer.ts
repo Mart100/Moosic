@@ -33,10 +33,7 @@ class MusicPlayer extends EventEmitter {
 
     this.stop()
 
-    // search if in database
-    let database = await getData()
-    let songs = database.songs
-    let songDB = songs[song.youtubeID]
+    console.log(song)
 
     // check if song is is queue
     let queueIDlist = Array.from(this.queue, s => s.youtubeID)
@@ -50,7 +47,6 @@ class MusicPlayer extends EventEmitter {
 
     if(this.currentSong.saved) {
       this.currentSong.lastPlayed = Date.now()
-      console.log(this.currentSong.lastPlayed)
       this.currentSong.save()
     }
 
@@ -62,8 +58,8 @@ class MusicPlayer extends EventEmitter {
     if(mp3Exists) this.playMp3(songLoc)
     else {
       this.playYT(song.youtubeID)
-      await this.currentSong.download({priority: true})
-      musicPlayer.play(this.currentSong)
+      //await this.currentSong.download({priority: true})
+      //musicPlayer.play(this.currentSong)
     }
 
     setTimeout(() => {
