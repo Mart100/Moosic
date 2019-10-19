@@ -109,7 +109,7 @@ async function loadCollections() {
         let renameInput = button.find('.renameInput')
         renameInput.focus()
         renameInput.on('change', () => {
-          let newName = renameInput.val() 
+          let newName = renameInput.val().toString()
           renameInput.remove()
           button.find('.name').html(newName)
           button.find('.name').show()

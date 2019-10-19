@@ -241,11 +241,12 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
     let song = songs.find(s => s.youtubeID == e.target.parentElement.parentElement.id.replace('song-', ''))
     if(song.liked) {
       await song.dislike()
-      e.target.src = './images/heart.png'
+      console.log('test')
+      $(e.target).attr('src', './images/heart.png') 
     }
     else {
       await song.like()
-      e.target.src = './images/red-heart.png'
+      $(e.target).attr('src', './images/red-heart.png') 
     }
   })
 

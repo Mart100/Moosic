@@ -77,6 +77,7 @@ async function loadPlaylists(accessToken:string) {
         }
       })
       .then(res => res.json())
+    console.log(rawPlaylists)
     if(rawPlaylists == null) return 'failed to retrieve playlists'
     let fetchPromises = []
     for(let item of rawPlaylists.items) {

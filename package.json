@@ -33,7 +33,7 @@
   "scripts": {
     "start": "npm install && npm run compileWatch && electron .",
     "compileWatch": "npm run copy_src_to_compiled && Start tsc -w",
-    "compile": "npm run copy_src_to_compiled && Start tsc",
+    "compile": "npm run copy_src_to_compiled && tsc",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
     "dist": "npm run compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
