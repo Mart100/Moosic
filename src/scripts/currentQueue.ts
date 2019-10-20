@@ -51,6 +51,7 @@ $(() => {
 function updateSongFocus() {
   $('#currentQueue .songs').show()
   let song = musicPlayer.currentSong
+  if(song == undefined) return
   $('#currentQueue .currentSong .image').attr('src', song.image)
 
   // keep setting the progress bar
