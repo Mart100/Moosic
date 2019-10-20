@@ -14,33 +14,34 @@ async function showSongs(songs, options) {
 
   if(songsElem[0].parentElement.id == 'search') options.topBar = false
 
-  if(songsElem.find('.topBar')[0] == undefined) {
-    songsElem.append(`    
-      <div class="topBar">
-        <input class="search" placeholder="Search songs"></input>
-        <img class="filterButton" src="images/filter.png"/>
-        <div class="filters">
-          <div class="sortBy">
-            <span class="title">Sort by:</span>
-            <hr>
-            <div id="sortby-lastadded" class="button2">Last added</div>
-            <div id="sortby-alphabetic" class="button2">Alphabetic</div>
-            <div id="sortby-lastplayed" class="button2">Last played</div>
-          </div>
-          <div class="filter">
-            <span class="title">Filter:</span>
-            <hr>
-            <div id="filter-downloaded" class="button2">Downloaded</div>
-            <div id="filter-liked" class="button2">Liked</div>
-          </div>
+  if(songsElem.find('.topBar')[0]) songsElem.find('.topBar').remove()
+
+  songsElem.prepend(`    
+    <div class="topBar">
+      <input class="search" placeholder="Search songs"></input>
+      <img class="filterButton" src="images/filter.png"/>
+      <div class="filters">
+        <div class="sortBy">
+          <span class="title">Sort by:</span>
+          <hr>
+          <div id="sortby-lastadded" class="button2">Last added</div>
+          <div id="sortby-alphabetic" class="button2">Alphabetic</div>
+          <div id="sortby-lastplayed" class="button2">Last played</div>
+        </div>
+        <div class="filter">
+          <span class="title">Filter:</span>
+          <hr>
+          <div id="filter-downloaded" class="button2">Downloaded</div>
+          <div id="filter-liked" class="button2">Liked</div>
         </div>
       </div>
-    `)
-    $('.button2').each((i, a) => {
-      let b = a.id.split('-')
-      let c = filters[b[0]][b[1]]
-      if(c) $(a).addClass('selected')
-    })
+    </div>
+  `)
+  $('.button2').each((i, a) => {
+    let b = a.id.split('-')
+    let c = filters[b[0]][b[1]]
+    if(c) $(a).addClass('selected')
+  })
   }
 
   if(options.topBar == false) {
