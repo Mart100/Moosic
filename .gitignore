@@ -3,8 +3,10 @@ compiled/src/storage/
 node_modules/
 node_modules/fs-extra
 ./node_modules
-./compiled/*
+compiled/*
 *.mp3
 dist
-src/scripts/*.js
-src/scripts/*.js.map
+compiled/src/scripts/*.js
+compiled/src/scripts/*.js.map
+**/*.js
+**/*.js.map
