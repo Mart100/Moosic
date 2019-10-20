@@ -3,7 +3,7 @@
   height: 100%;
   position: absolute;
   z-index: 50;
-  background-color: rgb(25, 25, 25);
+  background-color: #191919;
 }
 
 #currentQueue .currentSong {
@@ -20,13 +20,13 @@
   margin: 5px;
   cursor: pointer;
   background-color: rgba(50, 50, 50, 0.3);
-  border: 2px solid rgb(0,0,0);
+  border: 2px solid black;
   border-radius: 50%;
   z-index: 10;
 }
 
 #currentQueue .currentSong .exit:hover {
-  background-color: rgba(50, 50, 50, 1);
+  background-color: #323232;
 }
 
 #currentQueue .currentSong .image {
@@ -48,6 +48,7 @@
   transition-duration: 0.3s;
   box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.4);
 }
+
 #currentQueue .currentSong .progressBackground:hover {
   height: 7px;
   bottom: 9px;
@@ -61,6 +62,7 @@
   position: absolute;
   pointer-events: none;
 }
+
 #queue {
   top: 200px;
   position: absolute;
@@ -73,9 +75,8 @@
   position: absolute;
   height: 120px;
   bottom: -50px;
-  background-color: rgb(20, 20, 20);
+  background-color: #141414;
   z-index: 20;
-
 }
 
 #musicControls .bar_wrapper {
@@ -103,14 +104,26 @@
   margin-top: 5px;
 }
 
-#musicControls .bar_wrapper .repeat { left: 20%; }
-#musicControls .bar_wrapper .previous { left: 35%; }
-#musicControls .bar_wrapper .next { left: 65%; }
-#musicControls .bar_wrapper .shuffle { left: 80%; }
+#musicControls .bar_wrapper .repeat {
+  left: 20%;
+}
+
+#musicControls .bar_wrapper .previous {
+  left: 35%;
+}
+
+#musicControls .bar_wrapper .next {
+  left: 65%;
+}
+
+#musicControls .bar_wrapper .shuffle {
+  left: 80%;
+}
 
 #musicControls .bar_wrapper .shuffle.on {
   background-color: red;
 }
+
 #musicControls .bar_wrapper .repeat.on {
   background-color: red;
 }
@@ -141,7 +154,6 @@
   padding-right: 50px;
 }
 
-
 #musicControls .volume .volume_input {
   width: 200px;
   left: 50%;
@@ -163,6 +175,7 @@
   background: white;
   cursor: pointer;
 }
+
 #musicControls .volume img {
   width: 30px;
   height: 30px;
@@ -171,6 +184,9 @@
 #musicControls .volume .low_volume {
   float: left;
 }
+
 #musicControls .volume .high_volume {
   float: right;
 }
+
+/*# sourceMappingURL=currentQueue.css.map */

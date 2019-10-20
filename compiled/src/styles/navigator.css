@@ -3,7 +3,7 @@
   bottom: 0px;
   width: 100%;
   position: absolute;
-  background-color: rgb(15, 15, 15);
+  background-color: #0f0f0f;
   display: flex;
   list-style: none;
 }
@@ -19,12 +19,15 @@
   transition-duration: 0.5s;
   cursor: pointer;
   box-sizing: content-box;
-  border: 5px rgba(0,0,0,0) solid;
+  border: 5px rgba(0, 0, 0, 0) solid;
 }
 
 #navigator li.selected {
-  border-bottom: 5px rgb(255, 0, 0) solid;
+  border-bottom: 5px red solid;
 }
+
 #navigator li:hover {
-  background-color: rgb(25, 25, 25);
+  background-color: #191919;
 }
+
+/*# sourceMappingURL=navigator.css.map */

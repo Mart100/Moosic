@@ -1,12 +1,17 @@
 #deleteData-button {
-  background-color: rgb(50, 10, 10);
+  background-color: #320a0a;
 }
+
 #deleteData-button:hover {
-  background-color: rgb(200, 10, 10);
+  background-color: #c80a0a;
 }
+
 #settings {
   color: white;
 }
+
 #setStoragePos-button input {
   pointer-events: none;
 }
+
+/*# sourceMappingURL=settings.css.map */

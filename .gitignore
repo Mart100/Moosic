@@ -6,7 +6,5 @@ node_modules/fs-extra
 compiled/*
 *.mp3
 dist
-compiled/src/scripts/*.js
-compiled/src/scripts/*.js.map
 *.js
 *.js.map

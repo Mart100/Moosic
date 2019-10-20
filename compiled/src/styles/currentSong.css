@@ -3,7 +3,7 @@
   width: 100%;
   position: absolute;
   bottom: 50px;
-  background-color: rgb(20, 20, 20);
+  background-color: #141414;
 }
 
 #currentSong .image {
@@ -29,7 +29,7 @@
 }
 
 #currentSong #progress {
-  background-color: rgb(255, 0, 0);
+  background-color: red;
   position: absolute;
   height: 2px;
   z-index: 10;
@@ -46,3 +46,5 @@
   position: absolute;
   padding: 5px;
 }
+
+/*# sourceMappingURL=currentSong.css.map */

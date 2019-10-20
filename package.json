@@ -35,6 +35,7 @@
     "compileWatch": "npm run copy_src_to_compiled && Start tsc -w",
     "compile": "npm run copy_src_to_compiled && tsc",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
+    "compileSCSS": "sass --watch src/styles:compiled/src/styles",
     "dist": "npm run compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
     "publish": "npm run compile && electron-builder build -p always"
