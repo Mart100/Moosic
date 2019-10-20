@@ -53,15 +53,15 @@ function showSongs(songs, options) {
                         return [2, console.log('ERR: 564')];
                     if (songsElem[0].parentElement.id == 'search')
                         options.topBar = false;
-                    if (songsElem.find('.topBar')[0] == undefined) {
-                        songsElem.append("    \n      <div class=\"topBar\">\n        <input class=\"search\" placeholder=\"Search songs\"></input>\n        <img class=\"filterButton\" src=\"images/filter.png\"/>\n        <div class=\"filters\">\n          <div class=\"sortBy\">\n            <span class=\"title\">Sort by:</span>\n            <hr>\n            <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n            <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n            <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n          </div>\n          <div class=\"filter\">\n            <span class=\"title\">Filter:</span>\n            <hr>\n            <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n            <div id=\"filter-liked\" class=\"button2\">Liked</div>\n          </div>\n        </div>\n      </div>\n    ");
-                        $('.button2').each(function (i, a) {
-                            var b = a.id.split('-');
-                            var c = filters[b[0]][b[1]];
-                            if (c)
-                                $(a).addClass('selected');
-                        });
-                    }
+                    if (songsElem.find('.topBar')[0])
+                        songsElem.find('.topBar').remove();
+                    songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\"></input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
+                    $('.button2').each(function (i, a) {
+                        var b = a.id.split('-');
+                        var c = filters[b[0]][b[1]];
+                        if (c)
+                            $(a).addClass('selected');
+                    });
                     if (options.topBar == false) {
                         songsElem.find('.topBar').remove();
                     }
@@ -80,6 +80,7 @@ function showSongs(songs, options) {
                     if (searchTxtVal)
                         searchTxt = searchTxtVal.toString().toLowerCase();
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
+                    console.log(filters);
                     for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
                         s = songs_1[_i];
                         song = new Song(s);
@@ -268,7 +269,9 @@ function showTooltipForSong(song) {
                     database = _a.sent();
                     songsElem = getCurrentSongsElement();
                     songElem = songsElem.find('#song-' + song.youtubeID);
-                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play simular songs</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    if (songElem.find('.tooltip')[0])
+                        songElem.find('.tooltip').remove();
+                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play simular songs</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
                     currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
@@ -344,6 +347,14 @@ function showTooltipForSong(song) {
                     tooltip.find('.openInYoutube').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
                             openURL("https://youtube.com/watch?v=" + song.youtubeID);
+                            return [2];
+                        });
+                    }); });
+                    tooltip.find('.songInfo').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        var info;
+                        return __generator(this, function (_a) {
+                            info = "\n    song title: " + song.title + "\n    song thumbnail: " + song.image + "\n    song author: " + song.author + "\n    Last played: " + new Date(song.lastPlayed).toString() + "\n    saveDate: " + new Date(song.saveDate).toString() + "\n    youtubeID: " + song.youtubeID + "\n    ";
+                            window.alert(info);
                             return [2];
                         });
                     }); });

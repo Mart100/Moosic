@@ -47,6 +47,8 @@ $(function () {
 function updateSongFocus() {
     $('#currentQueue .songs').show();
     var song = musicPlayer.currentSong;
+    if (song == undefined)
+        return;
     $('#currentQueue .currentSong .image').attr('src', song.image);
     clearInterval(progressBarInterval);
     progressBarInterval = setInterval(function () {
