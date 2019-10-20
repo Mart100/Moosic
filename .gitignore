@@ -8,5 +8,5 @@ compiled/*
 dist
 compiled/src/scripts/*.js
 compiled/src/scripts/*.js.map
-**/*.js
-**/*.js.map
+*.js
+*.js.map
