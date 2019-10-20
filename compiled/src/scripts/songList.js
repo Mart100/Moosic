@@ -307,11 +307,15 @@ function showTooltipForSong(song) {
                         }); });
                     }
                     tooltip.find('.deleteSong').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        var songidx;
                         return __generator(this, function (_a) {
                             switch (_a.label) {
                                 case 0: return [4, song.delete()];
                                 case 1:
                                     _a.sent();
+                                    songidx = currentSongList.indexOf(currentSongList.find(function (s) { return s.youtubeID == song.youtubeID; }));
+                                    if (songidx > -1)
+                                        currentSongList.splice(songidx, 1);
                                     showSongs(currentSongList, {});
                                     return [2];
                             }
