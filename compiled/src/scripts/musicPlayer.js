@@ -67,7 +67,7 @@ var MusicPlayer = (function (_super) {
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var queueIDlist, idx, songLoc, mp3Exists;
+            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -81,6 +81,10 @@ var MusicPlayer = (function (_super) {
                         this.currentSong = song;
                         this.isPaused = false;
                         this.emit('play');
+                        songQueueIDX = this.queue.indexOf(this.queue.find(function (s) { return s.youtubeID == song.youtubeID; }));
+                        if (songQueueIDX > -1)
+                            this.queuePosition = songQueueIDX;
+                        console.log(songQueueIDX);
                         if (this.currentSong.saved) {
                             this.currentSong.lastPlayed = Date.now();
                             this.currentSong.save();
@@ -97,7 +101,9 @@ var MusicPlayer = (function (_super) {
                         }
                         setTimeout(function () {
                             _this.setVolume(_this.volume);
-                            scrollToCurrentSong();
+                            setTimeout(function () {
+                                scrollToCurrentSong();
+                            }, 300);
                         }, 100);
                         return [2];
                 }
@@ -111,7 +117,6 @@ var MusicPlayer = (function (_super) {
             var song = newQueue_1[_i];
             this.queue.push(new Song(song));
         }
-        this.queuePosition = 0;
         this.isShuffled = false;
         showSongs(this.queue, {});
     };

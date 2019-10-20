@@ -39,7 +39,7 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, topBar, filterButton, filtersDiv;
+        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -69,7 +69,6 @@ function showSongs(songs, options) {
                         songsElem.append("<div class=\"songList\"></div>");
                     }
                     songListElem = songsElem.find('.songList');
-                    songListElem.html('');
                     songs = Object.values(songs);
                     return [4, getData()];
                 case 2:
@@ -100,46 +99,61 @@ function showSongs(songs, options) {
                             continue;
                         refinedSongs.push(song);
                     }
-                    refinedSongs.sort(function (a, b) { return a.order - b.order; });
-                    if (filters.sortby.lastadded) {
-                        refinedSongs.sort(function (a, b) {
-                            return b.saveDate - a.saveDate;
-                        });
-                    }
-                    if (filters.sortby.lastplayed) {
-                        refinedSongs.sort(function (a, b) {
-                            var lastA = a.lastPlayed;
-                            if (!lastA)
-                                a.lastPlayed = 0;
-                            var lastB = b.lastPlayed;
-                            if (!lastB)
-                                b.lastPlayed = 0;
-                            return lastB - lastA;
-                        });
-                    }
-                    if (filters.sortby.alphabetic) {
-                        alphabet = 'abcdefghijklmnopqrstuvxyz';
-                        refinedSongs.sort(function (a, b) {
-                            if (a.title > b.title)
-                                return 1;
-                            if (b.title > a.title)
-                                return -1;
-                            return 0;
-                        });
+                    if (options.sort != false) {
+                        refinedSongs.sort(function (a, b) { return a.order - b.order; });
+                        if (filters.sortby.lastadded) {
+                            refinedSongs.sort(function (a, b) {
+                                return b.saveDate - a.saveDate;
+                            });
+                        }
+                        if (filters.sortby.lastplayed) {
+                            refinedSongs.sort(function (a, b) {
+                                var lastA = a.lastPlayed;
+                                if (!lastA)
+                                    a.lastPlayed = 0;
+                                var lastB = b.lastPlayed;
+                                if (!lastB)
+                                    b.lastPlayed = 0;
+                                return lastB - lastA;
+                            });
+                        }
+                        if (filters.sortby.alphabetic) {
+                            alphabet = 'abcdefghijklmnopqrstuvxyz';
+                            refinedSongs.sort(function (a, b) {
+                                if (a.title > b.title)
+                                    return 1;
+                                if (b.title > a.title)
+                                    return -1;
+                                return 0;
+                            });
+                        }
                     }
                     songsHtml = '';
                     for (_a = 0, refinedSongs_1 = refinedSongs; _a < refinedSongs_1.length; _a++) {
                         s = refinedSongs_1[_a];
                         songsHtml += "<div class=\"song\" id=\"song-" + s.youtubeID + "\"></div>";
                     }
-                    songListElem[0].innerHTML = songsHtml;
+                    if (songListElem.html().length < 1000)
+                        songListElem[0].innerHTML = songsHtml;
+                    console.log(songListElem.html().length);
                     songListElem.on('scroll', function () {
-                        var songNum = Math.floor(songListElem.scrollTop() / 82);
+                        var songNum = Math.floor(songListElem.scrollTop() / 80);
                         for (var i = -2; i < 10; i++)
                             loadSong(songNum + i, refinedSongs, songListElem);
                     });
                     songListElem.trigger('scroll');
-                    scrollToCurrentSong();
+                    if (options.songFocusID) {
+                        songFocus = refinedSongs.find(function (s) { return s.youtubeID == options.songFocusID; });
+                        songFocusIDX = refinedSongs.indexOf(songFocus);
+                        if (songFocusIDX > -1) {
+                            songHeight_1 = songFocusIDX * 80;
+                            console.log(songFocusIDX, songHeight_1);
+                            setTimeout(function () { songListElem[0].scrollTop = songHeight_1; }, 100);
+                        }
+                    }
+                    else {
+                        scrollToCurrentSong();
+                    }
                     topBar = songsElem.find('.topBar');
                     topBar.find('.search').off().on('input', function () {
                         showSongs(songs, options);
@@ -172,7 +186,7 @@ function showSongs(songs, options) {
                     filterButton.off().on('click', function () {
                         filtersDiv.toggleClass('expanded');
                     });
-                    console.log('SHUW SONGS');
+                    console.log('SHOW SONGLIST');
                     return [2];
             }
         });
@@ -222,11 +236,13 @@ function loadSong(idx, songs, songListElem) {
     var song = songs[idx];
     if (song == undefined)
         return;
+    if (songListElem.find("#song-" + song.youtubeID).html().length != 0)
+        return;
     var songHTML = $(song.getHTML());
     if (song.liked)
         songHTML.find(" .buttons .like").attr('src', './images/red-heart.png');
     songListElem.find("#song-" + song.youtubeID).replaceWith(songHTML);
-    songHTML.on('click', function (e) { onSongClick(e, songs); });
+    songHTML.on('click', function (e) { onSongClick(e, currentSongList); });
     songHTML.find('.like').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
         var song;
         return __generator(this, function (_a) {

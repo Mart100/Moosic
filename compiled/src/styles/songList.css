@@ -91,7 +91,7 @@
 
 .songList .song {
   width: 100%;
-  padding: 10px;
+  padding: 9px;
   height: 60px;
   border: 1px rgb(30, 30, 30) solid;
   transition-duration: 0.3s;

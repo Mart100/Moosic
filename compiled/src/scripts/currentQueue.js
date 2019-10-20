@@ -57,6 +57,6 @@ function updateSongFocus() {
     }, 1000);
     $('#queue').html('');
     var queue = musicPlayer.queue;
-    showSongs(queue, { topBar: false });
+    showSongs(queue, { topBar: false, sort: false, songFocusID: song.youtubeID });
 }
 //# sourceMappingURL=currentQueue.js.map
