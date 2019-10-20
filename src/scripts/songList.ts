@@ -42,7 +42,6 @@ async function showSongs(songs, options) {
     let c = filters[b[0]][b[1]]
     if(c) $(a).addClass('selected')
   })
-  }
 
   if(options.topBar == false) {
     songsElem.find('.topBar').remove()
@@ -74,6 +73,7 @@ async function showSongs(songs, options) {
   if(searchTxtVal) searchTxt = searchTxtVal.toString().toLowerCase()
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
+  console.log(filters)
 
   // construct refinedSongs
   for(let s of songs) {
@@ -263,12 +263,14 @@ async function showTooltipForSong(song:Song) {
   let songsElem = getCurrentSongsElement()
   let songElem = songsElem.find('#song-'+song.youtubeID)
 
+  if(songElem.find('.tooltip')[0]) songElem.find('.tooltip').remove()
   let tooltipHTML = $(`
   <div class="tooltip">
     <button class="download">Download</button>
     <button class="openInYoutube">Open in youtube</button>
     <button class="addToCollection">Add to collection</button>
     <button class="playSimularSongs">Play simular songs</button>
+    <button class="songInfo">Song info</button>
     <button class="deleteSong">Delete songs</button>
   </div>
   `)
@@ -323,6 +325,17 @@ async function showTooltipForSong(song:Song) {
   })
   tooltip.find('.openInYoutube').on('click', async (e) => {
     openURL(`https://youtube.com/watch?v=${song.youtubeID}`)
+  })
+  tooltip.find('.songInfo').on('click', async (e) => {
+    let info = `
+    song title: ${song.title}
+    song thumbnail: ${song.image}
+    song author: ${song.author}
+    Last played: ${new Date(song.lastPlayed).toString()}
+    saveDate: ${new Date(song.saveDate).toString()}
+    youtubeID: ${song.youtubeID}
+    `
+    window.alert(info)
   })
   tooltip.find('.addToCollection').on('click', async (e) => {
     tooltip.html('')
