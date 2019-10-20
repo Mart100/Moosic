@@ -45,6 +45,10 @@ class MusicPlayer extends EventEmitter {
     this.isPaused = false
     this.emit('play')
 
+    let songQueueIDX = this.queue.indexOf(this.queue.find(s => s.youtubeID == song.youtubeID))
+    if(songQueueIDX > -1) this.queuePosition = songQueueIDX
+    console.log(songQueueIDX)
+
     if(this.currentSong.saved) {
       this.currentSong.lastPlayed = Date.now()
       this.currentSong.save()
@@ -64,7 +68,9 @@ class MusicPlayer extends EventEmitter {
 
     setTimeout(() => {
       this.setVolume(this.volume)
-      scrollToCurrentSong()
+      setTimeout(() => {
+        scrollToCurrentSong()
+      }, 300)
     }, 100)
 
   }
@@ -72,7 +78,7 @@ class MusicPlayer extends EventEmitter {
     this.queue = []
     newQueue = JSON.parse(JSON.stringify(newQueue))
     for(let song of newQueue) this.queue.push(new Song(song))
-    this.queuePosition = 0
+    //this.queuePosition = 0
     this.isShuffled = false
     showSongs(this.queue, {})
   }

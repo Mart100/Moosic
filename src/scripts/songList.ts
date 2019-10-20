@@ -1,4 +1,4 @@
-let currentSongList = []
+let currentSongList:Song[] = []
 let filters:any = {}
 resetFilters()
 
@@ -53,8 +53,6 @@ async function showSongs(songs, options) {
 
   let songListElem = songsElem.find('.songList')
 
-  songListElem.html('')
-
   songs = Object.values(songs)
 
   let database:any = await getData()
@@ -93,50 +91,67 @@ async function showSongs(songs, options) {
     
     refinedSongs.push(song)
   }
-  // first sort by order
-  refinedSongs.sort((a,b) => a.order - b.order)
-  // sort songs 
-  if(filters.sortby.lastadded) {
-    refinedSongs.sort((a,b) => {
-      return b.saveDate - a.saveDate
-    })
-  }
-  if(filters.sortby.lastplayed) {
-    refinedSongs.sort((a,b) => {
 
-      let lastA = a.lastPlayed
-      if(!lastA) a.lastPlayed = 0
+  if(options.sort != false) {
+    // first sort by order
+    refinedSongs.sort((a,b) => a.order - b.order)
+    
+    // sort songs 
+    if(filters.sortby.lastadded) {
+      refinedSongs.sort((a,b) => {
+        return b.saveDate - a.saveDate
+      })
+    }
+    if(filters.sortby.lastplayed) {
+      refinedSongs.sort((a,b) => {
 
-      let lastB = b.lastPlayed
-      if(!lastB) b.lastPlayed = 0
+        let lastA = a.lastPlayed
+        if(!lastA) a.lastPlayed = 0
 
-      return lastB - lastA
-    })
+        let lastB = b.lastPlayed
+        if(!lastB) b.lastPlayed = 0
+
+        return lastB - lastA
+      })
+    }
+    if(filters.sortby.alphabetic) {
+      let alphabet = 'abcdefghijklmnopqrstuvxyz'
+      refinedSongs.sort((a,b) => {
+        if(a.title > b.title) return 1
+        if(b.title > a.title) return -1
+        return 0
+      })
+    }
   }
-  if(filters.sortby.alphabetic) {
-    let alphabet = 'abcdefghijklmnopqrstuvxyz'
-     refinedSongs.sort((a,b) => {
-      if(a.title > b.title) return 1
-      if(b.title > a.title) return -1
-      return 0
-    })
-  }
+
 
 
 
   let songsHtml = ''
   for(let s of refinedSongs) songsHtml += `<div class="song" id="song-${s.youtubeID}"></div>`
 
-  songListElem[0].innerHTML = songsHtml
+  if(songListElem.html().length < 1000) songListElem[0].innerHTML = songsHtml
+  console.log(songListElem.html().length)
 
   songListElem.on('scroll', () => {
-    let songNum = Math.floor(songListElem.scrollTop()/82)
+    let songNum = Math.floor(songListElem.scrollTop()/80)
     for(let i=-2;i<10;i++) loadSong(songNum+i, refinedSongs, songListElem)
   })
 
   songListElem.trigger('scroll')
 
-  scrollToCurrentSong()
+  if(options.songFocusID) {
+    let songFocus = refinedSongs.find(s => s.youtubeID == options.songFocusID)
+    let songFocusIDX = refinedSongs.indexOf(songFocus)
+    if(songFocusIDX > -1) {
+      let songHeight = songFocusIDX*80
+      console.log(songFocusIDX, songHeight)
+      setTimeout(() => { songListElem[0].scrollTop = songHeight }, 100)
+    }
+  }
+  else {
+    scrollToCurrentSong()
+  }
 
   let topBar = songsElem.find('.topBar')
 
@@ -180,7 +195,7 @@ async function showSongs(songs, options) {
     filtersDiv.toggleClass('expanded')
   })
 
-  console.log('SHUW SONGS')
+  console.log('SHOW SONGLIST')
 }
 
 function resetFilters() {
@@ -228,6 +243,8 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
 
   if(song == undefined) return
 
+  if(songListElem.find(`#song-${song.youtubeID}`).html().length != 0) return
+
   let songHTML = $(song.getHTML())
 
   if(song.liked) songHTML.find(` .buttons .like`).attr('src', './images/red-heart.png')
@@ -235,7 +252,7 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
   songListElem.find(`#song-${song.youtubeID}`).replaceWith(songHTML)
 
   // on song click. Play song
-  songHTML.on('click', (e) => { onSongClick(e, songs) })
+  songHTML.on('click', (e) => { onSongClick(e, currentSongList) })
 
   // like button
   songHTML.find('.like').on('click', async (e) => {
@@ -307,6 +324,8 @@ async function showTooltipForSong(song:Song) {
 
   tooltip.find('.deleteSong').on('click', async (e) => {
     await song.delete()
+    let songidx = currentSongList.indexOf(currentSongList.find(s => s.youtubeID == song.youtubeID))
+    if(songidx > -1) currentSongList.splice(songidx, 1)
     showSongs(currentSongList, {})
   })
 
