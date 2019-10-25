@@ -5,11 +5,7 @@ let copy_options = {
   filter: (src, dest) => {
     //console.log(src, dest)
     if(src.endsWith('.ts')) return false
-    if(src.includes('/Moosic/node_modules')) return false
-    if(src.includes('/Moosic/dist')) return false
-    if(src.includes('/Moosic/.vscode')) return false
-    if(src.includes('/Moosic/.git')) return false
-    if(src.includes('/Moosic/compiled')) return false
+    if(src.endsWith('.scss')) return false
     return true
   }
 }

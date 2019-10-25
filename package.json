@@ -32,10 +32,10 @@
   },
   "scripts": {
     "start": "npm install && npm run compileWatch && electron .",
-    "compileWatch": "npm run copy_src_to_compiled && Start tsc -w",
-    "compile": "npm run copy_src_to_compiled && tsc",
+    "compileWatch": "npm run copy_src_to_compiled && Start tsc -w && Start sass --watch src/styles:compiled/src/styles",
+    "compile": "npm run copy_src_to_compiled && tsc && sass src/styles:compiled/src/styles",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
-    "compileSCSS": "sass --watch src/styles:compiled/src/styles",
+    "compileSCSS": "sass src/styles:compiled/src/styles",
     "dist": "npm run compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
     "publish": "npm run compile && electron-builder build -p always"

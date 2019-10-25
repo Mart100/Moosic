@@ -1,13 +1,19 @@
 //let $ = require('jquery')
 
-const { dialog } = require('electron')
 const electron = require('electron')
+const dialog = electron.dialog
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 
+const log = require('electron-log')
 const { autoUpdater } = require("electron-updater")
+
+// logging
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('App starting...')
 
 require('v8-compile-cache')
 
@@ -21,6 +27,8 @@ catch(e) {}
 
 app.on('ready', () => {
 
+  autoUpdater.checkForUpdatesAndNotify()
+
   // Create the browser window.
   let window = new BrowserWindow({
     width: 400,
@@ -32,11 +40,6 @@ app.on('ready', () => {
     },
     icon: './icon.ico'
   })
-
-/*
-  window.webContents.session.webRequest.onHeadersReceived((details, callback) => {
-      callback({responseHeaders: Object.fromEntries(Object.entries(details.responseHeaders).filter(header => !/x-frame-options/i.test(header[0])))});
-  });*/
   
   window.setMenu(null)
   window.setMaximizable(false)
@@ -49,10 +52,6 @@ app.on('ready', () => {
       window.webContents.openDevTools()
     })
   }
-
-  setTimeout(() => {
-    autoUpdater.checkForUpdatesAndNotify()
-  }, 2000)
 
 
   window.on('closed', () => { win = null })

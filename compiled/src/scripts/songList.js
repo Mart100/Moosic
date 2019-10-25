@@ -45,6 +45,8 @@ function showSongs(songs, options) {
                 case 0:
                     if (!options)
                         options = {};
+                    if (options.sort == undefined)
+                        options.sort = true;
                     return [4, refreshSongs(songs, {})];
                 case 1:
                     songs = _b.sent();
@@ -80,6 +82,7 @@ function showSongs(songs, options) {
                         searchTxt = searchTxtVal.toString().toLowerCase();
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
                     console.log(filters);
+                    console.log(options);
                     for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
                         s = songs_1[_i];
                         song = new Song(s);

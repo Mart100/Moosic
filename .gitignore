@@ -3,8 +3,5 @@ compiled/src/storage/
 node_modules/
 node_modules/fs-extra
 ./node_modules
-compiled/*
-*.mp3
-dist
-*.js
-*.js.map
+compiled/
+dist/

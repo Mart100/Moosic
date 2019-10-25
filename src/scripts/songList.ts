@@ -6,6 +6,8 @@ async function showSongs(songs, options) {
 
   if(!options) options = {}
 
+  if(options.sort == undefined) options.sort = true
+
   songs = await refreshSongs(songs, {})
 
   let songsElem = getCurrentSongsElement()
@@ -72,6 +74,7 @@ async function showSongs(songs, options) {
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
   console.log(filters)
+  console.log(options)
 
   // construct refinedSongs
   for(let s of songs) {
