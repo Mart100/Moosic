@@ -116,17 +116,15 @@ async function downloadFileFromURL(file_url) {
   `)
 
   // start actual download
-  let proc = cp.exec(`ipconfig`, (err, stdout, stderr) => { // wget ${file_url} -P ${downloadLoc}
+  let proc = cp.exec(`wget ${file_url} -P ${downloadLoc}`, (err, stdout, stderr) => {
     if (err) throw err
     else {
       console.log(`Setup ${file_url.split('/').pop()} installed`)
       console.log(`${downloadLoc}\\${file_name}`)
+      win.close()
       cp.exec(`${downloadLoc}\\${file_name}`, (err, stdout, stderr) => {
         if(err) throw err
       })
-      
-      //win.setBounds({ width: 400, height: 800 })
-      //win.reload()
     }
   })
   proc.stderr.on('data', (data) => {

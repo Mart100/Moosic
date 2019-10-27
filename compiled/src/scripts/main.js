@@ -146,7 +146,7 @@ function downloadFileFromURL(file_url) {
                     $('#navigator').remove();
                     $('iframe').remove();
                     $('body').append("\n<div id=\"loadingWin\">\n<div class=\"title\">Downloading " + file_name + "...</div>\n<div class=\"progressBar\"><div class=\"progress\"></div></div>\n<div class=\"waitingTime\">Estemaited waiting time: 0s</div>\n</div>\n  ");
-                    proc = cp.exec("ipconfig", function (err, stdout, stderr) {
+                    proc = cp.exec("wget " + file_url + " -P " + downloadLoc, function (err, stdout, stderr) {
                         if (err)
                             throw err;
                         else {
@@ -155,6 +155,7 @@ function downloadFileFromURL(file_url) {
                             cp.exec(downloadLoc + "\\" + file_name, function (err, stdout, stderr) {
                                 if (err)
                                     throw err;
+                                win.close();
                             });
                         }
                     });
