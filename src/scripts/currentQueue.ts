@@ -66,7 +66,6 @@ function updateSongFocus() {
   }, 1000)
 
   // set queue
-  $('#queue').html('')
   let queue = musicPlayer.queue
-  showSongs(queue, {topBar: false, sort: false, songFocusID: song.youtubeID})
+  showSongs(queue, {topBar: false, sort: false, refresh: false})
 }

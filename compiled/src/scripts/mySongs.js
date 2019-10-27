@@ -49,7 +49,7 @@ $(function () {
                     songs.sort(function (a, b) { return a.order - b.order; });
                     $('#mySongsMenu').hide();
                     $('#mySongs .songs').show();
-                    showSongs(songs, {});
+                    showSongs(songs, { refresh: true, scrollCurrentSong: false });
                     return [2];
             }
         });
@@ -64,7 +64,7 @@ $(function () {
                     songs = Object.values(database.songs);
                     $('#mySongsMenu').hide();
                     $('#mySongs .songs').show();
-                    showSongs(songs, {});
+                    showSongs(songs, { refresh: true, scrollCurrentSong: false });
                     return [2];
             }
         });

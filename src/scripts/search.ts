@@ -25,7 +25,7 @@ $(() => {
       searchResults[song.youtubeID] = song
     }
     setSortByNone()
-    showSongs(searchResults, {topBar: false})
+    showSongs(searchResults, {topBar: false, scrollCurrentSong: false})
     $('#queue').hide()
   })
 })

@@ -60,8 +60,7 @@ function updateSongFocus() {
         var progress = musicPlayer.getCurrentTime() / musicPlayer.getDuration();
         $('#currentQueue .currentSong .progress').css('width', progress * 100 + "%");
     }, 1000);
-    $('#queue').html('');
     var queue = musicPlayer.queue;
-    showSongs(queue, { topBar: false, sort: false, songFocusID: song.youtubeID });
+    showSongs(queue, { topBar: false, sort: false, refresh: false });
 }
 //# sourceMappingURL=currentQueue.js.map

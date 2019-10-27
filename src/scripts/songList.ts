@@ -2,11 +2,21 @@ let currentSongList:Song[] = []
 let filters:any = {}
 resetFilters()
 
+interface showSongsOptions {
+  topBar:boolean
+  sort:boolean
+}
+
 async function showSongs(songs, options) {
+
+  console.log()
 
   if(!options) options = {}
 
+  if(options.topBar == undefined) options.topBar = true
   if(options.sort == undefined) options.sort = true
+  if(options.refresh == undefined) options.refresh = false
+  if(options.scrollCurrentSong == undefined) options.scrollCurrentSong = true
 
   songs = await refreshSongs(songs, {})
 
@@ -16,9 +26,7 @@ async function showSongs(songs, options) {
 
   if(songsElem[0].parentElement.id == 'search') options.topBar = false
 
-  if(songsElem.find('.topBar')[0]) songsElem.find('.topBar').remove()
-
-  songsElem.prepend(`    
+  if(songsElem.find('.topBar')[0] == undefined) songsElem.prepend(`    
     <div class="topBar">
       <input class="search" placeholder="Search songs"></input>
       <img class="filterButton" src="images/filter.png"/>
@@ -39,19 +47,16 @@ async function showSongs(songs, options) {
       </div>
     </div>
   `)
-  $('.button2').each((i, a) => {
+  $('.filters .button2').each((i, a) => {
     let b = a.id.split('-')
     let c = filters[b[0]][b[1]]
     if(c) $(a).addClass('selected')
+    else $(a).removeClass('selected')
   })
 
-  if(options.topBar == false) {
-    songsElem.find('.topBar').remove()
-  }
+  if(options.topBar == false) songsElem.find('.topBar').remove()
 
-  if(songsElem.find('.songList')[0] == undefined) {
-    songsElem.append(`<div class="songList"></div>`)
-  }
+  if(songsElem.find('.songList')[0] == undefined) songsElem.append(`<div class="songList"></div>`)
 
   let songListElem = songsElem.find('.songList')
 
@@ -61,12 +66,7 @@ async function showSongs(songs, options) {
 
   currentSongList = songs
 
-  // shuffle songs
-  /*
-  if(!filters.sortby.none) songs.sort((a, b) => Math.random()-0.5)*/
-
   let refinedSongs = []
-
   
   let searchTxtVal = songsElem.find('.topBar .search').val()
   let searchTxt:string
@@ -76,65 +76,68 @@ async function showSongs(songs, options) {
   console.log(filters)
   console.log(options)
 
-  // construct refinedSongs
-  for(let s of songs) {
-    //if(s.image == undefined) console.log(s)
-    let song: Song = new Song(s)
-    let filterOut = false
+  let refreshSongList = (songListElem.html().length < 1 || options.refresh)
+  console.log('refreshSongList: ', refreshSongList)
 
-    if(searchFilter) {
-      let songTxt = (song.title + ' ' + song.author).toLowerCase()
-      if(songTxt.includes(searchTxt) == false) filterOut = true
+  if(refreshSongList) {
+
+    // construct refinedSongs
+    for(let s of songs) {
+      //if(s.image == undefined) console.log(s)
+      let song: Song = new Song(s)
+      let filterOut = false
+
+      if(searchFilter) {
+        let songTxt = (song.title + ' ' + song.author).toLowerCase()
+        if(songTxt.includes(searchTxt) == false) filterOut = true
+      }
+
+      if(filters.filter.liked) if(!song.liked) continue
+      if(filters.filter.downloaded) if(song.isDownloaded() == undefined) continue
+
+      if(filterOut) continue
+      
+      refinedSongs.push(song)
     }
 
-    if(filters.filter.liked) if(!song.liked) continue
-    if(filters.filter.downloaded) if(song.isDownloaded() == undefined) continue
+    if(options.sort != false) {
+      // first sort by order
+      refinedSongs.sort((a,b) => a.order - b.order)
+      
+      // sort songs 
+      if(filters.sortby.lastadded) {
+        refinedSongs.sort((a,b) => {
+          return b.saveDate - a.saveDate
+        })
+      }
+      if(filters.sortby.lastplayed) {
+        refinedSongs.sort((a,b) => {
 
-    if(filterOut) continue
-    
-    refinedSongs.push(song)
+          let lastA = a.lastPlayed
+          if(!lastA) a.lastPlayed = 0
+
+          let lastB = b.lastPlayed
+          if(!lastB) b.lastPlayed = 0
+
+          return lastB - lastA
+        })
+      }
+      if(filters.sortby.alphabetic) {
+        let alphabet = 'abcdefghijklmnopqrstuvxyz'
+        refinedSongs.sort((a,b) => {
+          if(a.title > b.title) return 1
+          if(b.title > a.title) return -1
+          return 0
+        })
+      }
+    }
+
+    currentSongList = refinedSongs
+
+    let songsHtml = ''
+    for(let s of refinedSongs) songsHtml += `<div class="song" id="song-${s.youtubeID}"></div>`
+    songListElem[0].innerHTML = songsHtml
   }
-
-  if(options.sort != false) {
-    // first sort by order
-    refinedSongs.sort((a,b) => a.order - b.order)
-    
-    // sort songs 
-    if(filters.sortby.lastadded) {
-      refinedSongs.sort((a,b) => {
-        return b.saveDate - a.saveDate
-      })
-    }
-    if(filters.sortby.lastplayed) {
-      refinedSongs.sort((a,b) => {
-
-        let lastA = a.lastPlayed
-        if(!lastA) a.lastPlayed = 0
-
-        let lastB = b.lastPlayed
-        if(!lastB) b.lastPlayed = 0
-
-        return lastB - lastA
-      })
-    }
-    if(filters.sortby.alphabetic) {
-      let alphabet = 'abcdefghijklmnopqrstuvxyz'
-      refinedSongs.sort((a,b) => {
-        if(a.title > b.title) return 1
-        if(b.title > a.title) return -1
-        return 0
-      })
-    }
-  }
-
-
-
-
-  let songsHtml = ''
-  for(let s of refinedSongs) songsHtml += `<div class="song" id="song-${s.youtubeID}"></div>`
-
-  if(songListElem.html().length < 1000) songListElem[0].innerHTML = songsHtml
-  console.log(songListElem.html().length)
 
   songListElem.on('scroll', () => {
     let songNum = Math.floor(songListElem.scrollTop()/80)
@@ -153,12 +156,17 @@ async function showSongs(songs, options) {
     }
   }
   else {
-    scrollToCurrentSong()
+    if(options.scrollCurrentSong) scrollToCurrentSong()
+    else {
+      songListElem[0].scrollTop = 0
+    }
   }
 
   let topBar = songsElem.find('.topBar')
 
   topBar.find('.search').off().on('input', () => {
+    console.log('yoinks')
+    options.refresh = true
     showSongs(songs, options)
   })
 
@@ -180,6 +188,7 @@ async function showSongs(songs, options) {
         filters[a][b] = true
       }
 
+
     }
     else {
       filters[a][b] = false
@@ -189,7 +198,9 @@ async function showSongs(songs, options) {
       }
     }
 
-    showSongs(songs, options)
+    options.refresh = true
+    showSongs(songs, {refresh:true})
+    filtersDiv.toggleClass('expanded')
   })
 
   let filterButton = topBar.find('.filterButton')
@@ -246,6 +257,7 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
 
   if(song == undefined) return
 
+  if(songListElem.find(`#song-${song.youtubeID}`)[0] == undefined) return
   if(songListElem.find(`#song-${song.youtubeID}`).html().length != 0) return
 
   let songHTML = $(song.getHTML())
@@ -330,7 +342,7 @@ async function showTooltipForSong(song:Song) {
     await song.delete()
     let songidx = currentSongList.indexOf(currentSongList.find(s => s.youtubeID == song.youtubeID))
     if(songidx > -1) currentSongList.splice(songidx, 1)
-    showSongs(currentSongList, {})
+    showSongs(currentSongList, {refresh: true})
   })
 
   tooltip.find('.playSimularSongs').on('click', async (e) => {

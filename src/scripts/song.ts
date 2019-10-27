@@ -62,7 +62,7 @@ class Song {
     return
   }
   async save() {
-    this.saveDate = Date.now()
+    if(this.saveDate == undefined) this.saveDate = Date.now()
     this.saved = true
     await saveData1((database) => {
       database.songs[this.youtubeID] = this.getObject()

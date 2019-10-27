@@ -103,7 +103,8 @@ var Song = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        this.saveDate = Date.now();
+                        if (this.saveDate == undefined)
+                            this.saveDate = Date.now();
                         this.saved = true;
                         return [4, saveData1(function (database) {
                                 database.songs[_this.youtubeID] = _this.getObject();

@@ -7,7 +7,7 @@ $(() => {
     songs.sort((a, b) => a.order-b.order)
     $('#mySongsMenu').hide()
     $('#mySongs .songs').show()
-    showSongs(songs, {})
+    showSongs(songs, {refresh: true, scrollCurrentSong: false})
   })
 
   $('#allSongs-button').on('click', async (event) => {
@@ -15,7 +15,7 @@ $(() => {
     let songs = Object.values(database.songs)
     $('#mySongsMenu').hide()
     $('#mySongs .songs').show()
-    showSongs(songs, {})
+    showSongs(songs, {refresh: true, scrollCurrentSong: false})
   })
   
   $('#newCollection-button').on('click', async (event) => {

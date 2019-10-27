@@ -39,14 +39,21 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
+        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, refreshSongList, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
+                    console.log();
                     if (!options)
                         options = {};
+                    if (options.topBar == undefined)
+                        options.topBar = true;
                     if (options.sort == undefined)
                         options.sort = true;
+                    if (options.refresh == undefined)
+                        options.refresh = false;
+                    if (options.scrollCurrentSong == undefined)
+                        options.scrollCurrentSong = true;
                     return [4, refreshSongs(songs, {})];
                 case 1:
                     songs = _b.sent();
@@ -55,21 +62,20 @@ function showSongs(songs, options) {
                         return [2, console.log('ERR: 564')];
                     if (songsElem[0].parentElement.id == 'search')
                         options.topBar = false;
-                    if (songsElem.find('.topBar')[0])
-                        songsElem.find('.topBar').remove();
-                    songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\"></input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
-                    $('.button2').each(function (i, a) {
+                    if (songsElem.find('.topBar')[0] == undefined)
+                        songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\"></input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
+                    $('.filters .button2').each(function (i, a) {
                         var b = a.id.split('-');
                         var c = filters[b[0]][b[1]];
                         if (c)
                             $(a).addClass('selected');
+                        else
+                            $(a).removeClass('selected');
                     });
-                    if (options.topBar == false) {
+                    if (options.topBar == false)
                         songsElem.find('.topBar').remove();
-                    }
-                    if (songsElem.find('.songList')[0] == undefined) {
+                    if (songsElem.find('.songList')[0] == undefined)
                         songsElem.append("<div class=\"songList\"></div>");
-                    }
                     songListElem = songsElem.find('.songList');
                     songs = Object.values(songs);
                     return [4, getData()];
@@ -83,62 +89,65 @@ function showSongs(songs, options) {
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
                     console.log(filters);
                     console.log(options);
-                    for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
-                        s = songs_1[_i];
-                        song = new Song(s);
-                        filterOut = false;
-                        if (searchFilter) {
-                            songTxt = (song.title + ' ' + song.author).toLowerCase();
-                            if (songTxt.includes(searchTxt) == false)
-                                filterOut = true;
-                        }
-                        if (filters.filter.liked)
-                            if (!song.liked)
+                    refreshSongList = (songListElem.html().length < 1 || options.refresh);
+                    console.log('refreshSongList: ', refreshSongList);
+                    if (refreshSongList) {
+                        for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
+                            s = songs_1[_i];
+                            song = new Song(s);
+                            filterOut = false;
+                            if (searchFilter) {
+                                songTxt = (song.title + ' ' + song.author).toLowerCase();
+                                if (songTxt.includes(searchTxt) == false)
+                                    filterOut = true;
+                            }
+                            if (filters.filter.liked)
+                                if (!song.liked)
+                                    continue;
+                            if (filters.filter.downloaded)
+                                if (song.isDownloaded() == undefined)
+                                    continue;
+                            if (filterOut)
                                 continue;
-                        if (filters.filter.downloaded)
-                            if (song.isDownloaded() == undefined)
-                                continue;
-                        if (filterOut)
-                            continue;
-                        refinedSongs.push(song);
-                    }
-                    if (options.sort != false) {
-                        refinedSongs.sort(function (a, b) { return a.order - b.order; });
-                        if (filters.sortby.lastadded) {
-                            refinedSongs.sort(function (a, b) {
-                                return b.saveDate - a.saveDate;
-                            });
+                            refinedSongs.push(song);
                         }
-                        if (filters.sortby.lastplayed) {
-                            refinedSongs.sort(function (a, b) {
-                                var lastA = a.lastPlayed;
-                                if (!lastA)
-                                    a.lastPlayed = 0;
-                                var lastB = b.lastPlayed;
-                                if (!lastB)
-                                    b.lastPlayed = 0;
-                                return lastB - lastA;
-                            });
+                        if (options.sort != false) {
+                            refinedSongs.sort(function (a, b) { return a.order - b.order; });
+                            if (filters.sortby.lastadded) {
+                                refinedSongs.sort(function (a, b) {
+                                    return b.saveDate - a.saveDate;
+                                });
+                            }
+                            if (filters.sortby.lastplayed) {
+                                refinedSongs.sort(function (a, b) {
+                                    var lastA = a.lastPlayed;
+                                    if (!lastA)
+                                        a.lastPlayed = 0;
+                                    var lastB = b.lastPlayed;
+                                    if (!lastB)
+                                        b.lastPlayed = 0;
+                                    return lastB - lastA;
+                                });
+                            }
+                            if (filters.sortby.alphabetic) {
+                                alphabet = 'abcdefghijklmnopqrstuvxyz';
+                                refinedSongs.sort(function (a, b) {
+                                    if (a.title > b.title)
+                                        return 1;
+                                    if (b.title > a.title)
+                                        return -1;
+                                    return 0;
+                                });
+                            }
                         }
-                        if (filters.sortby.alphabetic) {
-                            alphabet = 'abcdefghijklmnopqrstuvxyz';
-                            refinedSongs.sort(function (a, b) {
-                                if (a.title > b.title)
-                                    return 1;
-                                if (b.title > a.title)
-                                    return -1;
-                                return 0;
-                            });
+                        currentSongList = refinedSongs;
+                        songsHtml = '';
+                        for (_a = 0, refinedSongs_1 = refinedSongs; _a < refinedSongs_1.length; _a++) {
+                            s = refinedSongs_1[_a];
+                            songsHtml += "<div class=\"song\" id=\"song-" + s.youtubeID + "\"></div>";
                         }
-                    }
-                    songsHtml = '';
-                    for (_a = 0, refinedSongs_1 = refinedSongs; _a < refinedSongs_1.length; _a++) {
-                        s = refinedSongs_1[_a];
-                        songsHtml += "<div class=\"song\" id=\"song-" + s.youtubeID + "\"></div>";
-                    }
-                    if (songListElem.html().length < 1000)
                         songListElem[0].innerHTML = songsHtml;
-                    console.log(songListElem.html().length);
+                    }
                     songListElem.on('scroll', function () {
                         var songNum = Math.floor(songListElem.scrollTop() / 80);
                         for (var i = -2; i < 10; i++)
@@ -155,10 +164,16 @@ function showSongs(songs, options) {
                         }
                     }
                     else {
-                        scrollToCurrentSong();
+                        if (options.scrollCurrentSong)
+                            scrollToCurrentSong();
+                        else {
+                            songListElem[0].scrollTop = 0;
+                        }
                     }
                     topBar = songsElem.find('.topBar');
                     topBar.find('.search').off().on('input', function () {
+                        console.log('yoinks');
+                        options.refresh = true;
                         showSongs(songs, options);
                     });
                     $('.button2').off().on('click', function (e) {
@@ -182,7 +197,9 @@ function showSongs(songs, options) {
                                 $(e.target).trigger('click');
                             }
                         }
-                        showSongs(songs, options);
+                        options.refresh = true;
+                        showSongs(songs, { refresh: true });
+                        filtersDiv.toggleClass('expanded');
                     });
                     filterButton = topBar.find('.filterButton');
                     filtersDiv = topBar.find('.filters');
@@ -238,6 +255,8 @@ function loadSong(idx, songs, songListElem) {
     var _this = this;
     var song = songs[idx];
     if (song == undefined)
+        return;
+    if (songListElem.find("#song-" + song.youtubeID)[0] == undefined)
         return;
     if (songListElem.find("#song-" + song.youtubeID).html().length != 0)
         return;
@@ -335,7 +354,7 @@ function showTooltipForSong(song) {
                                     songidx = currentSongList.indexOf(currentSongList.find(function (s) { return s.youtubeID == song.youtubeID; }));
                                     if (songidx > -1)
                                         currentSongList.splice(songidx, 1);
-                                    showSongs(currentSongList, {});
+                                    showSongs(currentSongList, { refresh: true });
                                     return [2];
                             }
                         });

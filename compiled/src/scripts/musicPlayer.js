@@ -101,9 +101,7 @@ var MusicPlayer = (function (_super) {
                         }
                         setTimeout(function () {
                             _this.setVolume(_this.volume);
-                            setTimeout(function () {
-                                scrollToCurrentSong();
-                            }, 300);
+                            scrollToCurrentSong();
                         }, 100);
                         return [2];
                 }
@@ -118,7 +116,6 @@ var MusicPlayer = (function (_super) {
             this.queue.push(new Song(song));
         }
         this.isShuffled = false;
-        showSongs(this.queue, {});
     };
     MusicPlayer.prototype.nextInQueue = function () {
         if (!this.repeat)
