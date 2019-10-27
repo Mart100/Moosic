@@ -8,12 +8,6 @@ const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 
 const log = require('electron-log')
-const { autoUpdater } = require("electron-updater")
-
-// logging
-autoUpdater.logger = log
-autoUpdater.logger.transports.file.level = 'info'
-log.info('App starting...')
 
 require('v8-compile-cache')
 
@@ -27,7 +21,6 @@ catch(e) {}
 
 app.on('ready', () => {
 
-  autoUpdater.checkForUpdatesAndNotify()
 
   // Create the browser window.
   let window = new BrowserWindow({

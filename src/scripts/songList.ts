@@ -290,6 +290,7 @@ async function showTooltipForSong(song:Song) {
     <button class="openInYoutube">Open in youtube</button>
     <button class="addToCollection">Add to collection</button>
     <button class="playSimularSongs">Play simular songs</button>
+    <button class="saveSongAs">Save song as</button>
     <button class="songInfo">Song info</button>
     <button class="deleteSong">Delete songs</button>
   </div>
@@ -341,6 +342,9 @@ async function showTooltipForSong(song:Song) {
     setSortByNone()
     musicPlayer.setQueue(relatedSongs)
     musicPlayer.nextInQueue()
+  })
+  tooltip.find('.saveSongAs').on('click', async (e) => {
+    FileSaver.saveAs(song.getDownloadLocation(), `${song.title}.mp3`)
   })
   tooltip.find('.download').on('click', async (e) => {
     song.download({})

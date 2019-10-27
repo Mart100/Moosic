@@ -290,7 +290,7 @@ function showTooltipForSong(song) {
                     songElem = songsElem.find('#song-' + song.youtubeID);
                     if (songElem.find('.tooltip')[0])
                         songElem.find('.tooltip').remove();
-                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play simular songs</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play simular songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
                     currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
@@ -359,6 +359,12 @@ function showTooltipForSong(song) {
                                     musicPlayer.nextInQueue();
                                     return [2];
                             }
+                        });
+                    }); });
+                    tooltip.find('.saveSongAs').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            FileSaver.saveAs(song.getDownloadLocation(), song.title + ".mp3");
+                            return [2];
                         });
                     }); });
                     tooltip.find('.download').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {

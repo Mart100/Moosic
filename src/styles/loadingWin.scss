@@ -1,0 +1,27 @@
+#loadingWin {
+  height: calc(100% - 24px);
+  position: absolute;
+  padding-top: 20px;
+  text-align: center;
+  color: white;
+  top: 24px;
+  width: 100%;
+  background-color: rgb(30, 30, 30);
+
+  .progressBar {
+    width: 90%;
+    height: 30px;
+    margin: auto;
+    margin-top: 40px;
+    border: 2px solid black;
+
+    .progress {
+      width: 0%;
+      height: 30px;
+      background-color: greenyellow;
+    }
+  }
+  .waitingTime {
+    margin-top: 10px;
+  }
+}

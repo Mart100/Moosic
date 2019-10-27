@@ -37,6 +37,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var fs = require('fs-extra');
 var ytdl = require('ytdl-core');
 var FileSaver = require('file-saver');
+var url = require('url');
+var http = require('http');
 var cp = require('child_process');
 var worker = require('worker_threads');
 var remote = require('electron').remote;
@@ -86,10 +88,109 @@ $(function () {
             location.reload();
     });
     getSongStoragePos();
+    checkForUpdates();
     setTimeout(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);
 });
+function checkForUpdates() {
+    return __awaiter(this, void 0, void 0, function () {
+        var thisVersion, latestVersion, confirmMessage, response;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    thisVersion = remote.app.getVersion();
+                    return [4, getLatestRelease()];
+                case 1:
+                    latestVersion = _a.sent();
+                    if (thisVersion == latestVersion)
+                        return [2];
+                    confirmMessage = "\nThere seems to be a new update for Moosic:\nYour version: " + thisVersion + "\nLatest version: " + latestVersion + "\n\nDo you want to install this update?\n";
+                    return [4, window.confirm(confirmMessage)];
+                case 2:
+                    response = _a.sent();
+                    if (response) {
+                        downloadFileFromURL("https://github.com/Mart100/Moosic/releases/download/v" + latestVersion + "/moosic-Setup-" + latestVersion + ".exe");
+                    }
+                    return [2];
+            }
+        });
+    });
+}
+function awaitWindowLoad(win) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2, new Promise(function (resolve, reject) {
+                    win.webContents.on('did-finish-load', function () {
+                        resolve();
+                    });
+                })];
+        });
+    });
+}
+function downloadFileFromURL(file_url) {
+    return __awaiter(this, void 0, void 0, function () {
+        var file_name, downloadLoc, win, proc;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    file_name = file_url.split('/').pop();
+                    downloadLoc = storagePos + '\\installers';
+                    win = remote.getCurrentWindow();
+                    win.setBounds({ width: 400, height: 200 });
+                    return [4, fs.ensureDir(downloadLoc)];
+                case 1:
+                    _a.sent();
+                    $('#index').remove();
+                    $('#currentSong').remove();
+                    $('#navigator').remove();
+                    $('iframe').remove();
+                    $('body').append("\n<div id=\"loadingWin\">\n<div class=\"title\">Downloading " + file_name + "...</div>\n<div class=\"progressBar\"><div class=\"progress\"></div></div>\n<div class=\"waitingTime\">Estemaited waiting time: 0s</div>\n</div>\n  ");
+                    proc = cp.exec("ipconfig", function (err, stdout, stderr) {
+                        if (err)
+                            throw err;
+                        else {
+                            console.log("Setup " + file_url.split('/').pop() + " installed");
+                            console.log(downloadLoc + "\\" + file_name);
+                            cp.exec(downloadLoc + "\\" + file_name, function (err, stdout, stderr) {
+                                if (err)
+                                    throw err;
+                            });
+                        }
+                    });
+                    proc.stderr.on('data', function (data) {
+                        if (!data.includes('%'))
+                            return;
+                        if (Math.random() < 0.9)
+                            return;
+                        data = data.replace(/\./g, '').replace('\n', '');
+                        var progressProcent = data.match(/[0-9]{1,3}%/g);
+                        var waitingTime = data.match(/[0-9]{1,5}s/g);
+                        if (progressProcent)
+                            $('#loadingWin .progressBar .progress').css('width', "" + progressProcent);
+                        if (waitingTime)
+                            $('#loadingWin .waitingTime').html("Estimated waiting time: " + waitingTime);
+                    });
+                    return [2];
+            }
+        });
+    });
+}
+function getLatestRelease() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            return [2, new Promise(function (resolve, reject) {
+                    $.ajax('https://api.github.com/repos/Mart100/Moosic/releases/latest', {
+                        success: function (data) {
+                            var tagName = data.tag_name;
+                            var version = tagName.replace('v', '');
+                            resolve(version);
+                        }
+                    });
+                })];
+        });
+    });
+}
 function getSongs() {
     return __awaiter(this, void 0, void 0, function () {
         var database, rawSongs, songs, _i, rawSongs_1, rawSong, song;

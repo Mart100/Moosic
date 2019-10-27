@@ -5,10 +5,6 @@ var BrowserWindow = electron.BrowserWindow;
 var globalShortcut = electron.globalShortcut;
 var ipcMain = electron.ipcMain;
 var log = require('electron-log');
-var autoUpdater = require("electron-updater").autoUpdater;
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('App starting...');
 require('v8-compile-cache');
 try {
     require('electron-reload')(__dirname, {
@@ -17,7 +13,6 @@ try {
 }
 catch (e) { }
 app.on('ready', function () {
-    autoUpdater.checkForUpdatesAndNotify();
     var window = new BrowserWindow({
         width: 400,
         height: 800,
