@@ -152,10 +152,10 @@ function downloadFileFromURL(file_url) {
                         else {
                             console.log("Setup " + file_url.split('/').pop() + " installed");
                             console.log(downloadLoc + "\\" + file_name);
+                            win.close();
                             cp.exec(downloadLoc + "\\" + file_name, function (err, stdout, stderr) {
                                 if (err)
                                     throw err;
-                                win.close();
                             });
                         }
                     });
