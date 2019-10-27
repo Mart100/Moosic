@@ -282,7 +282,7 @@ function showTooltipForSong(song) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    console.log('teststst');
+                    console.log('tooltip func');
                     return [4, getData()];
                 case 1:
                     database = _a.sent();

@@ -5,3 +5,4 @@ node_modules/fs-extra
 ./node_modules
 compiled/
 dist/
+compiled/src/scripts/*

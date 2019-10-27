@@ -6,7 +6,11 @@ $(() => {
     updateSongFocus()
   })
 
-  musicPlayer.on('play', () => { updateSongFocus() })
+  musicPlayer.on('play', () => {
+    let songElem = getCurrentSongsElement()
+    if(songElem.attr('id') != 'queue') return
+    updateSongFocus() 
+  })
 
   // on progress bar click
   $('#currentQueue .currentSong .progressBackground').on('click', (event) => {

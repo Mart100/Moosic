@@ -277,7 +277,7 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
 }
 
 async function showTooltipForSong(song:Song) {
-  console.log('teststst')
+  console.log('tooltip func')
 
   let database = await getData()
   let songsElem = getCurrentSongsElement()
@@ -300,7 +300,7 @@ async function showTooltipForSong(song:Song) {
   let showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID)
   if(showRemoveFromColl) tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>')
 
-  songElem.append(tooltipHTML)
+  songElem.append(tooltipHTML) 
 
   let parent = songElem.parent()
   let tooltip = parent.find('.tooltip')
