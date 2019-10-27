@@ -17,12 +17,7 @@ const musicPlayer = new MusicPlayer()
 const songDownloader = new SongDownloader()
 
 // storage position
-let storagePos:string = __dirname.replace('\\resources\\app.asar', '') + '\\storage'
-if(isDev()) storagePos = __dirname + '\\storage'
-console.log(storagePos)
-
-
-
+let storagePos:string = process.env.APPDATA+'\\moosic'+'\\storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 

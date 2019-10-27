@@ -47,10 +47,7 @@ var spotify_clientID = '11063f81cfec4398aeb571cff3bb819d';
 var ipc = require('electron').ipcRenderer;
 var musicPlayer = new MusicPlayer();
 var songDownloader = new SongDownloader();
-var storagePos = __dirname.replace('\\resources\\app.asar', '') + '\\storage';
-if (isDev())
-    storagePos = __dirname + '\\storage';
-console.log(storagePos);
+var storagePos = process.env.APPDATA + '\\moosic' + '\\storage';
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa');
 var songStoragePos = storagePos + '\\songs';
 function getSongStoragePos() {

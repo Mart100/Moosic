@@ -4,7 +4,12 @@ $(function () {
         $('#currentQueue').fadeIn();
         updateSongFocus();
     });
-    musicPlayer.on('play', function () { updateSongFocus(); });
+    musicPlayer.on('play', function () {
+        var songElem = getCurrentSongsElement();
+        if (songElem.attr('id') != 'queue')
+            return;
+        updateSongFocus();
+    });
     $('#currentQueue .currentSong .progressBackground').on('click', function (event) {
         var x = event.offsetX;
         var duration = musicPlayer.getDuration();
