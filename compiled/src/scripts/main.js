@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var fs = require('fs-extra');
 var ytdl = require('ytdl-core');
 var FileSaver = require('file-saver');
+var eprompt = require('electron-prompt');
 var url = require('url');
 var http = require('http');
 var cp = require('child_process');
@@ -88,7 +89,9 @@ $(function () {
             location.reload();
     });
     getSongStoragePos();
-    checkForUpdates();
+    if (isDev() == false) {
+        checkForUpdates();
+    }
     setTimeout(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);

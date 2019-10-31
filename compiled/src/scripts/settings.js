@@ -75,6 +75,15 @@ $(function () {
             }
         });
     }); });
+    $('#importData-youtubePlaylist-button').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then(function (userInput) {
+                var playlistLink = userInput;
+                console.log(playlistLink);
+            });
+            return [2];
+        });
+    }); });
     $('#setStoragePos-button').on('click', function () {
         var elem = $('<input type="file" webkitdirectory directory/>');
         elem.on('change', function (event) { return __awaiter(_this, void 0, void 0, function () {

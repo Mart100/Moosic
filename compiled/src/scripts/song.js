@@ -50,17 +50,51 @@ var Song = (function () {
         this.lastPlayed = data.lastPlayed;
         this.saveDate = data.saveDate;
         this.isDownloadedBool = data.isDownloadedBool;
+        if (data.fillData)
+            this.fillSongDataWithID();
         return this;
     }
+    Song.prototype.fillSongDataWithID = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var YTsongData;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, this.getVideoDataFromYoutube()];
+                    case 1:
+                        YTsongData = _a.sent();
+                        return [4, this.importFromYoutube(YTsongData)];
+                    case 2:
+                        _a.sent();
+                        return [2];
+                }
+            });
+        });
+    };
+    Song.prototype.getVideoDataFromYoutube = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            var request = gapi.client.youtube.videos.list({
+                id: _this.youtubeID,
+                part: 'snippet',
+                type: 'video',
+                maxResults: 1
+            });
+            request.execute(function (response) {
+                resolve(response.items[0]);
+            });
+        });
+    };
     Song.prototype.importFromYoutube = function (video) {
         this.image = video.snippet.thumbnails.default.url;
-        this.youtubeID = video.id.videoId;
+        this.youtubeID = video.id.videoId ? video.id.videoId : video.id;
         this.title = video.snippet.title;
         this.author = video.snippet.channelTitle;
-        this.liked = false;
+        this.liked = this.liked != undefined ? this.liked : false;
         this.saved = false;
         this.isDownloadedBool = false;
         this.order = 0;
+        if (this.liked)
+            this.like();
         return this;
     };
     Song.prototype.play = function () {
@@ -147,9 +181,7 @@ var Song = (function () {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0:
-                        console.log(this.title);
-                        return [4, this.isDownloaded()];
+                    case 0: return [4, this.isDownloaded()];
                     case 1:
                         if (_a.sent())
                             return [2];
@@ -220,6 +252,8 @@ var Song = (function () {
     };
     Song.prototype.getHTML = function () {
         var title = this.title;
+        if (title == undefined)
+            return '';
         if (title.length > 20)
             title = title.split('').splice(0, 20).join('') + '...';
         var channel = this.author;

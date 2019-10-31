@@ -11,6 +11,8 @@ const log = require('electron-log')
 
 require('v8-compile-cache')
 
+let mainWindow
+
 try {
   require('electron-reload')(__dirname, {
     ignored: /node_modules|storage|[\/\\]\./
@@ -18,12 +20,11 @@ try {
 }
 catch(e) {}
 
-
 app.on('ready', () => {
 
 
   // Create the browser window.
-  let window = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 400,
     height: 800,
     frame: false,
@@ -34,30 +35,30 @@ app.on('ready', () => {
     icon: './icon.ico'
   })
   
-  window.setMenu(null)
-  window.setMaximizable(false)
-  window.setResizable(false)
+  mainWindow.setMenu(null)
+  mainWindow.setMaximizable(false)
+  mainWindow.setResizable(false)
 
-  window.loadFile('./compiled/src/index.html')
+  mainWindow.loadFile('./compiled/src/index.html')
 
   if(isDevv()) {
-    window.webContents.once('dom-ready', () => {
-      window.webContents.openDevTools()
+    mainWindow.webContents.once('dom-ready', () => {
+      mainWindow.webContents.openDevTools()
     })
   }
 
 
-  window.on('closed', () => { win = null })
+  mainWindow.on('closed', () => { win = null })
 
   // set up media globalShortcuts
   globalShortcut.register('MediaPlayPause', () => {
-    window.webContents.executeJavaScript(`onMediaPlayPause()`)
+    mainWindow.webContents.executeJavaScript(`onMediaPlayPause()`)
   })
   globalShortcut.register('MediaPreviousTrack', () => {
-    window.webContents.executeJavaScript(`onMediaPreviousTrack()`)
+    mainWindow.webContents.executeJavaScript(`onMediaPreviousTrack()`)
   })
   globalShortcut.register('MediaNextTrack', () => {
-    window.webContents.executeJavaScript(`onMediaNextTrack()`)
+    mainWindow.webContents.executeJavaScript(`onMediaNextTrack()`)
   })
 })
 
@@ -66,3 +67,15 @@ function isDevv() {
   catch(e) { return false }
   return true
 }
+
+const ipc_mainProc = require('node-ipc')
+
+ipc_mainProc.config.id = 'electron_process'
+ipc_mainProc.config.retry = 1500
+
+ipc_mainProc.serve(() => ipc_mainProc.server.on('execJS', message => {
+  mainWindow.webContents.executeJavaScript(message)
+}))
+
+
+ipc_mainProc.server.start()

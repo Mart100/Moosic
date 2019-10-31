@@ -20,8 +20,14 @@ $(() => {
     await loadPlaylists(accessToken)
     $('#settings').hide()
     $('#playlistImportSpotify').fadeIn()
+  })
 
-
+  // import from youtube playlist 
+  $('#importData-youtubePlaylist-button').on('click', async () => {
+    eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then((userInput) => {
+      let playlistLink = userInput
+      console.log(playlistLink)
+    })
   })
 
   $('#setStoragePos-button').on('click', () => { 

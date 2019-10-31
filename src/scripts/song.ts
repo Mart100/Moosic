@@ -29,19 +29,40 @@ class Song {
     this.saveDate = data.saveDate
     this.isDownloadedBool = data.isDownloadedBool
 
+    if(data.fillData) this.fillSongDataWithID()
+
     return this
   }
-
+  async fillSongDataWithID() {
+    let YTsongData = await this.getVideoDataFromYoutube()
+    await this.importFromYoutube(YTsongData)
+    return
+  }
+  getVideoDataFromYoutube() {
+    return new Promise((resolve, reject) => {
+      let request = gapi.client.youtube.videos.list({
+        id: this.youtubeID,
+        part: 'snippet',
+        type: 'video',
+        maxResults: 1
+      })
+      request.execute((response) => {
+        resolve(response.items[0])
+      })
+    })
+  }
   importFromYoutube(video) {
 
     this.image = video.snippet.thumbnails.default.url
-    this.youtubeID = video.id.videoId
+    this.youtubeID = video.id.videoId ? video.id.videoId : video.id
     this.title = video.snippet.title
     this.author = video.snippet.channelTitle
-    this.liked = false
+    this.liked = this.liked != undefined ? this.liked : false
     this.saved = false
     this.isDownloadedBool = false
     this.order = 0
+
+    if(this.liked) this.like()
 
     return this
   }
@@ -83,8 +104,6 @@ class Song {
   }
   async download(options:object) {
 
-    console.log(this.title)
-
     if(await this.isDownloaded()) return
 
     await songDownloader.queueNewDownload(this.youtubeID, options)
@@ -124,6 +143,9 @@ class Song {
   }
   getHTML() {
     let title = this.title
+
+    if(title == undefined) return ''
+
     if(title.length > 20) title = title.split('').splice(0, 20).join('') + '...'
 
     let channel = this.author

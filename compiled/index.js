@@ -6,6 +6,7 @@ var globalShortcut = electron.globalShortcut;
 var ipcMain = electron.ipcMain;
 var log = require('electron-log');
 require('v8-compile-cache');
+var mainWindow;
 try {
     require('electron-reload')(__dirname, {
         ignored: /node_modules|storage|[\/\\]\./
@@ -13,7 +14,7 @@ try {
 }
 catch (e) { }
 app.on('ready', function () {
-    var window = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 400,
         height: 800,
         frame: false,
@@ -23,24 +24,24 @@ app.on('ready', function () {
         },
         icon: './icon.ico'
     });
-    window.setMenu(null);
-    window.setMaximizable(false);
-    window.setResizable(false);
-    window.loadFile('./compiled/src/index.html');
+    mainWindow.setMenu(null);
+    mainWindow.setMaximizable(false);
+    mainWindow.setResizable(false);
+    mainWindow.loadFile('./compiled/src/index.html');
     if (isDevv()) {
-        window.webContents.once('dom-ready', function () {
-            window.webContents.openDevTools();
+        mainWindow.webContents.once('dom-ready', function () {
+            mainWindow.webContents.openDevTools();
         });
     }
-    window.on('closed', function () { win = null; });
+    mainWindow.on('closed', function () { win = null; });
     globalShortcut.register('MediaPlayPause', function () {
-        window.webContents.executeJavaScript("onMediaPlayPause()");
+        mainWindow.webContents.executeJavaScript("onMediaPlayPause()");
     });
     globalShortcut.register('MediaPreviousTrack', function () {
-        window.webContents.executeJavaScript("onMediaPreviousTrack()");
+        mainWindow.webContents.executeJavaScript("onMediaPreviousTrack()");
     });
     globalShortcut.register('MediaNextTrack', function () {
-        window.webContents.executeJavaScript("onMediaNextTrack()");
+        mainWindow.webContents.executeJavaScript("onMediaNextTrack()");
     });
 });
 function isDevv() {
@@ -52,4 +53,11 @@ function isDevv() {
     }
     return true;
 }
+var ipc_mainProc = require('node-ipc');
+ipc_mainProc.config.id = 'electron_process';
+ipc_mainProc.config.retry = 1500;
+ipc_mainProc.serve(function () { return ipc_mainProc.server.on('execJS', function (message) {
+    mainWindow.webContents.executeJavaScript(message);
+}); });
+ipc_mainProc.server.start();
 //# sourceMappingURL=index.js.map

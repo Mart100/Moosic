@@ -14,6 +14,8 @@
   ],
   "include": [
     "./src/scripts",
-    "./index.ts"
+    "./index.ts",
+    "./index_com.ts",
+    "./CLI.ts"
   ]
 }

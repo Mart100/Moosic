@@ -1,6 +1,7 @@
 const fs = require('fs-extra')
 const ytdl = require('ytdl-core')
 const FileSaver = require('file-saver')
+const eprompt = require('electron-prompt')
 declare const Howl:any
 declare const YT:any
 declare const gapi:any
@@ -49,7 +50,9 @@ $(() => {
 	})
 
   getSongStoragePos()
-  checkForUpdates()
+  if(isDev() == false) {
+    checkForUpdates()
+  }
 
   setTimeout(() => {
     $('#navigator .mySongs').trigger('click')
