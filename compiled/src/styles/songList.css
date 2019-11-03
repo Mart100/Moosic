@@ -88,6 +88,8 @@
   overflow-x: hidden;
   position: absolute;
   width: 100%;
+  color: white;
+  text-align: center;
 }
 
 .songList .song {
@@ -96,6 +98,7 @@
   height: 60px;
   border: 1px #1e1e1e solid;
   transition-duration: 0.3s;
+  text-align: left;
   cursor: pointer;
 }
 

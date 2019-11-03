@@ -186,3 +186,20 @@ function requestPlaylistVideos(playlistID, pageToken?) {
     })
   })
 }
+
+function parseArrayToSongs(unparsedSongs) {
+
+  unparsedSongs = Object.values(unparsedSongs)
+
+  let songs:Song[] = []
+
+  for(let unparsedSong of unparsedSongs) {
+    let song:Song
+    if(unparsedSong.kind && unparsedSong.kind.includes('youtube')) song = new Song().importFromYoutube(unparsedSong)
+    else song = new Song(unparsedSong)
+    if(songs.find((s) => s.youtubeID == song.youtubeID)) continue
+    songs.push(song)
+  }
+
+  return songs
+}

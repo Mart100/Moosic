@@ -41,33 +41,10 @@ $(() => {
         playlistLastResponse = response
         for(let vid of response.items) playlistVideos.push(vid)
       }
-      let playlistName = playlistLastResponse
-      
-      // filter duplicates
-      playlistVideos = Array.from(new Set(playlistVideos))
-      
-      let songs = []
-      let songIDs = []
-
-      for(let vid of playlistVideos) {
-        let song = new Song().importFromYoutube(vid)
-        songs.push(song.getObject())
-        songIDs.push(song.youtubeID)
-      }
-
+      let playlistSongs = parseArrayToSongs(playlistVideos)
+      console.log(playlistSongs)
       let collName = await createNewCollection('Youtube playlist')
-      
-      // push songs in new collection
-      await saveData1((database) => {
-
-        let mergedSongs = { ...database.songs, ...songs}
-        database.songs = mergedSongs
-
-        database.collections.find(c => c.name == collName).songs = songIDs
-        console.log(database.collections.find(c => c.name == collName))
-
-        return database
-      })
+      addSongsToCollection(playlistSongs, collName)
     })
   })
 

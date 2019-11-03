@@ -54,13 +54,13 @@ class Song {
   importFromYoutube(video) {
 
     this.image = video.snippet.thumbnails.default.url
-    this.youtubeID = video.id.videoId ? video.id.videoId : video.id
+    this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id))
     this.title = video.snippet.title
     this.author = video.snippet.channelTitle
     this.liked = this.liked != undefined ? this.liked : false
     this.saved = false
     this.isDownloadedBool = false
-    this.order = 0
+    this.order = video.snippet.position ? video.snippet.position : 0
 
     if(this.liked) this.like()
 
@@ -146,10 +146,10 @@ class Song {
 
     if(title == undefined) return ''
 
-    if(title.length > 20) title = title.split('').splice(0, 20).join('') + '...'
+    if(title.length > 50) title = title.split('').splice(0, 20).join('') + '...'
 
     let channel = this.author
-    if(channel.length > 20) channel = channel.split('').splice(0, 20).join('') + '...'
+    if(channel.length > 50) channel = channel.split('').splice(0, 20).join('') + '...'
 
     let html = `
     <div class="song" id="song-${this.youtubeID}">

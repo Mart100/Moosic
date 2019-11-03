@@ -79,9 +79,9 @@ $(function () {
         var _this = this;
         return __generator(this, function (_a) {
             eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then(function (userInput) { return __awaiter(_this, void 0, void 0, function () {
-                var playlistLink, playlistID, playlistVideoLength, playlistLastResponse, playlistNextPageToken, playlistVideos, response, _i, _a, vid, playlistName, songs, songIDs, _b, playlistVideos_1, vid, song, collName;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                var playlistLink, playlistID, playlistVideoLength, playlistLastResponse, playlistNextPageToken, playlistVideos, response, _i, _a, vid, playlistSongs, collName;
+                return __generator(this, function (_b) {
+                    switch (_b.label) {
                         case 0:
                             playlistLink = userInput;
                             playlistID = userInput.split('list=')[1].split('&')[0];
@@ -89,12 +89,12 @@ $(function () {
                             playlistNextPageToken = undefined;
                             playlistVideos = [];
                             console.log(playlistLink, playlistID || playlistNextPageToken == 0);
-                            _c.label = 1;
+                            _b.label = 1;
                         case 1:
                             if (!(playlistVideoLength > playlistVideos.length)) return [3, 3];
                             return [4, requestPlaylistVideos(playlistID, playlistNextPageToken)];
                         case 2:
-                            response = _c.sent();
+                            response = _b.sent();
                             console.log(response);
                             playlistVideoLength = response.pageInfo.totalResults;
                             playlistNextPageToken = response.nextPageToken;
@@ -107,28 +107,12 @@ $(function () {
                             }
                             return [3, 1];
                         case 3:
-                            playlistName = playlistLastResponse;
-                            playlistVideos = Array.from(new Set(playlistVideos));
-                            songs = [];
-                            songIDs = [];
-                            for (_b = 0, playlistVideos_1 = playlistVideos; _b < playlistVideos_1.length; _b++) {
-                                vid = playlistVideos_1[_b];
-                                song = new Song().importFromYoutube(vid);
-                                songs.push(song.getObject());
-                                songIDs.push(song.youtubeID);
-                            }
+                            playlistSongs = parseArrayToSongs(playlistVideos);
+                            console.log(playlistSongs);
                             return [4, createNewCollection('Youtube playlist')];
                         case 4:
-                            collName = _c.sent();
-                            return [4, saveData1(function (database) {
-                                    var mergedSongs = __assign(__assign({}, database.songs), songs);
-                                    database.songs = mergedSongs;
-                                    database.collections.find(function (c) { return c.name == collName; }).songs = songIDs;
-                                    console.log(database.collections.find(function (c) { return c.name == collName; }));
-                                    return database;
-                                })];
-                        case 5:
-                            _c.sent();
+                            collName = _b.sent();
+                            addSongsToCollection(playlistSongs, collName);
                             return [2];
                     }
                 });

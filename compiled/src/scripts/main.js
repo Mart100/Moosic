@@ -231,4 +231,23 @@ function requestPlaylistVideos(playlistID, pageToken) {
         });
     });
 }
+function parseArrayToSongs(unparsedSongs) {
+    unparsedSongs = Object.values(unparsedSongs);
+    var songs = [];
+    var _loop_1 = function (unparsedSong) {
+        var song;
+        if (unparsedSong.kind && unparsedSong.kind.includes('youtube'))
+            song = new Song().importFromYoutube(unparsedSong);
+        else
+            song = new Song(unparsedSong);
+        if (songs.find(function (s) { return s.youtubeID == song.youtubeID; }))
+            return "continue";
+        songs.push(song);
+    };
+    for (var _i = 0, unparsedSongs_1 = unparsedSongs; _i < unparsedSongs_1.length; _i++) {
+        var unparsedSong = unparsedSongs_1[_i];
+        _loop_1(unparsedSong);
+    }
+    return songs;
+}
 //# sourceMappingURL=main.js.map

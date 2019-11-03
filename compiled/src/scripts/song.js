@@ -86,13 +86,13 @@ var Song = (function () {
     };
     Song.prototype.importFromYoutube = function (video) {
         this.image = video.snippet.thumbnails.default.url;
-        this.youtubeID = video.id.videoId ? video.id.videoId : video.id;
+        this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id));
         this.title = video.snippet.title;
         this.author = video.snippet.channelTitle;
         this.liked = this.liked != undefined ? this.liked : false;
         this.saved = false;
         this.isDownloadedBool = false;
-        this.order = 0;
+        this.order = video.snippet.position ? video.snippet.position : 0;
         if (this.liked)
             this.like();
         return this;
@@ -254,10 +254,10 @@ var Song = (function () {
         var title = this.title;
         if (title == undefined)
             return '';
-        if (title.length > 20)
+        if (title.length > 50)
             title = title.split('').splice(0, 20).join('') + '...';
         var channel = this.author;
-        if (channel.length > 20)
+        if (channel.length > 50)
             channel = channel.split('').splice(0, 20).join('') + '...';
         var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n      <div class=\"buttons\">\n        <img class=\"more\" src=\"./images/options.png\"/>\n        <img class=\"like\" src=\"./images/heart.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
         return html;

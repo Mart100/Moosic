@@ -70,6 +70,32 @@ function createNewCollection(nameOption) {
         });
     });
 }
+function addSongsToCollection(songs, collectionName) {
+    return __awaiter(this, void 0, void 0, function () {
+        var database, songIDs, _i, songs_1, s;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getData()];
+                case 1:
+                    database = _a.sent();
+                    songIDs = [];
+                    for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
+                        s = songs_1[_i];
+                        s.save();
+                        if (!songIDs.includes(s.youtubeID))
+                            songIDs.push(s.youtubeID);
+                    }
+                    return [4, saveData1(function (database) {
+                            database.collections.find(function (c) { return c.name == collectionName; }).songs = songIDs;
+                            return database;
+                        })];
+                case 2:
+                    _a.sent();
+                    return [2];
+            }
+        });
+    });
+}
 function addSongToCollection(song, collectionIDX) {
     return __awaiter(this, void 0, void 0, function () {
         var database;

@@ -114,6 +114,7 @@ class MusicPlayer extends EventEmitter {
     this.isShuffled = true
     this.unShuffledQueue = this.queue.slice(0)
     this.queue = this.queue.sort((a, b) => Math.random()-0.5)
+    showSongs(this.queue, {refresh: true, scrollToCurrentSong: true})
     this.emit('shuffle')
     
   }

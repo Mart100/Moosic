@@ -90,6 +90,7 @@ function createEmptyDatabase() {
         console.error(err)
         if(err.toString().includes('no such file or directory')) await createStorageFolder()
       }
+      databaseCacheValid = false
       resolve()
     })
   })

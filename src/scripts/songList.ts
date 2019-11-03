@@ -60,6 +60,8 @@ async function showSongs(songs, options) {
 
   let songListElem = songsElem.find('.songList')
 
+  if(songs.length == 0) return songListElem.html('No songs here :(')
+
   songs = Object.values(songs)
 
   let database:any = await getData()

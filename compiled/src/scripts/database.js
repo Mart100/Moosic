@@ -138,6 +138,7 @@ function createEmptyDatabase() {
                         _a.sent();
                         _a.label = 2;
                     case 2:
+                        databaseCacheValid = false;
                         resolve();
                         return [2];
                 }

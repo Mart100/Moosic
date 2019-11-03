@@ -158,6 +158,7 @@ var MusicPlayer = (function (_super) {
         this.isShuffled = true;
         this.unShuffledQueue = this.queue.slice(0);
         this.queue = this.queue.sort(function (a, b) { return Math.random() - 0.5; });
+        showSongs(this.queue, { refresh: true, scrollToCurrentSong: true });
         this.emit('shuffle');
     };
     MusicPlayer.prototype.unShuffleQueue = function () {

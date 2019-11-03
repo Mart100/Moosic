@@ -77,6 +77,8 @@ function showSongs(songs, options) {
                     if (songsElem.find('.songList')[0] == undefined)
                         songsElem.append("<div class=\"songList\"></div>");
                     songListElem = songsElem.find('.songList');
+                    if (songs.length == 0)
+                        return [2, songListElem.html('No songs here :(')];
                     songs = Object.values(songs);
                     return [4, getData()];
                 case 2:
