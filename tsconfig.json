@@ -10,10 +10,14 @@
     ]
   },
   "exclude": [
-    "./node_modules"
+    "node_modules",
+    "typings",
+    "node_modules/@types"
   ],
   "include": [
     "./src/scripts",
+  ],
+  "files": [
     "./index.ts",
     "./CLI.ts",
     "./protocol.ts"

@@ -4,7 +4,7 @@ const FileSaver = require('file-saver')
 const eprompt = require('electron-prompt')
 declare const Howl:any
 declare const YT:any
-declare const gapi:any
+declare let gapi:any
 const _ = require('lodash')
 const url = require('url')
 const http = require('http')

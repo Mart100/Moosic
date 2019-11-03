@@ -11,7 +11,6 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@types/gapi": "0.0.39",
     "browserify": "^16.5.0",
     "common-js": "^0.3.8",
     "electron-log": "^3.0.8",
