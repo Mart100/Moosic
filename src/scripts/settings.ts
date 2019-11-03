@@ -24,9 +24,50 @@ $(() => {
 
   // import from youtube playlist 
   $('#importData-youtubePlaylist-button').on('click', async () => {
-    eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then((userInput) => {
+    eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then(async (userInput) => {
       let playlistLink = userInput
-      console.log(playlistLink)
+      let playlistID = userInput.split('list=')[1].split('&')[0]
+      let playlistVideoLength = 1
+      let playlistLastResponse:any
+      let playlistNextPageToken:any = undefined
+      let playlistVideos:Song[] = []
+      console.log(playlistLink, playlistID || playlistNextPageToken == 0)
+      while(playlistVideoLength > playlistVideos.length) {
+        let response:any = await requestPlaylistVideos(playlistID, playlistNextPageToken)
+        console.log(response)
+        playlistVideoLength = response.pageInfo.totalResults
+        playlistNextPageToken = response.nextPageToken
+        if(playlistNextPageToken == undefined) playlistNextPageToken = 0
+        playlistLastResponse = response
+        for(let vid of response.items) playlistVideos.push(vid)
+      }
+      let playlistName = playlistLastResponse
+      
+      // filter duplicates
+      playlistVideos = Array.from(new Set(playlistVideos))
+      
+      let songs = []
+      let songIDs = []
+
+      for(let vid of playlistVideos) {
+        let song = new Song().importFromYoutube(vid)
+        songs.push(song.getObject())
+        songIDs.push(song.youtubeID)
+      }
+
+      let collName = await createNewCollection('Youtube playlist')
+      
+      // push songs in new collection
+      await saveData1((database) => {
+
+        let mergedSongs = { ...database.songs, ...songs}
+        database.songs = mergedSongs
+
+        database.collections.find(c => c.name == collName).songs = songIDs
+        console.log(database.collections.find(c => c.name == collName))
+
+        return database
+      })
     })
   })
 

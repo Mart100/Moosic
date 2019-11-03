@@ -3,9 +3,14 @@ let databaseCacheValid: boolean = false
 
 interface database {
   songs: Song[]
-  collections: any[]
+  collections: databaseCollection[]
   songStoragePos: string
 
+}
+
+interface databaseCollection {
+  name: string
+  songs: string[]
 }
 
 let databaseFileLoc = storagePos + '/database.json'
@@ -38,7 +43,6 @@ function getData(): Promise<any> {
         if(songObj.youtubeID == undefined) continue
         DBsongs.push(new Song(songObj))
       }
-
 
       let database:database = {
         songs: DBsongs,

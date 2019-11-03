@@ -72,9 +72,10 @@ async function loadCollections() {
     button.on('click', async () => {
       $('#mySongsMenu').hide()
       $('#mySongs .songs').show()
-      let collectionSongs = songs.filter(s => collection.songs.includes(s.youtubeID))
+      let collectionSongs = songs.filter((s:any) => collection.songs.includes(s.youtubeID))
       currentCollection = collection.name
-      showSongs(collectionSongs, {})
+      console.log(collectionSongs)
+      showSongs(collectionSongs, {refresh: true, scrollCurrentSong: false})
     }).children().click(e => false)
 
     button.find('.options-button').on('click', (event) => {
@@ -122,7 +123,7 @@ async function loadCollections() {
       })
       options.find('.downloadAll').on('click', async (e) => {
         database = await getData()
-        let collectionSongs: Song[] = Object.values(database.songs).filter((s: Song) => collection.songs.includes(s.youtubeID))
+        let collectionSongs: Song[] = Object.values(database.songs).filter((s: any) => collection.songs.includes(s.youtubeID))
         for(let song of collectionSongs) {
           song = new Song(song)
           song.download({})
@@ -130,7 +131,7 @@ async function loadCollections() {
       })
       options.find('.likeAll').on('click', async (e) => {
         database = await getData()
-        let collectionSongs: Song[] = Object.values(database.songs).filter((s: Song) => collection.songs.includes(s.youtubeID))
+        let collectionSongs: Song[] = Object.values(database.songs).filter((s: any) => collection.songs.includes(s.youtubeID))
         for(let song of collectionSongs) {
           song = new Song(song)
           song.like()

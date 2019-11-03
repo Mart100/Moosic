@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -21,6 +21,7 @@
     "fs-extra": "^8.1.0",
     "get-folder-size": "^2.0.1",
     "jquery": "^3.4.1",
+    "lodash": "^4.17.15",
     "node-ipc": "^9.1.1",
     "open": "^6.4.0",
     "spotify-web-api-js": "^1.2.0",
@@ -44,13 +45,15 @@
     "compileSCSS": "sass src/styles:compiled/src/styles",
     "dist": "npm run compile && electron-builder build",
     "publish": "npm run compile && electron-builder build -p always",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "registerNativeMessageHostChrome": "REG ADD \"HKCU\\Software\\Google\\Chrome\\NativeMessagingHosts\\com.midoxus.moosic\" /ve /t REG_SZ /d \"H:\\Programming\\Electron\\Moosic\\com.midoxus.moosic.json\" /f",
+    "registerNativeMessageHostFirefox": "REG ADD \"HKCU\\Software\\Mozilla\\NativeMessagingHosts\\com.midoxus.moosic\" /ve /t REG_SZ /d \"H:\\Programming\\Electron\\Moosic\\com.midoxus.moosic.json\" /f"
   },
   "bin": {
     "moosic": "compiled/CLI.js"
   },
   "build": {
-    "appId": "com.moosic.app",
+    "appId": "com.midoxus.moosic",
     "publish": [
       {
         "provider": "github",

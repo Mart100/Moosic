@@ -1,0 +1,12 @@
+{
+  "name": "com.midoxus.moosic",
+  "description": "Native Messaging Host Protocol for Moosic",
+  "path": "./protocol/protocol.py",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://afegcdkelljdakhoidmpagkmjcihgape/"
+  ],
+  "allowed_extensions": [
+    "moosic@midoxus.com"
+  ]
+}

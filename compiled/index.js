@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 var electron = require('electron');
 var dialog = electron.dialog;
 var app = electron.app;
@@ -55,7 +56,7 @@ function isDevv() {
 }
 var ipc_mainProc = require('node-ipc');
 ipc_mainProc.config.id = 'electron_process';
-ipc_mainProc.config.retry = 1500;
+ipc_mainProc.config.stopRetrying = true;
 ipc_mainProc.serve(function () { return ipc_mainProc.server.on('execJS', function (message) {
     mainWindow.webContents.executeJavaScript(message);
 }); });

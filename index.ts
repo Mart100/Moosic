@@ -1,4 +1,4 @@
-//let $ = require('jquery')
+#!/usr/bin/env node
 
 const electron = require('electron')
 const dialog = electron.dialog
@@ -68,14 +68,49 @@ function isDevv() {
   return true
 }
 
+
+// Connection to Command Line Interface ( CLI.js )
 const ipc_mainProc = require('node-ipc')
 
 ipc_mainProc.config.id = 'electron_process'
-ipc_mainProc.config.retry = 1500
+ipc_mainProc.config.stopRetrying = true
 
 ipc_mainProc.serve(() => ipc_mainProc.server.on('execJS', message => {
   mainWindow.webContents.executeJavaScript(message)
 }))
-
-
 ipc_mainProc.server.start()
+
+// Connection to protocol.ts
+/*
+let sendMessage = require('./protocol.js')(handleMessage)
+
+function handleMessage(req) {
+  console.log(req)
+  if(req.message == 'ping') {
+    sendMessage({message: 'pong', body: 'hello from nodejs app'})
+  }
+}*/
+
+/*
+process.stdin.on('readable', () => {
+  let input:any= []
+  let chunk
+  while(chunk = process.stdin.read()) {
+    input.push(chunk)
+  }
+  input = Buffer.concat(input)
+
+  let msgLen = input.readUInt32LE(0)
+  let dataLen = msgLen + 4
+
+  if (input.length >= dataLen) {
+    let content = input.slice(4, dataLen)
+    let json = JSON.parse(content.toString())
+    console.log('yoinks')
+  }
+})
+
+process.on('uncaughtException', (err) => {
+  console.log({error: err.toString()})
+})
+*/

@@ -5,6 +5,7 @@ const eprompt = require('electron-prompt')
 declare const Howl:any
 declare const YT:any
 declare const gapi:any
+const _ = require('lodash')
 const url = require('url')
 const http = require('http')
 const cp = require('child_process')
@@ -167,4 +168,21 @@ async function getSongs() {
     songs[song.youtubeID] = song
   }
   return songs
+}
+
+function requestPlaylistVideos(playlistID, pageToken?) {
+  return new Promise((resolve, reject) => {
+    let options:any = {
+      playlistId: playlistID,
+      part: 'snippet',
+      maxResults: 50
+    }
+
+    if(pageToken) options.pageToken = pageToken
+    let request = gapi.client.youtube.playlistItems.list(options)
+  
+    request.execute((response) => {
+      resolve(response)
+    })
+  })
 }

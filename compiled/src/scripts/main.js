@@ -38,6 +38,7 @@ var fs = require('fs-extra');
 var ytdl = require('ytdl-core');
 var FileSaver = require('file-saver');
 var eprompt = require('electron-prompt');
+var _ = require('lodash');
 var url = require('url');
 var http = require('http');
 var cp = require('child_process');
@@ -212,6 +213,21 @@ function getSongs() {
                     }
                     return [2, songs];
             }
+        });
+    });
+}
+function requestPlaylistVideos(playlistID, pageToken) {
+    return new Promise(function (resolve, reject) {
+        var options = {
+            playlistId: playlistID,
+            part: 'snippet',
+            maxResults: 50
+        };
+        if (pageToken)
+            options.pageToken = pageToken;
+        var request = gapi.client.youtube.playlistItems.list(options);
+        request.execute(function (response) {
+            resolve(response);
         });
     });
 }
