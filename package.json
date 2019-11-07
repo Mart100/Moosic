@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -38,6 +38,7 @@
   },
   "scripts": {
     "start": "npm install && npm run compileWatch && electron .",
+    "fstart": "npm run compile && electron .",
     "compileWatch": "npm run copy_src_to_compiled && Start tsc -w && Start sass --watch src/styles:compiled/src/styles",
     "compile": "npm run copy_src_to_compiled && tsc && sass src/styles:compiled/src/styles",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
