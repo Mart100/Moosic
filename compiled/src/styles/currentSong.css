@@ -5,6 +5,14 @@
   bottom: 50px;
   background-color: #141414;
 }
+#currentSong #progress {
+  background-color: red;
+  position: absolute;
+  height: 2px;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+}
 
 #currentSong .image {
   height: 50px;

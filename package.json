@@ -22,6 +22,7 @@
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "node-ipc": "^9.1.1",
+    "node-wget": "^0.4.3",
     "open": "^6.4.0",
     "spotify-web-api-js": "^1.2.0",
     "v8-compile-cache": "^2.1.0",

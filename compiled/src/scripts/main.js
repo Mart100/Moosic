@@ -90,7 +90,8 @@ $(function () {
             location.reload();
     });
     getSongStoragePos();
-    checkForUpdates();
+    if (isDev() == false)
+        checkForUpdates();
     setTimeout(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);
@@ -148,5 +149,15 @@ function parseArrayToSongs(unparsedSongs) {
         _loop_1(unparsedSong);
     }
     return songs;
+}
+function beutifySeconds(seconds) {
+    var songTimeSeconds = Math.floor(seconds % 60).toString();
+    if (songTimeSeconds.length == 1)
+        songTimeSeconds = '0' + songTimeSeconds;
+    var songTimeMinutes = Math.floor(seconds / 60).toString();
+    if (songTimeMinutes.length == 1)
+        songTimeMinutes = '0' + songTimeMinutes;
+    var beutifiedSongTime = songTimeMinutes + ":" + songTimeSeconds;
+    return beutifiedSongTime;
 }
 //# sourceMappingURL=main.js.map

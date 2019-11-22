@@ -1,5 +1,7 @@
 const EventEmitter = require('events')
 
+interface durationUpdateEventPacket { time:number; duration: number }
+
 class MusicPlayer extends EventEmitter {
   YTplayer: any
   HowlSound: any
@@ -12,6 +14,7 @@ class MusicPlayer extends EventEmitter {
   repeat: boolean
   unShuffledQueue: Song[]
   isShuffled: boolean
+  durationUpdateInterval: any
 
   constructor() {
     super()
@@ -26,6 +29,7 @@ class MusicPlayer extends EventEmitter {
     this.repeat = false
     this.unShuffledQueue = []
     this.isShuffled = false
+    this.durationUpdateInterval
 
 
   }
@@ -62,13 +66,26 @@ class MusicPlayer extends EventEmitter {
     if(mp3Exists) this.playMp3(songLoc)
     else {
       this.playYT(song.youtubeID)
-      //await this.currentSong.download({priority: true})
-      //musicPlayer.play(this.currentSong)
+      await this.currentSong.download({priority: true})
+      musicPlayer.play(this.currentSong)
     }
 
     setTimeout(() => {
       this.setVolume(this.volume)
       scrollToCurrentSong()
+    }, 100)
+
+    let songDuration:number = 0
+
+    clearInterval(this.durationUpdateInterval)
+    this.durationUpdateInterval = setInterval(() => {
+      let currentTime = this.getCurrentTime()
+      if(isNaN(currentTime)) currentTime = 0
+      if(songDuration == 0) songDuration = Math.round(this.getDuration())
+
+      let eventPacket:durationUpdateEventPacket = {time: currentTime, duration: songDuration}
+
+      this.emit('durationUpdate', eventPacket)
     }, 100)
 
   }
@@ -131,6 +148,7 @@ class MusicPlayer extends EventEmitter {
     this.HowlSound = undefined
     this.currentSong = undefined
     this.emit('stop')
+    clearInterval(this.durationUpdateInterval)
   }
   getDuration() {
     if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration) return this.YTplayer.getDuration()

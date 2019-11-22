@@ -35,7 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var player;
-var songDurationInterval;
 function onSongClick(event, queue) {
     return __awaiter(this, void 0, void 0, function () {
         var id, song;
@@ -98,6 +97,13 @@ $(function () {
     musicPlayer.on('play', function () {
         setCurrentSong(musicPlayer.currentSong);
     });
+    musicPlayer.on('durationUpdate', function (event) {
+        var progress = event.time / event.duration;
+        $('#currentSong #progress').css({ 'width': progress * 100 + "%" });
+        $('#currentQueue .currentSong .progress').css({ 'width': progress * 100 + "%" });
+        $('#currentQueue .currentSong .currentTime').html(beutifySeconds(event.time));
+        $('#currentQueue .currentSong .songDuration').html(beutifySeconds(event.duration));
+    });
 });
 function setCurrentSong(song) {
     $('#currentSong .image').attr('src', song.image);
@@ -112,12 +118,5 @@ function setCurrentSong(song) {
         musicPlayer.pause();
         return false;
     });
-    if (songDurationInterval != undefined)
-        clearInterval(songDurationInterval);
-    songDurationInterval = setInterval(function () {
-        var dur = musicPlayer.getDuration();
-        var elap = musicPlayer.getCurrentTime();
-        $('#currentSong #progress').css('width', (elap / dur) * 100 + "%");
-    }, 1000);
 }
 //# sourceMappingURL=playSong.js.map

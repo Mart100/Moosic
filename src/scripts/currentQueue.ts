@@ -12,13 +12,17 @@ $(() => {
     updateSongFocus() 
   })
 
+  let mouseDown:boolean = false
+
+  $('#currentQueue .currentSong .progressBackground').on('mousedown', (event) => { 
+    mouseDown = true
+    updateCurrentSongProgressBarWhenMoving(event)
+  })
+  $(document).on('mouseup', (event) => { mouseDown = false })
+
   // on progress bar click
-  $('#currentQueue .currentSong .progressBackground').on('click', (event) => {
-    let x = event.offsetX
-    let duration = musicPlayer.getDuration()
-    let newTime = (x / event.target.clientWidth) * duration
-    musicPlayer.setCurrentTime(newTime)
-    $('#currentQueue .currentSong .progress').css('width', `${(newTime/duration)*100}%`)
+  $(document).on('mousemove', (event) => {
+    if(mouseDown) updateCurrentSongProgressBarWhenMoving(event)
   })
 
   $('#currentQueue .currentSong .exit').on('click', () => {
@@ -30,6 +34,14 @@ $(() => {
     })
   })
 })
+
+function updateCurrentSongProgressBarWhenMoving(event) {
+  let x = event.offsetX
+  let duration = musicPlayer.getDuration()
+  let newTime = (x / event.target.clientWidth) * duration
+  musicPlayer.setCurrentTime(newTime)
+  $('#currentQueue .currentSong .progress').css('width', `${(newTime/duration)*100}%`)
+}
 
 // music controls
 $(() => {
@@ -57,13 +69,6 @@ function updateSongFocus() {
   let song = musicPlayer.currentSong
   if(song == undefined) return
   $('#currentQueue .currentSong .image').attr('src', song.image)
-
-  // keep setting the progress bar
-  clearInterval(progressBarInterval)
-  progressBarInterval = setInterval(() => {
-    let progress = musicPlayer.getCurrentTime()/musicPlayer.getDuration()
-    $('#currentQueue .currentSong .progress').css('width', `${progress*100}%`)
-  }, 1000)
 
   // set queue
   let queue = musicPlayer.queue

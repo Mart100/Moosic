@@ -63,11 +63,12 @@ var MusicPlayer = (function (_super) {
         _this.repeat = false;
         _this.unShuffledQueue = [];
         _this.isShuffled = false;
+        _this.durationUpdateInterval;
         return _this;
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists;
+            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists, songDuration;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -94,14 +95,31 @@ var MusicPlayer = (function (_super) {
                     case 1:
                         mp3Exists = _a.sent();
                         console.log(songLoc, mp3Exists);
-                        if (mp3Exists)
-                            this.playMp3(songLoc);
-                        else {
-                            this.playYT(song.youtubeID);
-                        }
+                        if (!mp3Exists) return [3, 2];
+                        this.playMp3(songLoc);
+                        return [3, 4];
+                    case 2:
+                        this.playYT(song.youtubeID);
+                        return [4, this.currentSong.download({ priority: true })];
+                    case 3:
+                        _a.sent();
+                        musicPlayer.play(this.currentSong);
+                        _a.label = 4;
+                    case 4:
                         setTimeout(function () {
                             _this.setVolume(_this.volume);
                             scrollToCurrentSong();
+                        }, 100);
+                        songDuration = 0;
+                        clearInterval(this.durationUpdateInterval);
+                        this.durationUpdateInterval = setInterval(function () {
+                            var currentTime = _this.getCurrentTime();
+                            if (isNaN(currentTime))
+                                currentTime = 0;
+                            if (songDuration == 0)
+                                songDuration = Math.round(_this.getDuration());
+                            var eventPacket = { time: currentTime, duration: songDuration };
+                            _this.emit('durationUpdate', eventPacket);
                         }, 100);
                         return [2];
                 }
@@ -175,6 +193,7 @@ var MusicPlayer = (function (_super) {
         this.HowlSound = undefined;
         this.currentSong = undefined;
         this.emit('stop');
+        clearInterval(this.durationUpdateInterval);
     };
     MusicPlayer.prototype.getDuration = function () {
         if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration)

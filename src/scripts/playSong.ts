@@ -1,5 +1,4 @@
 let player
-let songDurationInterval
 
 async function onSongClick(event, queue) {
   let id = event.target.id.replace('song-', '')
@@ -50,6 +49,20 @@ $(() => {
   musicPlayer.on('play', () => {
     setCurrentSong(musicPlayer.currentSong)
   })
+  musicPlayer.on('durationUpdate', (event:durationUpdateEventPacket) => {
+
+    let progress = event.time/event.duration
+
+    // current small bottom song focus update progressbar
+    $('#currentSong #progress').css({'width': `${progress * 100}%`})
+    
+    // Big song focus update progressbar
+    $('#currentQueue .currentSong .progress').css({'width': `${progress*100}%`})
+
+    // Update times big song focus
+    $('#currentQueue .currentSong .currentTime').html(beutifySeconds(event.time))
+    $('#currentQueue .currentSong .songDuration').html(beutifySeconds(event.duration))
+  })
 })
 
 function setCurrentSong(song) {
@@ -68,13 +81,4 @@ function setCurrentSong(song) {
     musicPlayer.pause()
     return false
   })
-
-
-  if(songDurationInterval != undefined) clearInterval(songDurationInterval)
-
-  songDurationInterval = setInterval(() => {
-    let dur = musicPlayer.getDuration()
-    let elap = musicPlayer.getCurrentTime()
-    $('#currentSong #progress').css('width', `${(elap/dur) * 100}%`)
-  }, 1000)
 }

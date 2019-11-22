@@ -10,12 +10,15 @@ $(function () {
             return;
         updateSongFocus();
     });
-    $('#currentQueue .currentSong .progressBackground').on('click', function (event) {
-        var x = event.offsetX;
-        var duration = musicPlayer.getDuration();
-        var newTime = (x / event.target.clientWidth) * duration;
-        musicPlayer.setCurrentTime(newTime);
-        $('#currentQueue .currentSong .progress').css('width', (newTime / duration) * 100 + "%");
+    var mouseDown = false;
+    $('#currentQueue .currentSong .progressBackground').on('mousedown', function (event) {
+        mouseDown = true;
+        updateCurrentSongProgressBarWhenMoving(event);
+    });
+    $(document).on('mouseup', function (event) { mouseDown = false; });
+    $(document).on('mousemove', function (event) {
+        if (mouseDown)
+            updateCurrentSongProgressBarWhenMoving(event);
     });
     $('#currentQueue .currentSong .exit').on('click', function () {
         $('#currentQueue').animate({ 'top': '125%' }, 500, function () {
@@ -26,6 +29,13 @@ $(function () {
         });
     });
 });
+function updateCurrentSongProgressBarWhenMoving(event) {
+    var x = event.offsetX;
+    var duration = musicPlayer.getDuration();
+    var newTime = (x / event.target.clientWidth) * duration;
+    musicPlayer.setCurrentTime(newTime);
+    $('#currentQueue .currentSong .progress').css('width', (newTime / duration) * 100 + "%");
+}
 $(function () {
     $('#musicControls .play').on('click', function () { musicPlayer.unpause(); });
     $('#musicControls .pause').on('click', function () { musicPlayer.pause(); });
@@ -55,11 +65,6 @@ function updateSongFocus() {
     if (song == undefined)
         return;
     $('#currentQueue .currentSong .image').attr('src', song.image);
-    clearInterval(progressBarInterval);
-    progressBarInterval = setInterval(function () {
-        var progress = musicPlayer.getCurrentTime() / musicPlayer.getDuration();
-        $('#currentQueue .currentSong .progress').css('width', progress * 100 + "%");
-    }, 1000);
     var queue = musicPlayer.queue;
     showSongs(queue, { topBar: false, sort: false, refresh: false });
 }

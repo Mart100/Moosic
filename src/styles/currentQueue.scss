@@ -4,6 +4,19 @@
   position: absolute;
   z-index: 50;
   background-color: rgb(25, 25, 25);
+  color: white;
+  text-align: center;
+  
+  .currentTime {
+    position: absolute;
+    bottom: 7px;
+    left: 7px;
+  }
+  .songDuration {
+    position: absolute;
+    bottom: 7px;
+    right: 7px;
+  }
 }
 
 #currentQueue .currentSong {
@@ -14,6 +27,7 @@
 
 #currentQueue .currentSong .exit {
   position: absolute;
+  left: 0px;
   width: 30px;
   height: 30px;
   padding: 5px;
@@ -32,6 +46,7 @@
 #currentQueue .currentSong .image {
   position: absolute;
   width: 100%;
+  left: 0px;
   height: 100%;
   z-index: 0;
 }
@@ -45,7 +60,6 @@
   position: absolute;
   cursor: pointer;
   bottom: 10px;
-  transition-duration: 0.3s;
   box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.4);
 }
 #currentQueue .currentSong .progressBackground:hover {

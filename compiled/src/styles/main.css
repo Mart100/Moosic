@@ -11,4 +11,8 @@ body {
   padding: 0px;
 }
 
+img {
+  -webkit-user-drag: none;
+}
+
 /*# sourceMappingURL=main.css.map */

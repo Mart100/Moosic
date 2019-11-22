@@ -104,3 +104,15 @@ function parseArrayToSongs(unparsedSongs) {
 
   return songs
 }
+
+function beutifySeconds(seconds) {
+
+  let songTimeSeconds = Math.floor(seconds % 60).toString()
+  if(songTimeSeconds.length == 1) songTimeSeconds = '0'+songTimeSeconds
+  let songTimeMinutes = Math.floor(seconds / 60).toString()
+  if(songTimeMinutes.length == 1) songTimeMinutes = '0'+songTimeMinutes
+
+  let beutifiedSongTime = `${songTimeMinutes}:${songTimeSeconds}`
+
+  return beutifiedSongTime
+}

@@ -4,6 +4,15 @@
   position: absolute;
   bottom: 50px;
   background-color: rgb(20, 20, 20);
+
+  #progress {
+    background-color: rgb(255, 0, 0);
+    position: absolute;
+    height: 2px;
+    z-index: 10;
+    top: 0px;
+    left: 0px;
+  }
 }
 
 #currentSong .image {
