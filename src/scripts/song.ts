@@ -51,7 +51,7 @@ class Song {
       })
     })
   }
-  importFromYoutube(video) {
+  async importFromYoutube(video) {
 
     this.image = video.snippet.thumbnails.default.url
     this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id))
@@ -62,7 +62,15 @@ class Song {
     this.isDownloadedBool = false
     this.order = video.snippet.position ? video.snippet.position : 0
 
-    if(this.liked) this.like()
+    let DBsong = await getSongByID(this.youtubeID)
+    if(DBsong != undefined) {
+      this.saveDate = DBsong.saveData || undefined
+      this.saved = DBsong.saved || this.saved
+      this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool
+      this.liked = DBsong.liked || this.liked
+    }
+
+    //if(this.liked) this.like()
 
     return this
   }

@@ -20,8 +20,10 @@ $(() => {
 
     let results: any = await getYoutubeResults()
 
+    console.log(results)
+
     for(let video of results) {
-      let song = new Song().importFromYoutube(video)
+      let song = await new Song().importFromYoutube(video)
       searchResults[song.youtubeID] = song
     }
     setSortByNone()

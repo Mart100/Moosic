@@ -133,23 +133,50 @@ function requestPlaylistVideos(playlistID, pageToken) {
     });
 }
 function parseArrayToSongs(unparsedSongs) {
-    unparsedSongs = Object.values(unparsedSongs);
-    var songs = [];
-    var _loop_1 = function (unparsedSong) {
-        var song;
-        if (unparsedSong.kind && unparsedSong.kind.includes('youtube'))
-            song = new Song().importFromYoutube(unparsedSong);
-        else
-            song = new Song(unparsedSong);
-        if (songs.find(function (s) { return s.youtubeID == song.youtubeID; }))
-            return "continue";
-        songs.push(song);
-    };
-    for (var _i = 0, unparsedSongs_1 = unparsedSongs; _i < unparsedSongs_1.length; _i++) {
-        var unparsedSong = unparsedSongs_1[_i];
-        _loop_1(unparsedSong);
-    }
-    return songs;
+    return __awaiter(this, void 0, void 0, function () {
+        var songs, _loop_1, _i, unparsedSongs_1, unparsedSong;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    unparsedSongs = Object.values(unparsedSongs);
+                    songs = [];
+                    _loop_1 = function (unparsedSong) {
+                        var song;
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0:
+                                    if (!(unparsedSong.kind && unparsedSong.kind.includes('youtube'))) return [3, 2];
+                                    return [4, new Song().importFromYoutube(unparsedSong)];
+                                case 1:
+                                    song = _a.sent();
+                                    return [3, 3];
+                                case 2:
+                                    song = new Song(unparsedSong);
+                                    _a.label = 3;
+                                case 3:
+                                    if (songs.find(function (s) { return s.youtubeID == song.youtubeID; }))
+                                        return [2, "continue"];
+                                    songs.push(song);
+                                    return [2];
+                            }
+                        });
+                    };
+                    _i = 0, unparsedSongs_1 = unparsedSongs;
+                    _a.label = 1;
+                case 1:
+                    if (!(_i < unparsedSongs_1.length)) return [3, 4];
+                    unparsedSong = unparsedSongs_1[_i];
+                    return [5, _loop_1(unparsedSong)];
+                case 2:
+                    _a.sent();
+                    _a.label = 3;
+                case 3:
+                    _i++;
+                    return [3, 1];
+                case 4: return [2, songs];
+            }
+        });
+    });
 }
 function beutifySeconds(seconds) {
     var songTimeSeconds = Math.floor(seconds % 60).toString();

@@ -85,17 +85,32 @@ var Song = (function () {
         });
     };
     Song.prototype.importFromYoutube = function (video) {
-        this.image = video.snippet.thumbnails.default.url;
-        this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id));
-        this.title = video.snippet.title;
-        this.author = video.snippet.channelTitle;
-        this.liked = this.liked != undefined ? this.liked : false;
-        this.saved = false;
-        this.isDownloadedBool = false;
-        this.order = video.snippet.position ? video.snippet.position : 0;
-        if (this.liked)
-            this.like();
-        return this;
+        return __awaiter(this, void 0, void 0, function () {
+            var DBsong;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        this.image = video.snippet.thumbnails.default.url;
+                        this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id));
+                        this.title = video.snippet.title;
+                        this.author = video.snippet.channelTitle;
+                        this.liked = this.liked != undefined ? this.liked : false;
+                        this.saved = false;
+                        this.isDownloadedBool = false;
+                        this.order = video.snippet.position ? video.snippet.position : 0;
+                        return [4, getSongByID(this.youtubeID)];
+                    case 1:
+                        DBsong = _a.sent();
+                        if (DBsong != undefined) {
+                            this.saveDate = DBsong.saveData || undefined;
+                            this.saved = DBsong.saved || this.saved;
+                            this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool;
+                            this.liked = DBsong.liked || this.liked;
+                        }
+                        return [2, this];
+                }
+            });
+        });
     };
     Song.prototype.play = function () {
         musicPlayer.play(this);

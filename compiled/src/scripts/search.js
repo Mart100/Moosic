@@ -54,11 +54,21 @@ $(function () {
                     return [4, getYoutubeResults()];
                 case 1:
                     results = _a.sent();
-                    for (_i = 0, results_1 = results; _i < results_1.length; _i++) {
-                        video = results_1[_i];
-                        song = new Song().importFromYoutube(video);
-                        searchResults[song.youtubeID] = song;
-                    }
+                    console.log(results);
+                    _i = 0, results_1 = results;
+                    _a.label = 2;
+                case 2:
+                    if (!(_i < results_1.length)) return [3, 5];
+                    video = results_1[_i];
+                    return [4, new Song().importFromYoutube(video)];
+                case 3:
+                    song = _a.sent();
+                    searchResults[song.youtubeID] = song;
+                    _a.label = 4;
+                case 4:
+                    _i++;
+                    return [3, 2];
+                case 5:
                     setSortByNone();
                     showSongs(searchResults, { topBar: false, scrollCurrentSong: false, refresh: true });
                     $('#queue').hide();
