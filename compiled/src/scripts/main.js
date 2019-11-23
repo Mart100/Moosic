@@ -239,4 +239,30 @@ try {
 catch (e) {
     throw e;
 }
+$(function () {
+    var dragEnterTime = 0;
+    $('html').on('drag dragstart dragend dragover dragenter dragleave drop', function (e) {
+        e.preventDefault();
+    }).on('dragenter', function (event) {
+        dragEnterTime = new Date().getTime();
+        console.log('Enter');
+        if ($('#dropToImportDiv')[0])
+            return;
+        $('body').append("\n<div id=\"dropToImportDiv\" style=\"width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;\">\n  <span style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);\">\n  Drop to import song\n  </span>\n</div>\n    ");
+    }).on('dragleave', function () {
+        if (dragEnterTime > new Date().getTime() - 10)
+            return;
+        console.log('Leave');
+        $('#dropToImportDiv').remove();
+    }).on('drop', function (event) {
+        var text = event.originalEvent.dataTransfer.getData("text/plain");
+        $('#dropToImportDiv').remove();
+        if (!text.includes('youtube.com/watch'))
+            return;
+        var youtubeID = text.split('?v=')[1];
+        if (youtubeID.length != 11)
+            return;
+        new Song({ youtubeID: youtubeID, fillData: true, liked: true }).like();
+    });
+});
 //# sourceMappingURL=main.js.map

@@ -150,3 +150,33 @@ try {
 } catch(e) {
   throw e
 }
+
+$(() => {
+
+  let dragEnterTime = 0
+  $('html').on('drag dragstart dragend dragover dragenter dragleave drop', (e) => {
+    e.preventDefault()
+  }).on('dragenter', (event:any) => {
+    dragEnterTime = new Date().getTime()
+    console.log('Enter')
+    if($('#dropToImportDiv')[0]) return
+    $('body').append(`
+<div id="dropToImportDiv" style="width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;">
+  <span style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);">
+  Drop to import song
+  </span>
+</div>
+    `)
+  }).on('dragleave', () => {
+    if(dragEnterTime > new Date().getTime()-10) return
+    console.log('Leave')
+    $('#dropToImportDiv').remove()
+  }).on('drop', (event:any) => {
+    let text = event.originalEvent.dataTransfer.getData("text/plain")
+    $('#dropToImportDiv').remove()
+    if(!text.includes('youtube.com/watch')) return
+    let youtubeID = text.split('?v=')[1]
+    if(youtubeID.length != 11) return
+    new Song({youtubeID: youtubeID, fillData: true, liked: true}).like()
+  })
+})
