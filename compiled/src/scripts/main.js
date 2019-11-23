@@ -160,4 +160,43 @@ function beutifySeconds(seconds) {
     var beutifiedSongTime = songTimeMinutes + ":" + songTimeSeconds;
     return beutifiedSongTime;
 }
+var DiscordRPC = require('discord-rpc');
+var DiscordClientId = '647590804503789578';
+DiscordRPC.register(DiscordClientId);
+var DiscordRPCclient = new DiscordRPC.Client({ transport: 'ipc' });
+DiscordRPCclient.on('ready', function () {
+    console.log('YOINKS');
+    setRPCactivity();
+});
+function setRPCactivity(options) {
+    return __awaiter(this, void 0, void 0, function () {
+        var database;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getData()];
+                case 1:
+                    database = _a.sent();
+                    if (database.settings.discordRPC == false)
+                        return [2];
+                    if (!options)
+                        options = {};
+                    DiscordRPCclient.setActivity({
+                        details: 'Listening to:',
+                        state: options.state || 'Nothing',
+                        startTimestamp: options.startTimestamp,
+                        largeImageKey: 'logo',
+                        largeImageText: 'Download at martve.me/Moosic',
+                        instance: true,
+                    });
+                    return [2];
+            }
+        });
+    });
+}
+try {
+    DiscordRPCclient.login({ clientId: DiscordClientId, clientSecret: 'tOftCtpYtWyddHwfSFvLMBwYv9y5C8KE' });
+}
+catch (e) {
+    throw e;
+}
 //# sourceMappingURL=main.js.map

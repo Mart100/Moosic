@@ -111,6 +111,7 @@ var MusicPlayer = (function (_super) {
                             scrollToCurrentSong();
                         }, 100);
                         songDuration = 0;
+                        setRPCactivity({ state: song.title, startTimestamp: new Date() });
                         clearInterval(this.durationUpdateInterval);
                         this.durationUpdateInterval = setInterval(function () {
                             var currentTime = _this.getCurrentTime();

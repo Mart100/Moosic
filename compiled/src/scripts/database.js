@@ -84,7 +84,8 @@ function getData() {
                                     database = {
                                         songs: DBsongs,
                                         collections: objParsed.collections,
-                                        songStoragePos: objParsed.songStoragePos
+                                        songStoragePos: objParsed.songStoragePos,
+                                        settings: objParsed.settings
                                     };
                                     databaseCache = database;
                                     databaseCacheValid = true;
@@ -124,7 +125,10 @@ function createEmptyDatabase() {
     return new Promise(function (resolve, reject) {
         var obj = {
             "songs": {},
-            "collections": []
+            "collections": [],
+            "settings": {
+                "discordRPC": false
+            }
         };
         fs.writeJson(databaseFileLoc, obj, function (err) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {

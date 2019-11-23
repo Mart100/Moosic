@@ -179,6 +179,24 @@ $(() => {
     })
   })
 
+  $('#discordRPC-button').on('click', async () => {
+    await saveData1((data) => { 
+      data.settings.discordRPC = !data.settings.discordRPC
+      return data
+    })
+
+    let database = await getData()
+
+    if(database.settings.discordRPC) {
+      $('#discordRPC-button').html('Disable discord RPC')
+      setRPCactivity({state: musicPlayer.currentSong.title, startTimestamp: new Date() })
+    }
+    else {
+      $('#discordRPC-button').html('Enable discord RPC')
+      DiscordRPCclient.clearActivity()
+    }
+  }) 
+
   $('#deleteData-button').on('click', async () => {
     let confirm = window.confirm('Are you sure you want to delete all your data?')
 

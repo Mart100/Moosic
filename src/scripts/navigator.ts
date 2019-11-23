@@ -1,5 +1,5 @@
 $(() => {
-  $('#navigator li').on('click', (event) => {
+  $('#navigator li').on('click', async (event) => {
     $('#navigator li').removeClass('selected')
     $(event.target).addClass('selected')
 
@@ -13,6 +13,8 @@ $(() => {
     $('.songs').hide()
     $('#songsPopup').hide()
     resetFilters()
+
+    let database = await getData()
 
 
     if(name == 'search') {
@@ -33,6 +35,10 @@ $(() => {
       $('#settings').fadeIn()
       $('#settings .thing1').hide()
       $('#settings-main').fadeIn(250)
+
+      // enable/disable discord RPC
+      if(database.settings.discordRPC) $('#discordRPC-button').html('Disable discord RPC')
+      else $('#discordRPC-button').html('Enable discord RPC')
     }
   })
 })

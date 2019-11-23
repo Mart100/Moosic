@@ -260,6 +260,31 @@ $(function () {
             return [2];
         });
     }); });
+    $('#discordRPC-button').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var database;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, saveData1(function (data) {
+                        data.settings.discordRPC = !data.settings.discordRPC;
+                        return data;
+                    })];
+                case 1:
+                    _a.sent();
+                    return [4, getData()];
+                case 2:
+                    database = _a.sent();
+                    if (database.settings.discordRPC) {
+                        $('#discordRPC-button').html('Disable discord RPC');
+                        setRPCactivity({ state: musicPlayer.currentSong.title, startTimestamp: new Date() });
+                    }
+                    else {
+                        $('#discordRPC-button').html('Enable discord RPC');
+                        DiscordRPCclient.clearActivity();
+                    }
+                    return [2];
+            }
+        });
+    }); });
     $('#deleteData-button').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
         var confirm;
         return __generator(this, function (_a) {

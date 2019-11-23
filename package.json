@@ -13,6 +13,8 @@
   "dependencies": {
     "browserify": "^16.5.0",
     "common-js": "^0.3.8",
+    "discord-rich-presence": "0.0.8",
+    "discord-rpc": "^3.1.0",
     "electron-log": "^3.0.8",
     "electron-prompt": "^1.4.0",
     "electron-updater": "^4.1.2",

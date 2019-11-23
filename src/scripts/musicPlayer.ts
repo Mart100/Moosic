@@ -33,7 +33,7 @@ class MusicPlayer extends EventEmitter {
 
 
   }
-  async play(song) {
+  async play(song:Song) {
 
     this.stop()
 
@@ -76,6 +76,8 @@ class MusicPlayer extends EventEmitter {
     }, 100)
 
     let songDuration:number = 0
+    
+    setRPCactivity({state: song.title, startTimestamp: new Date() })
 
     clearInterval(this.durationUpdateInterval)
     this.durationUpdateInterval = setInterval(() => {

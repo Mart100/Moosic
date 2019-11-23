@@ -116,3 +116,33 @@ function beutifySeconds(seconds) {
 
   return beutifiedSongTime
 }
+
+
+const DiscordRPC = require('discord-rpc')
+const DiscordClientId = '647590804503789578'
+DiscordRPC.register(DiscordClientId)
+const DiscordRPCclient = new DiscordRPC.Client({ transport: 'ipc' })
+
+DiscordRPCclient.on('ready', () => {
+  console.log('YOINKS')
+  setRPCactivity()
+})
+
+async function setRPCactivity(options?) {
+  let database = await getData()
+  if(database.settings.discordRPC == false) return
+  if(!options) options = {}
+  DiscordRPCclient.setActivity({
+    details: 'Listening to:',
+    state: options.state || 'Nothing',
+    startTimestamp: options.startTimestamp,
+    largeImageKey: 'logo',
+    largeImageText: 'Download at martve.me/Moosic',
+    instance: true,
+  })
+}
+try {
+  DiscordRPCclient.login({ clientId: DiscordClientId, clientSecret: 'tOftCtpYtWyddHwfSFvLMBwYv9y5C8KE' })
+} catch(e) {
+  throw e
+}

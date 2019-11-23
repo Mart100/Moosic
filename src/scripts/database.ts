@@ -5,6 +5,7 @@ interface database {
   songs: Song[]
   collections: databaseCollection[]
   songStoragePos: string
+  settings: any
 
 }
 
@@ -47,7 +48,8 @@ function getData(): Promise<any> {
       let database:database = {
         songs: DBsongs,
         collections: objParsed.collections,
-        songStoragePos: objParsed.songStoragePos
+        songStoragePos: objParsed.songStoragePos,
+        settings: objParsed.settings
       }
 
       databaseCache = database
@@ -82,7 +84,10 @@ function createEmptyDatabase() {
 
     let obj = {
       "songs": {},
-      "collections": []
+      "collections": [],
+      "settings": {
+        "discordRPC": false
+      }
     }
 
     fs.writeJson(databaseFileLoc, obj, async (err) => {
@@ -137,4 +142,4 @@ async function awaitSavingStatus() {
       }
     }, 100)
   })
-}
+} 
