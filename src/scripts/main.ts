@@ -123,8 +123,12 @@ const DiscordClientId = '647590804503789578'
 DiscordRPC.register(DiscordClientId)
 const DiscordRPCclient = new DiscordRPC.Client({ transport: 'ipc' })
 
-DiscordRPCclient.on('ready', () => {
+DiscordRPCclient.on('ready', async () => {
   console.log('YOINKS')
+
+  let database = await getData()
+  if(database.settings.discordRPC == false) return
+
   setRPCactivity()
 })
 
@@ -142,7 +146,7 @@ async function setRPCactivity(options?) {
   })
 }
 try {
-  DiscordRPCclient.login({ clientId: DiscordClientId, clientSecret: 'tOftCtpYtWyddHwfSFvLMBwYv9y5C8KE' })
+  DiscordRPCclient.login({ clientId: DiscordClientId })
 } catch(e) {
   throw e
 }

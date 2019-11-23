@@ -55,6 +55,14 @@ $(function () {
         else
             $('#musicControls .repeat').removeClass('on');
     });
+    $('#musicControls .volume .low_volume').on('click', function () {
+        $('#musicControls .volume .volume_input').val(0);
+        $('#musicControls .volume .volume_input').trigger('input');
+    });
+    $('#musicControls .volume .high_volume').on('click', function () {
+        $('#musicControls .volume .volume_input').val(100);
+        $('#musicControls .volume .volume_input').trigger('input');
+    });
     $('#musicControls .volume .volume_input').on('input', function () {
         musicPlayer.setVolume($('#musicControls .volume .volume_input').val());
     });

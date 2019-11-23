@@ -34,6 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var _this = this;
 var fs = require('fs-extra');
 var ytdl = require('ytdl-core');
 var FileSaver = require('file-saver');
@@ -164,10 +165,22 @@ var DiscordRPC = require('discord-rpc');
 var DiscordClientId = '647590804503789578';
 DiscordRPC.register(DiscordClientId);
 var DiscordRPCclient = new DiscordRPC.Client({ transport: 'ipc' });
-DiscordRPCclient.on('ready', function () {
-    console.log('YOINKS');
-    setRPCactivity();
-});
+DiscordRPCclient.on('ready', function () { return __awaiter(_this, void 0, void 0, function () {
+    var database;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                console.log('YOINKS');
+                return [4, getData()];
+            case 1:
+                database = _a.sent();
+                if (database.settings.discordRPC == false)
+                    return [2];
+                setRPCactivity();
+                return [2];
+        }
+    });
+}); });
 function setRPCactivity(options) {
     return __awaiter(this, void 0, void 0, function () {
         var database;
@@ -194,7 +207,7 @@ function setRPCactivity(options) {
     });
 }
 try {
-    DiscordRPCclient.login({ clientId: DiscordClientId, clientSecret: 'tOftCtpYtWyddHwfSFvLMBwYv9y5C8KE' });
+    DiscordRPCclient.login({ clientId: DiscordClientId });
 }
 catch (e) {
     throw e;

@@ -59,6 +59,14 @@ $(() => {
     if(a) $('#musicControls .repeat').addClass('on')
     else $('#musicControls .repeat').removeClass('on')
   })
+  $('#musicControls .volume .low_volume').on('click', () => {
+    $('#musicControls .volume .volume_input').val(0)
+    $('#musicControls .volume .volume_input').trigger('input')
+  })
+  $('#musicControls .volume .high_volume').on('click', () => {
+    $('#musicControls .volume .volume_input').val(100)
+    $('#musicControls .volume .volume_input').trigger('input')
+  })
   $('#musicControls .volume .volume_input').on('input', () => {
     musicPlayer.setVolume($('#musicControls .volume .volume_input').val())
   })
