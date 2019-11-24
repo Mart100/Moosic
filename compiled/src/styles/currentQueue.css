@@ -22,6 +22,7 @@
   width: 100%;
   height: 200px;
   position: absolute;
+  overflow: hidden;
 }
 
 #currentQueue .currentSong .exit {
@@ -42,12 +43,19 @@
   background-color: #323232;
 }
 
-#currentQueue .currentSong .image {
+#currentQueue .currentSong .imageWrapper {
   position: absolute;
   width: 100%;
   left: 0px;
   height: 100%;
   z-index: 0;
+}
+#currentQueue .currentSong .imageWrapper .image {
+  position: absolute;
+  width: 100%;
+  height: 134%;
+  left: 0px;
+  top: -17%;
 }
 
 #currentQueue .currentSong .progressBackground {

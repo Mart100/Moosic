@@ -72,7 +72,7 @@ function updateSongFocus() {
     var song = musicPlayer.currentSong;
     if (song == undefined)
         return;
-    $('#currentQueue .currentSong .image').attr('src', song.image);
+    $('#currentQueue .currentSong .image').attr('src', song.image.replace('default', 'hqdefault'));
     var queue = musicPlayer.queue;
     showSongs(queue, { topBar: false, sort: false, refresh: false });
 }
