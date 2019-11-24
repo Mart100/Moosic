@@ -350,7 +350,7 @@ async function showTooltipForSong(song:Song) {
   tooltip.find('.playSimularSongs').on('click', async (e) => {
     let relatedVideos: any = await getRelatedVideosYT(song.youtubeID)
     let relatedSongs: Song[] = []
-    for(let vid of relatedVideos) relatedSongs.push(new Song().importFromYoutube(vid))
+    for(let vid of relatedVideos) relatedSongs.push(await new Song().importFromYoutube(vid))
     $('#songsPopup').fadeIn()
     $('#songsPopup .songs').fadeIn()
     setSortByNone()

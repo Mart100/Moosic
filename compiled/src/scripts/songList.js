@@ -362,17 +362,27 @@ function showTooltipForSong(song) {
                         });
                     }); });
                     tooltip.find('.playSimularSongs').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
-                        var relatedVideos, relatedSongs, _i, relatedVideos_1, vid;
-                        return __generator(this, function (_a) {
-                            switch (_a.label) {
+                        var relatedVideos, relatedSongs, _i, relatedVideos_1, vid, _a, _b;
+                        return __generator(this, function (_c) {
+                            switch (_c.label) {
                                 case 0: return [4, getRelatedVideosYT(song.youtubeID)];
                                 case 1:
-                                    relatedVideos = _a.sent();
+                                    relatedVideos = _c.sent();
                                     relatedSongs = [];
-                                    for (_i = 0, relatedVideos_1 = relatedVideos; _i < relatedVideos_1.length; _i++) {
-                                        vid = relatedVideos_1[_i];
-                                        relatedSongs.push(new Song().importFromYoutube(vid));
-                                    }
+                                    _i = 0, relatedVideos_1 = relatedVideos;
+                                    _c.label = 2;
+                                case 2:
+                                    if (!(_i < relatedVideos_1.length)) return [3, 5];
+                                    vid = relatedVideos_1[_i];
+                                    _b = (_a = relatedSongs).push;
+                                    return [4, new Song().importFromYoutube(vid)];
+                                case 3:
+                                    _b.apply(_a, [_c.sent()]);
+                                    _c.label = 4;
+                                case 4:
+                                    _i++;
+                                    return [3, 2];
+                                case 5:
                                     $('#songsPopup').fadeIn();
                                     $('#songsPopup .songs').fadeIn();
                                     setSortByNone();
