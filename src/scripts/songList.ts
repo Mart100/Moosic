@@ -28,7 +28,9 @@ async function showSongs(songs, options) {
 
   if(songsElem.find('.topBar')[0] == undefined) songsElem.prepend(`    
     <div class="topBar">
-      <input class="search" placeholder="Search songs"></input>
+      <input class="search" placeholder="Search songs">
+      <img class="clearSearch" src="./images/delete.png">
+      </input>
       <img class="filterButton" src="images/filter.png"/>
       <div class="filters">
         <div class="sortBy">
@@ -54,6 +56,12 @@ async function showSongs(songs, options) {
     else $(a).removeClass('selected')
   })
 
+  songsElem.find('.topBar .clearSearch').off().on('click', () => {
+    songsElem.find('.topBar .search').val('')
+    options.refresh = true
+    showSongs(songs, options)
+  })
+
   if(options.topBar == false) songsElem.find('.topBar').remove()
 
   if(songsElem.find('.songList')[0] == undefined) songsElem.append(`<div class="songList"></div>`)
@@ -72,7 +80,12 @@ async function showSongs(songs, options) {
   
   let searchTxtVal = songsElem.find('.topBar .search').val()
   let searchTxt:string
-  if(searchTxtVal) searchTxt = searchTxtVal.toString().toLowerCase()
+  if(searchTxtVal) {
+    searchTxt = searchTxtVal.toString().toLowerCase()
+    songsElem.find('.topBar .clearSearch').show()
+  } else {
+    songsElem.find('.topBar .clearSearch').hide()
+  }
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
   console.log(filters)

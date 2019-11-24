@@ -3,6 +3,7 @@ const ytdl = require('ytdl-core')
 const FileSaver = require('file-saver')
 const eprompt = require('electron-prompt')
 declare const Howl:any
+declare const Howler:any
 declare const YT:any
 declare let gapi:any
 const _ = require('lodash')

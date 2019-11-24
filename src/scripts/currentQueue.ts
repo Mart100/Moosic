@@ -76,7 +76,7 @@ function updateSongFocus() {
   $('#currentQueue .songs').show()
   let song = musicPlayer.currentSong
   if(song == undefined) return
-  $('#currentQueue .currentSong .image').attr('src', song.image.replace('default', 'hqdefault'))
+  $('#currentQueue .currentSong .image').attr('src', song.image.replace('mq', '').replace('default', 'hqdefault'))
 
   // set queue
   let queue = musicPlayer.queue

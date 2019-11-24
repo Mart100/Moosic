@@ -39,6 +39,8 @@ class MusicPlayer extends EventEmitter {
 
     console.log(song)
 
+    if(song.youtubeID == undefined) return
+
     // check if song is is queue
     let queueIDlist = Array.from(this.queue, s => s.youtubeID)
 
@@ -61,6 +63,7 @@ class MusicPlayer extends EventEmitter {
     let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
 
+
     console.log(songLoc, mp3Exists)
 
     if(mp3Exists) this.playMp3(songLoc)
@@ -71,9 +74,8 @@ class MusicPlayer extends EventEmitter {
     }
 
     setTimeout(() => {
-      this.setVolume(this.volume)
       scrollToCurrentSong()
-    }, 100)
+    }, 10)
 
     let songDuration:number = 0
     
@@ -133,7 +135,7 @@ class MusicPlayer extends EventEmitter {
     this.isShuffled = true
     this.unShuffledQueue = this.queue.slice(0)
     this.queue = this.queue.sort((a, b) => Math.random()-0.5)
-    showSongs(this.queue, {refresh: true, scrollToCurrentSong: true})
+    showSongs(musicPlayer.queue, {refresh: true, scrollToCurrentSong: true, topBar: false, sort: false})
     this.emit('shuffle')
     
   }
@@ -145,12 +147,18 @@ class MusicPlayer extends EventEmitter {
   stop() {
     if(this.YTplayer != undefined && this.YTplayer.stopVideo != undefined) this.YTplayer.stopVideo()
     if(this.HowlSound != undefined) this.HowlSound.stop()
+    clearInterval(this.durationUpdateInterval)
 
     this.YTplayer = undefined
-    this.HowlSound = undefined
+    //this.HowlSound = undefined
     this.currentSong = undefined
+
     this.emit('stop')
-    clearInterval(this.durationUpdateInterval)
+
+    for(let howl of Howler._howls) {
+      howl.stop()
+    }
+
   }
   getDuration() {
     if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration) return this.YTplayer.getDuration()
@@ -165,9 +173,23 @@ class MusicPlayer extends EventEmitter {
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek()
   }
   playMp3(url) {
+    if(this.HowlSound != undefined) this.HowlSound.stop()
     this.HowlSound = new Howl({ src: [url] })
     this.HowlSound.play()
     this.currentPlayer = 'MP3'
+
+    // on song play start
+    this.HowlSound.on('play', () => {
+      
+      // set volume
+      this.setVolume(this.volume)
+
+      // Make sure to clear any other music when this song starts playing
+      for(let howl of Howler._howls) {
+        if(howl._src.includes(this.currentSong.youtubeID)) continue
+        howl.stop()
+      }
+    })
 
     this.onEndListenerMp3()
   }

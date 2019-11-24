@@ -26,6 +26,9 @@ Do you want to install this update?
     fs.pathExists(installerLocation, async (err, exists) => {
       if(err) console.error(err)
 
+      console.log('Installer exists: ', exists)
+      console.log(installerLocation)
+
       // if file doesn't exist. Download Setup file from github
       if(!exists) await downloadFileFromURL(`https://github.com/Mart100/Moosic/releases/download/v${latestVersion}/moosic-Setup-${latestVersion}.exe`)
 
@@ -38,7 +41,6 @@ Do you want to install this update?
     })
     
   }
-
 }
 
 async function downloadFileFromURL(file_url) {

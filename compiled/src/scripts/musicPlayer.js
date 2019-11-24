@@ -75,6 +75,8 @@ var MusicPlayer = (function (_super) {
                     case 0:
                         this.stop();
                         console.log(song);
+                        if (song.youtubeID == undefined)
+                            return [2];
                         queueIDlist = Array.from(this.queue, function (s) { return s.youtubeID; });
                         idx = queueIDlist.indexOf(song.youtubeID);
                         if (idx != -1)
@@ -107,9 +109,8 @@ var MusicPlayer = (function (_super) {
                         _a.label = 4;
                     case 4:
                         setTimeout(function () {
-                            _this.setVolume(_this.volume);
                             scrollToCurrentSong();
-                        }, 100);
+                        }, 10);
                         songDuration = 0;
                         setRPCactivity({ state: song.title, startTimestamp: new Date() });
                         clearInterval(this.durationUpdateInterval);
@@ -177,7 +178,7 @@ var MusicPlayer = (function (_super) {
         this.isShuffled = true;
         this.unShuffledQueue = this.queue.slice(0);
         this.queue = this.queue.sort(function (a, b) { return Math.random() - 0.5; });
-        showSongs(this.queue, { refresh: true, scrollToCurrentSong: true });
+        showSongs(musicPlayer.queue, { refresh: true, scrollToCurrentSong: true, topBar: false, sort: false });
         this.emit('shuffle');
     };
     MusicPlayer.prototype.unShuffleQueue = function () {
@@ -190,11 +191,14 @@ var MusicPlayer = (function (_super) {
             this.YTplayer.stopVideo();
         if (this.HowlSound != undefined)
             this.HowlSound.stop();
+        clearInterval(this.durationUpdateInterval);
         this.YTplayer = undefined;
-        this.HowlSound = undefined;
         this.currentSong = undefined;
         this.emit('stop');
-        clearInterval(this.durationUpdateInterval);
+        for (var _i = 0, _a = Howler._howls; _i < _a.length; _i++) {
+            var howl = _a[_i];
+            howl.stop();
+        }
     };
     MusicPlayer.prototype.getDuration = function () {
         if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration)
@@ -215,9 +219,21 @@ var MusicPlayer = (function (_super) {
             return this.HowlSound.seek();
     };
     MusicPlayer.prototype.playMp3 = function (url) {
+        var _this = this;
+        if (this.HowlSound != undefined)
+            this.HowlSound.stop();
         this.HowlSound = new Howl({ src: [url] });
         this.HowlSound.play();
         this.currentPlayer = 'MP3';
+        this.HowlSound.on('play', function () {
+            _this.setVolume(_this.volume);
+            for (var _i = 0, _a = Howler._howls; _i < _a.length; _i++) {
+                var howl = _a[_i];
+                if (howl._src.includes(_this.currentSong.youtubeID))
+                    continue;
+                howl.stop();
+            }
+        });
         this.onEndListenerMp3();
     };
     MusicPlayer.prototype.playYT = function (videoID) {

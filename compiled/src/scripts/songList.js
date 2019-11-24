@@ -63,7 +63,7 @@ function showSongs(songs, options) {
                     if (songsElem[0].parentElement.id == 'search')
                         options.topBar = false;
                     if (songsElem.find('.topBar')[0] == undefined)
-                        songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\"></input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
+                        songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\">\n      <img class=\"clearSearch\" src=\"./images/delete.png\">\n      </input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
                     $('.filters .button2').each(function (i, a) {
                         var b = a.id.split('-');
                         var c = filters[b[0]][b[1]];
@@ -71,6 +71,11 @@ function showSongs(songs, options) {
                             $(a).addClass('selected');
                         else
                             $(a).removeClass('selected');
+                    });
+                    songsElem.find('.topBar .clearSearch').off().on('click', function () {
+                        songsElem.find('.topBar .search').val('');
+                        options.refresh = true;
+                        showSongs(songs, options);
                     });
                     if (options.topBar == false)
                         songsElem.find('.topBar').remove();
@@ -86,8 +91,13 @@ function showSongs(songs, options) {
                     currentSongList = songs;
                     refinedSongs = [];
                     searchTxtVal = songsElem.find('.topBar .search').val();
-                    if (searchTxtVal)
+                    if (searchTxtVal) {
                         searchTxt = searchTxtVal.toString().toLowerCase();
+                        songsElem.find('.topBar .clearSearch').show();
+                    }
+                    else {
+                        songsElem.find('.topBar .clearSearch').hide();
+                    }
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
                     console.log(filters);
                     console.log(options);
