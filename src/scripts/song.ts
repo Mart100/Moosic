@@ -152,12 +152,13 @@ class Song {
   getHTML() {
     let title = this.title
 
+  /*
     if(title == undefined) return ''
 
     if(title.length > 50) title = title.split('').splice(0, 20).join('') + '...'
 
     let channel = this.author
-    if(channel.length > 50) channel = channel.split('').splice(0, 20).join('') + '...'
+    if(channel.length > 50) channel = channel.split('').splice(0, 20).join('') + '...'*/
 
     let html = `
     <div class="song" id="song-${this.youtubeID}">

@@ -267,13 +267,6 @@ var Song = (function () {
     };
     Song.prototype.getHTML = function () {
         var title = this.title;
-        if (title == undefined)
-            return '';
-        if (title.length > 50)
-            title = title.split('').splice(0, 20).join('') + '...';
-        var channel = this.author;
-        if (channel.length > 50)
-            channel = channel.split('').splice(0, 20).join('') + '...';
         var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n      <div class=\"buttons\">\n        <img class=\"more\" src=\"./images/options.png\"/>\n        <img class=\"like\" src=\"./images/heart.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
         return html;
     };

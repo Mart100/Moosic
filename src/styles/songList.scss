@@ -145,17 +145,26 @@
 .songList .song .title {
   color: white;
   display: inline-block;
-  max-width: 200px;
+  width: 240px;
+  height: 20px;
   margin-left: 10px;
-  font-size: 14px;
+  font-size: 13px;
   pointer-events: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
 }
 .songList .song .channel {
   color: rgb(180, 180, 180);
   margin-left: 10px;
-  font-size: 12px;
+  font-size: 11px;
+  width: 240px;
+  height: 20px;
   display: inline-block;
   pointer-events: none;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap
 }
 .songList .song .buttons {
   position: absolute;
