@@ -198,7 +198,7 @@ var Song = (function () {
                 switch (_a.label) {
                     case 0: return [4, this.isDownloaded()];
                     case 1:
-                        if (_a.sent())
+                        if ((_a.sent()) && !options.redownload)
                             return [2];
                         return [4, songDownloader.queueNewDownload(this.youtubeID, options)];
                     case 2:

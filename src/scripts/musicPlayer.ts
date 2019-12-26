@@ -191,6 +191,13 @@ class MusicPlayer extends EventEmitter {
       }
     })
 
+    this.HowlSound.on('loaderror', async (err) => {
+      // Redownload song if error
+      await this.currentSong.download({priority: true, redownload: true})
+
+      this.currentSong.play()
+    })
+
     this.onEndListenerMp3()
   }
   playYT(videoID) {

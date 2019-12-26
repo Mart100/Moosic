@@ -110,9 +110,9 @@ class Song {
       })
     })
   }
-  async download(options:object) {
+  async download(options:any) {
 
-    if(await this.isDownloaded()) return
+    if(await this.isDownloaded() && !options.redownload) return
 
     await songDownloader.queueNewDownload(this.youtubeID, options)
 
