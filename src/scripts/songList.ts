@@ -316,7 +316,7 @@ async function showTooltipForSong(song:Song) {
     <button class="download">Download</button>
     <button class="openInYoutube">Open in youtube</button>
     <button class="addToCollection">Add to collection</button>
-    <button class="playSimularSongs">Play simular songs</button>
+    <button class="playSimularSongs">Play similar songs</button>
     <button class="saveSongAs">Save song as</button>
     <button class="songInfo">Song info</button>
     <button class="deleteSong">Delete songs</button>

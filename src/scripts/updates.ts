@@ -1,3 +1,5 @@
+const wget = require('wget-improved')
+
 async function checkForUpdates() {
 
   let thisVersion = remote.app.getVersion()
@@ -70,6 +72,33 @@ async function downloadFileFromURL(file_url) {
   </div>
     `)
 
+    let downloadStarted = new Date().getTime()
+    console.log(file_url, downloadLoc+'/'+file_name)
+    let download = wget.download(file_url, downloadLoc+'/'+file_name)
+
+    download.on('error', (err) => {
+      console.error(err)
+    })
+
+    download.on('end', (output) => {
+      console.log(output)
+      console.log(`Setup ${file_url.split('/').pop()} installed`)
+      console.log(`${downloadLoc}\\${file_name}`)
+      setTimeout(() => { resolve() }, 1000)
+    })
+
+    download.on('progress', (progress) => {
+      console.log(progress)
+      let timeSinceStart = (new Date().getTime() - downloadStarted)/1000
+      let totalTime = timeSinceStart / progress
+      let timeToGo = Math.round(totalTime-timeSinceStart)
+
+      $('#loadingWin .progressBar .progress').css('width', `${progress*100}%`)
+      $('#loadingWin .waitingTime').html(`Estimated waiting time: ${timeToGo}s`)
+
+    })
+
+    /*
     // start actual download
     let proc = cp.exec(`wget ${file_url} -P ${downloadLoc}`, (err, stdout, stderr) => {
       if (err) throw err
@@ -92,7 +121,7 @@ async function downloadFileFromURL(file_url) {
       //console.log(data, progressProcent, waitingTime)
       if(progressProcent) $('#loadingWin .progressBar .progress').css('width', `${progressProcent}`)
       if(waitingTime) $('#loadingWin .waitingTime').html(`Estimated waiting time: ${waitingTime}`)
-    })
+    })*/
   })
 }
 

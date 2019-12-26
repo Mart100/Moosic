@@ -52,7 +52,8 @@ $(() => {
 	})
 
   getSongStoragePos()
-  if(isDev() == false) checkForUpdates()
+  //if(isDev() == false)  
+  checkForUpdates()
 
   setTimeout(() => {
     $('#navigator .mySongs').trigger('click')

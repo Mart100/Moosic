@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.5.1",
+  "version": "1.5.4",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -24,12 +24,12 @@
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
     "node-ipc": "^9.1.1",
-    "node-wget": "^0.4.3",
     "open": "^6.4.0",
     "spotify-web-api-js": "^1.2.0",
     "v8-compile-cache": "^2.1.0",
+    "wget-improved": "^3.0.2",
     "yargs": "^14.2.0",
-    "ytdl-core": "^0.29.5"
+    "ytdl-core": "^1.0.5"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",
@@ -61,7 +61,8 @@
       {
         "provider": "github",
         "owner": "Mart100",
-        "repo": "Moosic"
+        "repo": "Moosic",
+        "publishAutoUpdate": false
       }
     ],
     "win": {
