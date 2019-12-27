@@ -164,8 +164,8 @@ class Song {
     <div class="song" id="song-${this.youtubeID}">
       <div class="image"><img src="${this.image}"/></div>
       <div class="buttons">
-        <img class="more" src="./images/options.png"/>
         <img class="like" src="./images/heart.png"/>
+        <img class="more" src="./images/options.png"/>
       </div>
       <div class="title">${title}</div>
       <br>

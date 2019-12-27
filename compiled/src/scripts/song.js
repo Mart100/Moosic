@@ -267,7 +267,7 @@ var Song = (function () {
     };
     Song.prototype.getHTML = function () {
         var title = this.title;
-        var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n      <div class=\"buttons\">\n        <img class=\"more\" src=\"./images/options.png\"/>\n        <img class=\"like\" src=\"./images/heart.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
+        var html = "\n    <div class=\"song\" id=\"song-" + this.youtubeID + "\">\n      <div class=\"image\"><img src=\"" + this.image + "\"/></div>\n      <div class=\"buttons\">\n        <img class=\"like\" src=\"./images/heart.png\"/>\n        <img class=\"more\" src=\"./images/options.png\"/>\n      </div>\n      <div class=\"title\">" + title + "</div>\n      <br>\n      <div class=\"channel\">" + this.author + "</div>\n    </div>\n    ";
         return html;
     };
     return Song;
