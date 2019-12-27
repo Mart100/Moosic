@@ -150,12 +150,12 @@ async function showSongs(songs, options) {
     currentSongList = refinedSongs
 
     let songsHtml = ''
-    for(let s of refinedSongs) songsHtml += `<div class="song" id="song-${s.youtubeID}"></div>`
+    for(let s of refinedSongs) songsHtml += `<div class="song" style="height: ${songHeight-20}px" id="song-${s.youtubeID}"></div>`
     songListElem[0].innerHTML = songsHtml
   }
 
   songListElem.on('scroll', () => {
-    let songNum = Math.floor(songListElem.scrollTop()/80)
+    let songNum = Math.floor(songListElem.scrollTop()/songHeight)
     for(let i=-2;i<10;i++) loadSong(songNum+i, refinedSongs, songListElem)
   })
 
@@ -279,6 +279,13 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
 
   if(song.liked) songHTML.find(` .buttons .like`).attr('src', './images/red-heart.png')
 
+  let SSP = songHeight/5 // Song Style Padding
+  songHTML.css({'height': songHeight-SSP, 'padding': SSP/2-1})
+  songHTML.find('.like').css({'height': (songHeight-8-SSP)/2-10, 'width':(songHeight-8-SSP)/2-10})
+  songHTML.find('.buttons').css({'height': songHeight-SSP})
+  songHTML.find('.more').css({'height': (songHeight-8-SSP)/2, 'width': (songHeight-8-SSP)/2})
+  songHTML.find('.image').css({'height': songHeight-SSP, 'width': songHeight-SSP})
+
   songListElem.find(`#song-${song.youtubeID}`).replaceWith(songHTML)
 
   // on song click. Play song
@@ -328,7 +335,7 @@ async function showTooltipForSong(song:Song) {
   let showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID)
   if(showRemoveFromColl) tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>')
 
-  songElem.append(tooltipHTML) 
+  songElem.prepend(tooltipHTML) 
 
   let parent = songElem.parent()
   let tooltip = parent.find('.tooltip')
@@ -337,7 +344,8 @@ async function showTooltipForSong(song:Song) {
   tooltip.on('mouseleave', () => {
     tooltip.remove()
   })
-  moreButton.on('mouseleave', () => {
+  moreButton.on('mouseleave', async () => {
+    await sleep(100)
     if(parent.find('.tooltip:hover').length != 0) return
     tooltip.remove()
   })
@@ -367,6 +375,7 @@ async function showTooltipForSong(song:Song) {
     $('#songsPopup').fadeIn()
     $('#songsPopup .songs').fadeIn()
     setSortByNone()
+    showSongs(relatedSongs, {refresh: true})
     musicPlayer.setQueue(relatedSongs)
     musicPlayer.nextInQueue()
   })

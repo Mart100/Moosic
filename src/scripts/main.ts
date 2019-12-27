@@ -20,6 +20,7 @@ const spotify_clientID = '11063f81cfec4398aeb571cff3bb819d'
 const ipc = require('electron').ipcRenderer
 const musicPlayer = new MusicPlayer()
 const songDownloader = new SongDownloader()
+let songHeight = 80
 
 // storage position
 let storagePos:string = process.env.APPDATA+'\\moosic'+'\\storage'

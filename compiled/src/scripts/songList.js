@@ -156,12 +156,12 @@ function showSongs(songs, options) {
                         songsHtml = '';
                         for (_a = 0, refinedSongs_1 = refinedSongs; _a < refinedSongs_1.length; _a++) {
                             s = refinedSongs_1[_a];
-                            songsHtml += "<div class=\"song\" id=\"song-" + s.youtubeID + "\"></div>";
+                            songsHtml += "<div class=\"song\" style=\"height: " + (songHeight - 20) + "px\" id=\"song-" + s.youtubeID + "\"></div>";
                         }
                         songListElem[0].innerHTML = songsHtml;
                     }
                     songListElem.on('scroll', function () {
-                        var songNum = Math.floor(songListElem.scrollTop() / 80);
+                        var songNum = Math.floor(songListElem.scrollTop() / songHeight);
                         for (var i = -2; i < 10; i++)
                             loadSong(songNum + i, refinedSongs, songListElem);
                     });
@@ -275,6 +275,12 @@ function loadSong(idx, songs, songListElem) {
     var songHTML = $(song.getHTML());
     if (song.liked)
         songHTML.find(" .buttons .like").attr('src', './images/red-heart.png');
+    var SSP = songHeight / 5;
+    songHTML.css({ 'height': songHeight - SSP, 'padding': SSP / 2 - 1 });
+    songHTML.find('.like').css({ 'height': (songHeight - 8 - SSP) / 2 - 10, 'width': (songHeight - 8 - SSP) / 2 - 10 });
+    songHTML.find('.buttons').css({ 'height': songHeight - SSP });
+    songHTML.find('.more').css({ 'height': (songHeight - 8 - SSP) / 2, 'width': (songHeight - 8 - SSP) / 2 });
+    songHTML.find('.image').css({ 'height': songHeight - SSP, 'width': songHeight - SSP });
     songListElem.find("#song-" + song.youtubeID).replaceWith(songHTML);
     songHTML.on('click', function (e) { onSongClick(e, currentSongList); });
     songHTML.find('.like').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
@@ -326,18 +332,26 @@ function showTooltipForSong(song) {
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
                         tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>');
-                    songElem.append(tooltipHTML);
+                    songElem.prepend(tooltipHTML);
                     parent = songElem.parent();
                     tooltip = parent.find('.tooltip');
                     moreButton = parent.find('.more');
                     tooltip.on('mouseleave', function () {
                         tooltip.remove();
                     });
-                    moreButton.on('mouseleave', function () {
-                        if (parent.find('.tooltip:hover').length != 0)
-                            return;
-                        tooltip.remove();
-                    });
+                    moreButton.on('mouseleave', function () { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            switch (_a.label) {
+                                case 0: return [4, sleep(100)];
+                                case 1:
+                                    _a.sent();
+                                    if (parent.find('.tooltip:hover').length != 0)
+                                        return [2];
+                                    tooltip.remove();
+                                    return [2];
+                            }
+                        });
+                    }); });
                     if (showRemoveFromColl) {
                         tooltip.find('.removeFromColl').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
                             return __generator(this, function (_a) {
@@ -396,6 +410,7 @@ function showTooltipForSong(song) {
                                     $('#songsPopup').fadeIn();
                                     $('#songsPopup .songs').fadeIn();
                                     setSortByNone();
+                                    showSongs(relatedSongs, { refresh: true });
                                     musicPlayer.setQueue(relatedSongs);
                                     musicPlayer.nextInQueue();
                                     return [2];
