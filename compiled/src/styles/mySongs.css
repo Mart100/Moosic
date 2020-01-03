@@ -1,3 +1,14 @@
+#mySongs {
+  overflow: auto;
+  height: 100%;
+}
+#mySongs #mySongsMenu {
+  position: absolute;
+  overflow: auto;
+  height: 100%;
+  width: 100%;
+}
+
 #mySongs .songs {
   height: 100%;
   overflow-y: auto;

@@ -68,7 +68,10 @@ async function showSongs(songs, options) {
 
   let songListElem = songsElem.find('.songList')
 
-  if(songs.length == 0) return songListElem.html('No songs here :(')
+  if(songs.length == 0) {
+    if(songsElem.parent().attr('id') == 'search') return songListElem.html('^ Use input to search trough youtube ^')
+    return songListElem.html('No songs here :(')
+  }
 
   songs = Object.values(songs)
 

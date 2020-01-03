@@ -82,8 +82,11 @@ function showSongs(songs, options) {
                     if (songsElem.find('.songList')[0] == undefined)
                         songsElem.append("<div class=\"songList\"></div>");
                     songListElem = songsElem.find('.songList');
-                    if (songs.length == 0)
+                    if (songs.length == 0) {
+                        if (songsElem.parent().attr('id') == 'search')
+                            return [2, songListElem.html('^ Use input to search trough youtube ^')];
                         return [2, songListElem.html('No songs here :(')];
+                    }
                     songs = Object.values(songs);
                     return [4, getData()];
                 case 2:

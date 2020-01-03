@@ -92,7 +92,8 @@ $(function () {
             location.reload();
     });
     getSongStoragePos();
-    checkForUpdates();
+    if (isDev() == false)
+        checkForUpdates();
     setTimeout(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);

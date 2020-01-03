@@ -54,6 +54,15 @@ $(function () {
         fs.writeFileSync(filename, formattedCode);
         FileSaver.saveAs(filename, "Moosic-Data.json");
     });
+    $('#appearance-button').on('click', function () {
+        $('#settings-main').fadeOut(250, function () {
+            $('#appearanceSettings').fadeIn(250);
+        });
+    });
+    $('#appearanceSettings-songSize input').on('input', function () {
+        var v = $('#appearanceSettings-songSize input').val();
+        songHeight = Number(v);
+    });
     $('#importData-button').on('click', function () {
         $('#settings-main').fadeOut(250, function () {
             $('#importData').fadeIn(250);

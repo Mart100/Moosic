@@ -97,6 +97,7 @@
       <div id="settings" style="display: none;">
         <div id="settings-main"> 
           <div class="button1" id="importData-button">Import songs</div>
+          <div class="button1" id="appearance-button">Appearance</div>
           <div class="button1" style="font-size: 14px;" id="exportData-button">Export / Save your data to json</div>
           <div class="button1" style="font-size: 15px;" id="deleteData-button">Delete all data</div>
           <div class="button1" style="font-size: 15px;" id="info-button">Info</div>
@@ -108,6 +109,15 @@
           <div id="info-savedSongs">Saved Songs: </div>
           <div id="info-downloadedSongs">Downloaded Songs: </div>
           <div id="info-downloadedSongsStorageSize">Downloaded Songs storage size: </div>
+        </div>
+        <div id="appearanceSettings" class="thing1" style="display: none;">
+          <div class="button1" id="appearanceSettings-songSize">
+            Change songTile size
+            <input type="range" min="50" max="100" value="80">
+          </div>
+          <div class="button1" id="importData-youtubePlaylist-button">Import Youtube Playlist</div>
+          <div class="button1" id="importData-headset-button">Import headset save</div>
+          <div class="button1" id="importData-spotify-button">Import from Spotify</div>
         </div>
         <div id="importData" class="thing1" style="display: none;">
           <div class="button1" id="importData-moosic-button">Import Moosic Save</div>

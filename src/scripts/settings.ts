@@ -8,6 +8,18 @@ $(() => {
     FileSaver.saveAs(filename, "Moosic-Data.json")
   })
 
+  $('#appearance-button').on('click', () => {
+    $('#settings-main').fadeOut(250, () => {
+      $('#appearanceSettings').fadeIn(250)
+      
+    })
+  })
+
+  $('#appearanceSettings-songSize input').on('input', () => {
+    let v = $('#appearanceSettings-songSize input').val()
+    songHeight = Number(v)
+  })
+
   $('#importData-button').on('click', () => {
     $('#settings-main').fadeOut(250, () => {
       $('#importData').fadeIn(250)
