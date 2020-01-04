@@ -42,11 +42,14 @@ function onSongClick(event, queue) {
             switch (_a.label) {
                 case 0:
                     id = event.target.id.replace('song-', '');
+                    console.log(id);
                     if (id == undefined || id == '')
                         return [2];
                     return [4, getSongByID(id)];
                 case 1:
                     song = _a.sent();
+                    if (song == undefined || song.youtubeID == undefined)
+                        song = new Song(currentSongList.find(function (s) { return s.youtubeID == id; }));
                     if (song == undefined || song.youtubeID == undefined)
                         song = new Song(searchResults[id]);
                     if (queue != undefined) {

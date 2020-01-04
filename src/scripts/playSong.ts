@@ -2,10 +2,12 @@ let player
 
 async function onSongClick(event, queue) {
   let id = event.target.id.replace('song-', '')
+  console.log(id)
   if(id == undefined || id == '') return
 
   let song = await getSongByID(id)
 
+  if(song == undefined || song.youtubeID == undefined) song = new Song(currentSongList.find(s => s.youtubeID == id))
   if(song == undefined || song.youtubeID == undefined) song = new Song(searchResults[id])
 
   if(queue != undefined) {
