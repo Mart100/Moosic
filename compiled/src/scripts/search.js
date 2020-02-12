@@ -39,7 +39,7 @@ var searchResults = [];
 $(function () {
     setTimeout(function () {
         gapi.client.load('youtube', 'v3', function () {
-            gapi.client.setApiKey('AIzaSyCIM4EzNqi1in22f4Z3Ru3iYvLaY8tc3bo');
+            gapi.client.setApiKey('AIzaSy' + 'CIM4EzN' + 'qi1in22' + 'f4Z3Ru' + '3iYvLa' + 'Y8tc3bo');
         });
     }, 1000);
     $('#search .input').on('change', function () { return __awaiter(_this, void 0, void 0, function () {

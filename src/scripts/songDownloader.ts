@@ -94,7 +94,15 @@ class SongDownloader {
         this.moveQueue()
 
         resolve() 
-      }
+      } 
+
+      // stop after x seconds
+      setTimeout(() => {
+        if(this.finished.includes(songID)) return
+        this.inProgress.splice(this.inProgress.indexOf(songID), 1)
+        this.moveQueue()
+        resolve()
+      }, 10000)
     })
   }
 

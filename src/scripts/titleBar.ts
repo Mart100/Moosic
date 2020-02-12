@@ -1,5 +1,5 @@
 $(() => {
-  $('#titleBarClose').on('click', () => {
+  $('#titleBarClose').on('click', async () => {
     
     // if downloads running warn
     let totalSongsPending = songDownloader.pending.length+songDownloader.inProgress.length
@@ -13,6 +13,8 @@ $(() => {
       if(!confirm(txt)) return
 
     }
+
+    await awaitSavingStatus()
     remote.getCurrentWindow().close()
   })
   $('#titleBarMinimize').on('click', () => {

@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var databaseCache;
 var databaseCacheValid = false;
 var databaseFileLoc = storagePos + '/database.json';
+var revertToBackupConfirm;
 function getData() {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
@@ -57,7 +58,7 @@ function getData() {
                 case 4:
                     _a.sent();
                     fs.readFile(databaseFileLoc, 'utf8', function (err, obj) { return __awaiter(_this, void 0, void 0, function () {
-                        var _a, objParsed, DBsongs, songID, songObj, database;
+                        var _a, objParsed, databasePos, databaseBackupPos, stats, backupDate, txt, DBsongs, songID, songObj, database;
                         return __generator(this, function (_b) {
                             switch (_b.label) {
                                 case 0:
@@ -73,7 +74,32 @@ function getData() {
                                     _a.apply(void 0, [_b.sent()]);
                                     _b.label = 3;
                                 case 3:
-                                    objParsed = JSON.parse(obj);
+                                    try {
+                                        objParsed = JSON.parse(obj);
+                                    }
+                                    catch (e) {
+                                        console.error(e);
+                                        if (revertToBackupConfirm == false)
+                                            return [2];
+                                        revertToBackupConfirm = false;
+                                        databasePos = storagePos + '\\' + 'database.json';
+                                        databaseBackupPos = storagePos + '\\' + 'database_backup.json';
+                                        stats = fs.statSync(databaseBackupPos);
+                                        backupDate = new Date(stats.mtimeMs);
+                                        txt = "\nAn error has occured:\n" + e + "\n\nThis most likely means the database where your songs are stored has become corrupted.\n\nWould you like to revert to a backup from:\n" + backupDate + "\n?";
+                                        if (confirm(txt)) {
+                                            revertToBackupConfirm = true;
+                                            fs.copyFile(databaseBackupPos, databasePos, function (err) {
+                                                if (err)
+                                                    throw err;
+                                                console.log('Successfully applied database_backup.json to database.json!');
+                                                alert('Successfully backed up!');
+                                            });
+                                        }
+                                        else {
+                                            revertToBackupConfirm = false;
+                                        }
+                                    }
                                     DBsongs = [];
                                     for (songID in objParsed.songs) {
                                         songObj = objParsed.songs[songID];

@@ -83,6 +83,9 @@
   padding: 10px;
   color: white;
 }
+.topBar .search:focus {
+  outline: none;
+}
 
 .topBar .filterButton {
   float: right;

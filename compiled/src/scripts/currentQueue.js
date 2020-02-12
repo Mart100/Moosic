@@ -1,6 +1,8 @@
 var progressBarInterval;
 $(function () {
     $('#currentSong').on('click', function () {
+        if (!musicPlayer.currentSong)
+            return;
         $('#currentQueue').fadeIn();
         updateSongFocus();
     });

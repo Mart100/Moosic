@@ -7,11 +7,21 @@
 }
 
 #settings {
+  position: absolute;
   color: white;
+  height: 100%;
+  width: 100%;
+  top: 0px;
+  overflow-y: auto;
 }
 
 #setStoragePos-button input {
   pointer-events: none;
+}
+
+#appearanceSettings .songs {
+  height: 300px;
+  margin-top: 15px;
 }
 
 /*# sourceMappingURL=settings.css.map */

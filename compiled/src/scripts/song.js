@@ -80,6 +80,7 @@ var Song = (function () {
                 maxResults: 1
             });
             request.execute(function (response) {
+                console.log(_this.youtubeID, response);
                 resolve(response.items[0]);
             });
         });
@@ -102,7 +103,7 @@ var Song = (function () {
                     case 1:
                         DBsong = _a.sent();
                         if (DBsong != undefined) {
-                            this.saveDate = DBsong.saveData || undefined;
+                            this.saveDate = this.saveDate || DBsong.saveData || undefined;
                             this.saved = DBsong.saved || this.saved;
                             this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool;
                             this.liked = DBsong.liked || this.liked;
@@ -194,28 +195,43 @@ var Song = (function () {
     };
     Song.prototype.download = function (options) {
         return __awaiter(this, void 0, void 0, function () {
+            var isDownloaded, songPos, redownload;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.isDownloaded()];
                     case 1:
-                        if ((_a.sent()) && !options.redownload)
+                        isDownloaded = _a.sent();
+                        if (isDownloaded && !options.redownload)
                             return [2];
+                        songPos = this.getDownloadLocation();
+                        redownload = false;
+                        if (isDownloaded && options.redownload && fs.existsSync(songPos))
+                            redownload = true;
                         return [4, songDownloader.queueNewDownload(this.youtubeID, options)];
                     case 2:
                         _a.sent();
-                        this.isDownloadedBool = true;
-                        if (!this.saved) return [3, 4];
-                        return [4, this.save()];
+                        if (!redownload) return [3, 4];
+                        console.log('Unloading Howler Because redownloaded song');
+                        Howler.unload();
+                        return [4, sleep(100)];
                     case 3:
                         _a.sent();
+                        musicPlayer.play(musicPlayer.currentSong);
                         _a.label = 4;
-                    case 4: return [2];
+                    case 4:
+                        this.isDownloadedBool = true;
+                        if (!this.saved) return [3, 6];
+                        return [4, this.save()];
+                    case 5:
+                        _a.sent();
+                        _a.label = 6;
+                    case 6: return [2];
                 }
             });
         });
     };
     Song.prototype.getDownloadLocation = function () {
-        return songStoragePos + '/' + this.youtubeID + '.mp3';
+        return songStoragePos + '\\' + this.youtubeID + '.mp3';
     };
     Song.prototype.isDownloaded = function () {
         return __awaiter(this, void 0, void 0, function () {
@@ -235,6 +251,23 @@ var Song = (function () {
                         if (this.saved)
                             this.save();
                         return [2, mp3Exists];
+                }
+            });
+        });
+    };
+    Song.prototype.deleteSave = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, saveData1(function (database) {
+                            console.log('DELETE: ' + _this.youtubeID);
+                            delete database.songs[_this.youtubeID];
+                            return database;
+                        })];
+                    case 1:
+                        _a.sent();
+                        return [2];
                 }
             });
         });

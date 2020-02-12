@@ -317,7 +317,7 @@ function loadSong(idx, songs, songListElem) {
 }
 function showTooltipForSong(song) {
     return __awaiter(this, void 0, void 0, function () {
-        var database, songsElem, songElem, tooltipHTML, currentColl, showRemoveFromColl, parent, tooltip, moreButton;
+        var database, songsElem, songElem, isDownloaded, downloadText, tooltipHTML, currentColl, showRemoveFromColl, parent, tooltip, moreButton;
         var _this = this;
         return __generator(this, function (_a) {
             switch (_a.label) {
@@ -328,9 +328,15 @@ function showTooltipForSong(song) {
                     database = _a.sent();
                     songsElem = getCurrentSongsElement();
                     songElem = songsElem.find('#song-' + song.youtubeID);
+                    return [4, song.isDownloaded()];
+                case 2:
+                    isDownloaded = _a.sent();
+                    downloadText = 'Download';
+                    if (isDownloaded)
+                        downloadText = 'Redownload';
                     if (songElem.find('.tooltip')[0])
                         songElem.find('.tooltip').remove();
-                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">Download</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">" + downloadText + "</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
                     currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
@@ -428,7 +434,7 @@ function showTooltipForSong(song) {
                     }); });
                     tooltip.find('.download').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
                         return __generator(this, function (_a) {
-                            song.download({});
+                            song.download({ redownload: true });
                             return [2];
                         });
                     }); });

@@ -8,6 +8,7 @@ const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 
 const log = require('electron-log')
+const fs_ = require('fs-extra')
 
 require('v8-compile-cache')
 
@@ -47,6 +48,39 @@ app.on('ready', () => {
     })
   }
 
+  let backedUpDatabase = false
+  mainWindow.on('close', (e) => {
+
+    if(!backedUpDatabase) e.preventDefault()
+    else return
+    
+    let storagePos = process.env.APPDATA+'\\moosic'+'\\storage'
+    let databasePos = storagePos+'\\'+'database.json'
+
+    console.log('Tried closing: ', databasePos)
+    fs_.readFile(databasePos, 'utf8', (err, obj) => {
+      try {
+        let parsedObj = JSON.parse(obj)
+      }
+      catch(error) {
+        err = error
+      }
+      
+      if(err) {
+        console.log(err)
+        backedUpDatabase = true
+        app.quit()
+        return
+      }
+      
+      fs_.copyFile(databasePos, storagePos+'\\'+'database_backup.json', (err) => {
+        if(err) throw err;
+        console.log('Successfully backed up database.json')
+        backedUpDatabase = true
+        app.quit()
+      })
+    })
+  })
 
   mainWindow.on('closed', () => { win = null })
 
@@ -79,38 +113,3 @@ ipc_mainProc.serve(() => ipc_mainProc.server.on('execJS', message => {
   mainWindow.webContents.executeJavaScript(message)
 }))
 ipc_mainProc.server.start()
-
-// Connection to protocol.ts
-/*
-let sendMessage = require('./protocol.js')(handleMessage)
-
-function handleMessage(req) {
-  console.log(req)
-  if(req.message == 'ping') {
-    sendMessage({message: 'pong', body: 'hello from nodejs app'})
-  }
-}*/
-
-/*
-process.stdin.on('readable', () => {
-  let input:any= []
-  let chunk
-  while(chunk = process.stdin.read()) {
-    input.push(chunk)
-  }
-  input = Buffer.concat(input)
-
-  let msgLen = input.readUInt32LE(0)
-  let dataLen = msgLen + 4
-
-  if (input.length >= dataLen) {
-    let content = input.slice(4, dataLen)
-    let json = JSON.parse(content.toString())
-    console.log('yoinks')
-  }
-})
-
-process.on('uncaughtException', (err) => {
-  console.log({error: err.toString()})
-})
-*/

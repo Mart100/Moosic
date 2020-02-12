@@ -58,7 +58,7 @@ class MusicPlayer extends EventEmitter {
     if(this.currentSong.saved) {
       this.currentSong.lastPlayed = Date.now()
       this.currentSong.save()
-    }
+    } 
 
     let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
@@ -66,8 +66,8 @@ class MusicPlayer extends EventEmitter {
 
     console.log(songLoc, mp3Exists)
 
-    if(mp3Exists) this.playMp3(songLoc)
-    else {
+    if(mp3Exists) this.playMp3(songLoc) 
+    else { 
       this.playYT(song.youtubeID)
       await this.currentSong.download({priority: true})
       musicPlayer.play(this.currentSong)
@@ -173,8 +173,8 @@ class MusicPlayer extends EventEmitter {
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek()
   }
   playMp3(url) {
-    if(this.HowlSound != undefined) this.HowlSound.stop()
-    this.HowlSound = new Howl({ src: [url] })
+    //if(this.HowlSound != undefined) this.HowlSound.stop()
+    this.HowlSound = new Howl({ src: url })
     this.HowlSound.play()
     this.currentPlayer = 'MP3'
 

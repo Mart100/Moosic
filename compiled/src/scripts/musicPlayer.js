@@ -220,9 +220,7 @@ var MusicPlayer = (function (_super) {
     };
     MusicPlayer.prototype.playMp3 = function (url) {
         var _this = this;
-        if (this.HowlSound != undefined)
-            this.HowlSound.stop();
-        this.HowlSound = new Howl({ src: [url] });
+        this.HowlSound = new Howl({ src: url });
         this.HowlSound.play();
         this.currentPlayer = 'MP3';
         this.HowlSound.on('play', function () {

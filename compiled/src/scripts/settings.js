@@ -59,10 +59,22 @@ $(function () {
             $('#appearanceSettings').fadeIn(250);
         });
     });
-    $('#appearanceSettings-songSize input').on('input', function () {
-        var v = $('#appearanceSettings-songSize input').val();
-        songHeight = Number(v);
-    });
+    $('#appearanceSettings-songSize input').on('input', function () { return __awaiter(_this, void 0, void 0, function () {
+        var v, songs;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    v = $('#appearanceSettings-songSize input').val();
+                    songHeight = Number(v);
+                    $('#appearanceSettings .songs').show();
+                    return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    showSongs(songs, { refresh: true });
+                    return [2];
+            }
+        });
+    }); });
     $('#importData-button').on('click', function () {
         $('#settings-main').fadeOut(250, function () {
             $('#importData').fadeIn(250);
@@ -160,6 +172,66 @@ $(function () {
         }); });
         elem.trigger('click');
     });
+    $('#importData-mp3Folder-button').on('click', function () {
+        var elem = $('<input type="file" webkitdirectory directory/>');
+        elem.on('change', function (event) { return __awaiter(_this, void 0, void 0, function () {
+            var pos;
+            var _this = this;
+            return __generator(this, function (_a) {
+                pos = elem.prop('files')[0].path;
+                pos = pos.replace(/\\/g, '/');
+                fs.readdir(pos, function (err, files) { return __awaiter(_this, void 0, void 0, function () {
+                    var songs, _a, _b, _i, idx, file, youtubeID, stats, creationdate, accessedDate, song, collName;
+                    return __generator(this, function (_c) {
+                        switch (_c.label) {
+                            case 0:
+                                if (err)
+                                    console.error(err);
+                                songs = {};
+                                _a = [];
+                                for (_b in files)
+                                    _a.push(_b);
+                                _i = 0;
+                                _c.label = 1;
+                            case 1:
+                                if (!(_i < _a.length)) return [3, 4];
+                                idx = _a[_i];
+                                file = files[idx];
+                                youtubeID = file.split('.')[0];
+                                stats = fs.statSync(pos + '\\' + file);
+                                console.log(stats);
+                                creationdate = stats.ctimeMs;
+                                accessedDate = stats.atimeMs;
+                                song = new Song({ youtubeID: youtubeID, fillData: true, saveDate: creationdate, lastPlayed: accessedDate });
+                                songs[youtubeID] = song;
+                                return [4, sleep(10)];
+                            case 2:
+                                _c.sent();
+                                _c.label = 3;
+                            case 3:
+                                _i++;
+                                return [3, 1];
+                            case 4: return [4, createNewCollection('MP3 collection')];
+                            case 5:
+                                collName = _c.sent();
+                                return [4, saveData1(function (database) {
+                                        var mergedSongs = __assign(__assign({}, database.songs), songs);
+                                        database.songs = mergedSongs;
+                                        database.collections.find(function (c) { return c.name == collName; }).songs = Object.keys(songs);
+                                        return database;
+                                    })];
+                            case 6:
+                                _c.sent();
+                                console.log('Done importing songs from mp3 folder');
+                                return [2];
+                        }
+                    });
+                }); });
+                return [2];
+            });
+        }); });
+        elem.trigger('click');
+    });
     $('#importData-moosic-button').on('click', function () {
         $('body').append('<input id="fileInput" type="file" accept=".json"/>');
         var input = $('#fileInput');
@@ -235,6 +307,121 @@ $(function () {
             }); });
         });
     });
+    $('#advanced-button').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            $('#settings-main').fadeOut(250, function () {
+                $('#advancedSettings').fadeIn(250);
+            });
+            return [2];
+        });
+    }); });
+    $('#advancedSettings-repairSave').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var songs, songID, song, newSongID, newSongData, newSong, songIDs, songID, song;
+        var _this = this;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    for (songID in songs) {
+                        song = songs[songID];
+                        if (songID.includes('.mp3')) {
+                            newSongID = songID.replace('.mp3', '');
+                            newSongData = song;
+                            newSongData.youtubeID = newSongID;
+                            newSong = new Song(newSongData);
+                            new Song(song).deleteSave();
+                            console.log(newSong);
+                            newSong.save();
+                        }
+                    }
+                    songIDs = [];
+                    for (songID in songs) {
+                        song = songs[songID];
+                        if (songIDs.includes(songID)) {
+                            console.log(songID);
+                            song.deleteSave();
+                        }
+                        songIDs.push(songID);
+                    }
+                    fs.readdir(songStoragePos, function (err, files) { return __awaiter(_this, void 0, void 0, function () {
+                        var _i, files_1, file, newFileName;
+                        return __generator(this, function (_a) {
+                            if (err)
+                                console.error(err);
+                            for (_i = 0, files_1 = files; _i < files_1.length; _i++) {
+                                file = files_1[_i];
+                                if (file.includes('.mp3.mp3')) {
+                                    newFileName = file.replace('.mp3.mp3', '') + '.mp3';
+                                    fs.rename(songStoragePos + '\\' + file, songStoragePos + '\\' + newFileName, function (err) {
+                                        if (err)
+                                            throw err;
+                                    });
+                                }
+                            }
+                            return [2];
+                        });
+                    }); });
+                    console.log('Done repairing!');
+                    return [2];
+            }
+        });
+    }); });
+    $('#advancedSettings-addYoutubeData').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var songs, i, songID, song, newSong;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    i = 0;
+                    for (songID in songs) {
+                        song = songs[songID];
+                        if (song.title == undefined) {
+                            if (i > 0)
+                                continue;
+                            newSong = new Song({ youtubeID: song.youtubeID, fillData: true });
+                            newSong.save();
+                            i++;
+                        }
+                    }
+                    console.log('Tried adding to lost songs');
+                    return [2];
+            }
+        });
+    }); });
+    $('#advancedSettings-deleteLost').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var songs, songID, song;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    for (songID in songs) {
+                        song = songs[songID];
+                        if (song.title == undefined) {
+                            song.delete();
+                        }
+                    }
+                    console.log('Deleted all lost songs');
+                    return [2];
+            }
+        });
+    }); });
+    $('#advancedSettings-downloadAllSongs').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var songs, songID;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    for (songID in songs) {
+                        songs[songID].download({});
+                    }
+                    return [2];
+            }
+        });
+    }); });
     $('#info-button').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
         var _this = this;
         return __generator(this, function (_a) {
@@ -262,6 +449,7 @@ $(function () {
                                 var songStorageSize = (size / 1024 / 1024).toFixed(2);
                                 $('#info-downloadedSongsStorageSize').html('Downloaded Songs storage size: ' + songStorageSize + ' MB');
                             });
+                            $('#info-songsLocation').html("Songs Location: " + songStoragePos);
                             return [2];
                     }
                 });
@@ -312,4 +500,26 @@ $(function () {
         });
     }); });
 });
+function removeSongsWithMP3end() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, saveData1(function (data) {
+                        var songs = data.songs;
+                        for (var songID in songs) {
+                            var song = songs[songID];
+                            if (songID.includes('.mp3')) {
+                                delete data.songs[songID];
+                            }
+                        }
+                        return data;
+                    })];
+                case 1:
+                    _a.sent();
+                    console.log('Done');
+                    return [2];
+            }
+        });
+    });
+}
 //# sourceMappingURL=settings.js.map

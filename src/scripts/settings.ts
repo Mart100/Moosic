@@ -15,9 +15,12 @@ $(() => {
     })
   })
 
-  $('#appearanceSettings-songSize input').on('input', () => {
+  $('#appearanceSettings-songSize input').on('input', async () => {
     let v = $('#appearanceSettings-songSize input').val()
     songHeight = Number(v)
+    $('#appearanceSettings .songs').show()
+    let songs = await getSongs()
+    showSongs(songs, {refresh: true})
   })
 
   $('#importData-button').on('click', () => {
@@ -78,6 +81,52 @@ $(() => {
 
         songStoragePos = newStoragePos
       })
+    })
+
+    elem.trigger('click')
+  })
+
+  // import from mp3 folder
+  $('#importData-mp3Folder-button').on('click', () => {
+    let elem = $('<input type="file" webkitdirectory directory/>')
+
+    elem.on('change', async (event) => {
+      let pos = elem.prop('files')[0].path
+      pos = pos.replace(/\\/g, '/')
+
+      fs.readdir(pos, async (err, files) => { 
+        if(err) console.error(err)
+
+        let songs = {}
+
+        for(let idx in files) {
+          let file = files[idx]
+          let youtubeID = file.split('.')[0]
+          let stats = fs.statSync(pos+'\\'+file)
+          console.log(stats)
+          let creationdate = stats.ctimeMs
+          let accessedDate = stats.atimeMs
+          let song = new Song({youtubeID: youtubeID, fillData: true, saveDate: creationdate, lastPlayed: accessedDate})
+          songs[youtubeID] = song
+          await sleep(10)
+        }
+
+        let collName = await createNewCollection('MP3 collection')
+
+        await saveData1((database) => {
+
+          let mergedSongs = { ...database.songs, ...songs}
+          database.songs = mergedSongs
+
+          database.collections.find(c => c.name == collName).songs = Object.keys(songs)
+
+          return database
+        })
+        
+        console.log('Done importing songs from mp3 folder')
+
+      })
+
     })
 
     elem.trigger('click')
@@ -162,6 +211,94 @@ $(() => {
     })
   })
 
+  $('#advanced-button').on('click', async () => {
+    $('#settings-main').fadeOut(250, () => {
+      $('#advancedSettings').fadeIn(250)
+    })
+  })
+
+  $('#advancedSettings-repairSave').on('click', async () => {
+
+    let songs = await getSongs()
+
+    // rename youtube ID's with .mp3 in SAVE
+    for(let songID in songs) {
+      let song = songs[songID]
+      if(songID.includes('.mp3')) {
+        let newSongID = songID.replace('.mp3', '')
+        let newSongData = song
+        newSongData.youtubeID = newSongID
+        let newSong = new Song(newSongData)
+        new Song(song).deleteSave()
+        console.log(newSong)
+        newSong.save()
+      }
+    }
+
+    // remove duplicate ID
+    let songIDs = []
+    for(let songID in songs) {
+      let song = songs[songID]
+      if(songIDs.includes(songID)) { 
+        console.log(songID)
+        song.deleteSave()
+      }
+      songIDs.push(songID)
+    }
+
+    // rename files with .mp3.mp3
+    fs.readdir(songStoragePos, async (err, files) => { 
+      if(err) console.error(err)
+      for(let file of files) {
+        if(file.includes('.mp3.mp3')) {
+          let newFileName = file.replace('.mp3.mp3', '') + '.mp3'
+          fs.rename(songStoragePos+'\\'+file, songStoragePos+'\\'+newFileName, (err) => {
+            if(err) throw err
+          })
+        }
+      }
+
+    })
+
+    console.log('Done repairing!')
+
+  })
+
+  $('#advancedSettings-addYoutubeData').on('click', async () => {
+    let songs = await getSongs()
+    let i = 0
+    for(let songID in songs) {
+      let song = songs[songID]
+      if(song.title == undefined) {
+        if(i > 0) continue
+        let newSong = new Song({youtubeID: song.youtubeID, fillData: true})
+        newSong.save()
+        i++
+      }
+    }
+
+    console.log('Tried adding to lost songs')
+  })
+
+  $('#advancedSettings-deleteLost').on('click', async () => {
+    let songs = await getSongs()
+    for(let songID in songs) {
+      let song = songs[songID]
+      if(song.title == undefined) {
+        song.delete()
+      } 
+    }
+
+    console.log('Deleted all lost songs')
+  })
+
+  $('#advancedSettings-downloadAllSongs').on('click', async () => {
+    let songs = await getSongs()
+    for(let songID in songs) {
+      songs[songID].download({})
+    }
+  })
+
   $('#info-button').on('click', async () => {
     $('#settings-main').fadeOut(250, async () => {
       $('#info').fadeIn(250)
@@ -187,6 +324,8 @@ $(() => {
         let songStorageSize = (size / 1024 / 1024).toFixed(2)
         $('#info-downloadedSongsStorageSize').html('Downloaded Songs storage size: ' + songStorageSize + ' MB')
       })
+
+      $('#info-songsLocation').html("Songs Location: " + songStoragePos)
 
     })
   })
@@ -220,3 +359,19 @@ $(() => {
     fs.emptyDir(storagePos + '/songs')
   })
 })
+
+async function removeSongsWithMP3end() {
+  await saveData1((data) => {
+    let songs = data.songs
+    for(let songID in songs) {
+      let song = songs[songID]
+      if(songID.includes('.mp3')) {
+        delete data.songs[songID]
+      }
+    }
+
+    return data
+  })
+
+  console.log('Done')
+}

@@ -6,6 +6,7 @@ var BrowserWindow = electron.BrowserWindow;
 var globalShortcut = electron.globalShortcut;
 var ipcMain = electron.ipcMain;
 var log = require('electron-log');
+var fs_ = require('fs-extra');
 require('v8-compile-cache');
 var mainWindow;
 try {
@@ -34,6 +35,37 @@ app.on('ready', function () {
             mainWindow.webContents.openDevTools();
         });
     }
+    var backedUpDatabase = false;
+    mainWindow.on('close', function (e) {
+        if (!backedUpDatabase)
+            e.preventDefault();
+        else
+            return;
+        var storagePos = process.env.APPDATA + '\\moosic' + '\\storage';
+        var databasePos = storagePos + '\\' + 'database.json';
+        console.log('Tried closing: ', databasePos);
+        fs_.readFile(databasePos, 'utf8', function (err, obj) {
+            try {
+                var parsedObj = JSON.parse(obj);
+            }
+            catch (error) {
+                err = error;
+            }
+            if (err) {
+                console.log(err);
+                backedUpDatabase = true;
+                app.quit();
+                return;
+            }
+            fs_.copyFile(databasePos, storagePos + '\\' + 'database_backup.json', function (err) {
+                if (err)
+                    throw err;
+                console.log('Successfully backed up database.json');
+                backedUpDatabase = true;
+                app.quit();
+            });
+        });
+    });
     mainWindow.on('closed', function () { win = null; });
     globalShortcut.register('MediaPlayPause', function () {
         mainWindow.webContents.executeJavaScript("onMediaPlayPause()");

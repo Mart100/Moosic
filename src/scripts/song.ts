@@ -47,6 +47,7 @@ class Song {
         maxResults: 1
       })
       request.execute((response) => {
+        console.log(this.youtubeID, response)
         resolve(response.items[0])
       })
     })
@@ -64,7 +65,7 @@ class Song {
 
     let DBsong = await getSongByID(this.youtubeID)
     if(DBsong != undefined) {
-      this.saveDate = DBsong.saveData || undefined
+      this.saveDate = this.saveDate || DBsong.saveData || undefined
       this.saved = DBsong.saved || this.saved
       this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool
       this.liked = DBsong.liked || this.liked
@@ -112,9 +113,22 @@ class Song {
   }
   async download(options:any) {
 
-    if(await this.isDownloaded() && !options.redownload) return
+    let isDownloaded = await this.isDownloaded() 
+    if(isDownloaded && !options.redownload) return
+
+    let songPos = this.getDownloadLocation()
+    let redownload = false
+    if(isDownloaded && options.redownload && fs.existsSync(songPos)) redownload = true
+
 
     await songDownloader.queueNewDownload(this.youtubeID, options)
+
+    if(redownload) {
+      console.log('Unloading Howler Because redownloaded song')
+      Howler.unload()
+      await sleep(100)
+      musicPlayer.play(musicPlayer.currentSong)
+    }
 
     this.isDownloadedBool = true
 
@@ -123,7 +137,7 @@ class Song {
     return
   }
   getDownloadLocation() {
-    return songStoragePos+'/'+this.youtubeID+'.mp3'
+    return songStoragePos+'\\'+this.youtubeID+'.mp3'
   }
   async isDownloaded() {
     if(this.isDownloadedBool) return this.isDownloadedBool
@@ -135,6 +149,15 @@ class Song {
       if(this.saved) this.save()
       return mp3Exists
     }
+  }
+  async deleteSave() {
+    await saveData1((database) => {
+      console.log('DELETE: '+ this.youtubeID)
+      delete database.songs[this.youtubeID]
+      return database
+    })
+
+    return
   }
   async delete() {
 

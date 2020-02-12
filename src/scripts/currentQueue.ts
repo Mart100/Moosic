@@ -2,6 +2,7 @@ let progressBarInterval
 
 $(() => {
   $('#currentSong').on('click', () => {
+    if(!musicPlayer.currentSong) return
     $('#currentQueue').fadeIn()
     updateSongFocus()
   })

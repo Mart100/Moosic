@@ -126,6 +126,13 @@ var SongDownloader = (function () {
                                     return [2];
                                 });
                             }); };
+                            setTimeout(function () {
+                                if (_this.finished.includes(songID))
+                                    return;
+                                _this.inProgress.splice(_this.inProgress.indexOf(songID), 1);
+                                _this.moveQueue();
+                                resolve();
+                            }, 10000);
                             return [2];
                         });
                     }); })];

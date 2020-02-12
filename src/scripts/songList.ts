@@ -320,10 +320,14 @@ async function showTooltipForSong(song:Song) {
   let songsElem = getCurrentSongsElement()
   let songElem = songsElem.find('#song-'+song.youtubeID)
 
+  let isDownloaded = await song.isDownloaded()
+  let downloadText = 'Download'
+  if(isDownloaded) downloadText = 'Redownload'
+
   if(songElem.find('.tooltip')[0]) songElem.find('.tooltip').remove()
   let tooltipHTML = $(`
   <div class="tooltip">
-    <button class="download">Download</button>
+    <button class="download">${downloadText}</button>
     <button class="openInYoutube">Open in youtube</button>
     <button class="addToCollection">Add to collection</button>
     <button class="playSimularSongs">Play similar songs</button>
@@ -386,7 +390,7 @@ async function showTooltipForSong(song:Song) {
     FileSaver.saveAs(song.getDownloadLocation(), `${song.title}.mp3`)
   })
   tooltip.find('.download').on('click', async (e) => {
-    song.download({})
+    song.download({redownload: true})
   })
   tooltip.find('.openInYoutube').on('click', async (e) => {
     openURL(`https://youtube.com/watch?v=${song.youtubeID}`)

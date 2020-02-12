@@ -15,6 +15,7 @@ interface databaseCollection {
 }
 
 let databaseFileLoc = storagePos + '/database.json'
+let revertToBackupConfirm:boolean
 
 function getData(): Promise<any> {
   return new Promise(async (resolve, reject) => {
@@ -35,7 +36,36 @@ function getData(): Promise<any> {
           resolve(await getData())
         }
       }
-      let objParsed:any = JSON.parse(obj)
+      let objParsed:any
+
+      try {
+        objParsed = JSON.parse(obj)
+      } catch(e) {
+        console.error(e)
+        if(revertToBackupConfirm == false) return
+        revertToBackupConfirm = false
+        let databasePos = storagePos+'\\'+'database.json'
+        let databaseBackupPos = storagePos+'\\'+'database_backup.json'
+        let stats = fs.statSync(databaseBackupPos)
+        let backupDate = new Date(stats.mtimeMs)
+        let txt = `
+An error has occured:
+${e}\n
+This most likely means the database where your songs are stored has become corrupted.\n
+Would you like to revert to a backup from:
+${backupDate}
+?`
+        if(confirm(txt)) {
+          revertToBackupConfirm = true
+          fs.copyFile(databaseBackupPos, databasePos, (err) => {
+            if(err) throw err;
+            console.log('Successfully applied database_backup.json to database.json!')
+            alert('Successfully backed up!')
+          })
+        } else {
+          revertToBackupConfirm = false
+        }
+      }
 
       let DBsongs: Song[] = []
 
