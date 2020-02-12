@@ -55,9 +55,20 @@ $(function () {
         FileSaver.saveAs(filename, "Moosic-Data.json");
     });
     $('#appearance-button').on('click', function () {
-        $('#settings-main').fadeOut(250, function () {
-            $('#appearanceSettings').fadeIn(250);
-        });
+        $('#settings-main').fadeOut(250, function () { return __awaiter(_this, void 0, void 0, function () {
+            var database;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4, getData()];
+                    case 1:
+                        database = _a.sent();
+                        $('#appearanceSettings').fadeIn(250);
+                        console.log('yatta yeet', database.settings.songTileSize);
+                        $('#appearanceSettings-songSize input').val(database.settings.songTileSize);
+                        return [2];
+                }
+            });
+        }); });
     });
     $('#appearanceSettings-songSize input').on('input', function () { return __awaiter(_this, void 0, void 0, function () {
         var v, songs;
@@ -73,6 +84,17 @@ $(function () {
                     showSongs(songs, { refresh: true });
                     return [2];
             }
+        });
+    }); });
+    $('#appearanceSettings-songSize input').on('change', function () { return __awaiter(_this, void 0, void 0, function () {
+        var v;
+        return __generator(this, function (_a) {
+            v = $('#appearanceSettings-songSize input').val();
+            saveData1(function (database) {
+                database.settings.songTileSize = v;
+                return database;
+            });
+            return [2];
         });
     }); });
     $('#importData-button').on('click', function () {

@@ -9,8 +9,11 @@ $(() => {
   })
 
   $('#appearance-button').on('click', () => {
-    $('#settings-main').fadeOut(250, () => {
+    $('#settings-main').fadeOut(250, async () => {
+      let database = await getData()
       $('#appearanceSettings').fadeIn(250)
+      console.log('yatta yeet', database.settings.songTileSize)
+      $('#appearanceSettings-songSize input').val(database.settings.songTileSize)
       
     })
   })
@@ -21,6 +24,14 @@ $(() => {
     $('#appearanceSettings .songs').show()
     let songs = await getSongs()
     showSongs(songs, {refresh: true})
+  })
+
+  $('#appearanceSettings-songSize input').on('change', async () => {
+    let v = $('#appearanceSettings-songSize input').val()
+    saveData1((database) => {
+      database.settings.songTileSize = v
+      return database
+    })
   })
 
   $('#importData-button').on('click', () => {

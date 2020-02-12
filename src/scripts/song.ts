@@ -12,6 +12,7 @@ class Song {
   lastPlayed?: number
   saveDate?: number
   isDownloadedBool?: boolean
+  playedTimes?: number[]
 
   constructor(data?) {
 
@@ -26,6 +27,8 @@ class Song {
     if(this.liked == undefined) this.liked = false
     this.order = data.order
     this.lastPlayed = data.lastPlayed
+    this.playedTimes = data.playedTimes
+    if(!this.playedTimes) this.playedTimes = []
     this.saveDate = data.saveDate
     this.isDownloadedBool = data.isDownloadedBool
 

@@ -116,7 +116,8 @@ function createEmptyDatabase() {
       "songs": {},
       "collections": [],
       "settings": {
-        "discordRPC": false
+        "discordRPC": false,
+        "songTileSize": 80
       }
     }
 

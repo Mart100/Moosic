@@ -56,6 +56,13 @@ class MusicPlayer extends EventEmitter {
     console.log(songQueueIDX)
 
     if(this.currentSong.saved) {
+      
+      let minuteDate = Math.floor(Date.now()/1000/60)
+      let playedTimes = this.currentSong.playedTimes
+      let lastPlayedDate = playedTimes[playedTimes.length-1]
+      if(lastPlayedDate == undefined) lastPlayedDate = 0
+      if(minuteDate > lastPlayedDate) playedTimes.push(minuteDate)
+
       this.currentSong.lastPlayed = Date.now()
       this.currentSong.save()
     } 

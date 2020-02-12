@@ -39,7 +39,7 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, refreshSongList, _i, songs_1, s, song, filterOut, songTxt, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
+        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, refreshSongList, _i, songs_1, s, song, filterOut, songTxt, mode_1, now_1, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
@@ -63,7 +63,8 @@ function showSongs(songs, options) {
                     if (songsElem[0].parentElement.id == 'search')
                         options.topBar = false;
                     if (songsElem.find('.topBar')[0] == undefined)
-                        songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\">\n      <img class=\"clearSearch\" src=\"./images/delete.png\">\n      </input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\">Last added</div>\n          <div id=\"sortby-alphabetic\" class=\"button2\">Alphabetic</div>\n          <div id=\"sortby-lastplayed\" class=\"button2\">Last played</div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\">Downloaded</div>\n          <div id=\"filter-liked\" class=\"button2\">Liked</div>\n        </div>\n      </div>\n    </div>\n  ");
+                        songsElem.prepend("    \n    <div class=\"topBar\">\n      <input class=\"search\" placeholder=\"Search songs\">\n      <img class=\"clearSearch\" src=\"./images/delete.png\">\n      </input>\n      <img class=\"filterButton\" src=\"images/filter.png\"/>\n      <div class=\"filters\">\n        <div class=\"sortBy\">\n          <span class=\"title\">Sort by:</span>\n          <hr>\n          <div id=\"sortby-lastadded\" class=\"button2\"><span>Last added</span></div>\n          <div id=\"sortby-alphabetic\" class=\"button2\"><span>Alphabetic</span></div>\n          <div id=\"sortby-lastplayed\" class=\"button2\"><span>Last played</span></div>\n          <div id=\"sortby-mostplayed\" class=\"button2\"><span>Most played</span></div>\n        </div>\n        <div class=\"filter\">\n          <span class=\"title\">Filter:</span>\n          <hr>\n          <div id=\"filter-downloaded\" class=\"button2\"><span>Downloaded</span></div>\n          <div id=\"filter-liked\" class=\"button2\"><span>Liked</span></div>\n        </div>\n      </div>\n    </div>\n  ");
+                    $("#sortby-mostplayed").html('<span>Most played</span>');
                     $('.filters .button2').each(function (i, a) {
                         var b = a.id.split('-');
                         var c = filters[b[0]][b[1]];
@@ -71,6 +72,10 @@ function showSongs(songs, options) {
                             $(a).addClass('selected');
                         else
                             $(a).removeClass('selected');
+                        if (filters['sortby']['mostplayed']) {
+                            $("#sortby-mostplayed").html("\n      <span>Most played:</span>\n      <div class=\"day\">Today</div>\n      <div class=\"week\">This week</div>\n      <div class=\"month\">This month</div>\n      <div class=\"year\">This year</div>\n      <div class=\"alltime\">All time</div>\n      ");
+                            $("#sortby-mostplayed div." + filters.mostplayedmode).addClass('selected');
+                        }
                     });
                     songsElem.find('.topBar .clearSearch').off().on('click', function () {
                         songsElem.find('.topBar .search').val('');
@@ -102,10 +107,7 @@ function showSongs(songs, options) {
                         songsElem.find('.topBar .clearSearch').hide();
                     }
                     searchFilter = (searchTxt != undefined) && (searchTxt != "");
-                    console.log(filters);
-                    console.log(options);
                     refreshSongList = (songListElem.html().length < 1 || options.refresh);
-                    console.log('refreshSongList: ', refreshSongList);
                     if (refreshSongList) {
                         for (_i = 0, songs_1 = songs; _i < songs_1.length; _i++) {
                             s = songs_1[_i];
@@ -131,6 +133,15 @@ function showSongs(songs, options) {
                             if (filters.sortby.lastadded) {
                                 refinedSongs.sort(function (a, b) {
                                     return b.saveDate - a.saveDate;
+                                });
+                            }
+                            if (filters.sortby.mostplayed) {
+                                mode_1 = filters.mostplayedmode;
+                                now_1 = Date.now();
+                                refinedSongs.sort(function (a, b) {
+                                    var scoreA = countMostPlayedScores(a, mode_1, now_1);
+                                    var scoreB = countMostPlayedScores(b, mode_1, now_1);
+                                    return scoreB - scoreA;
                                 });
                             }
                             if (filters.sortby.lastplayed) {
@@ -165,7 +176,8 @@ function showSongs(songs, options) {
                     }
                     songListElem.on('scroll', function () {
                         var songNum = Math.floor(songListElem.scrollTop() / songHeight);
-                        for (var i = -2; i < 10; i++)
+                        var loadSize = Math.ceil(songListElem.height() / songHeight) + 2;
+                        for (var i = -2; i < loadSize; i++)
                             loadSong(songNum + i, refinedSongs, songListElem);
                     });
                     songListElem.trigger('scroll');
@@ -193,9 +205,16 @@ function showSongs(songs, options) {
                     });
                     $('.button2').off().on('click', function (e) {
                         $(e.target).toggleClass('selected');
-                        var a = e.target.id.split('-')[0];
-                        var b = e.target.id.split('-')[1];
-                        if ($(e.target).hasClass('selected')) {
+                        var elem = e.target;
+                        var subElem = false;
+                        if (!$(elem).parent().hasClass("sortBy") && !$(elem).parent().hasClass("filter")) {
+                            elem = $(elem).parent()[0];
+                            subElem = true;
+                        }
+                        var a = elem.id.split('-')[0];
+                        var b = elem.id.split('-')[1];
+                        if ($(e.target).hasClass('selected') || subElem) {
+                            console.log(a, b);
                             filters[a][b] = true;
                             if (a == 'sortby') {
                                 $('.sortby .button2').removeClass('selected');
@@ -203,7 +222,20 @@ function showSongs(songs, options) {
                                 filters.sortby.alphabetic = false;
                                 filters.sortby.lastplayed = false;
                                 filters.sortby.lastadded = false;
+                                filters.sortby.mostplayed = false;
                                 filters[a][b] = true;
+                                if (b == 'mostplayed') {
+                                    if (subElem) {
+                                        console.log(e.target.classList);
+                                        var mode = e.target.classList[0];
+                                        $(e.target).addClass('selected');
+                                        filters.mostplayedmode = mode;
+                                    }
+                                    else {
+                                        $("#sortby-mostplayed").html("\n            <span>Most played:</span>\n            <div class=\"day\">Today</div>\n            <div class=\"week\">This week</div>\n            <div class=\"month\">This month</div>\n            <div class=\"year\">This year</div>\n            <div class=\"alltime\">All time</div>\n            ");
+                                        return;
+                                    }
+                                }
                             }
                         }
                         else {
@@ -227,6 +259,24 @@ function showSongs(songs, options) {
         });
     });
 }
+function countMostPlayedScores(song, mode, now) {
+    var score = 0;
+    for (var _i = 0, _a = song.playedTimes; _i < _a.length; _i++) {
+        var dateM = _a[_i];
+        var dateMs = dateM * 60 * 1000;
+        if (mode == 'day' && now - dateMs < 1000 * 60 * 60 * 24)
+            score++;
+        if (mode == 'week' && now - dateMs < 1000 * 60 * 60 * 24 * 7)
+            score++;
+        if (mode == 'month' && now - dateMs < 1000 * 60 * 60 * 24 * 31)
+            score++;
+        if (mode == 'year' && now - dateMs < 1000 * 60 * 60 * 24 * 365)
+            score++;
+        if (mode == 'alltime')
+            score++;
+    }
+    return score;
+}
 function resetFilters() {
     filters = {
         filter: {
@@ -237,15 +287,19 @@ function resetFilters() {
             lastadded: true,
             alphabetic: false,
             lastplayed: false,
+            mostplayed: false,
             none: false
-        }
+        },
+        mostplayedmode: 'day'
     };
 }
 function setSortByNone() {
-    filters.lastadded = false;
-    filters.alphabetic = false;
-    filters.lastplayed = false;
-    filters.none = true;
+    filters.sortby.lastadded = false;
+    filters.sortby.alphabetic = false;
+    filters.sortby.lastplayed = false;
+    filters.sortby.mostplayed = false;
+    filters.sortby.none = true;
+    filters.mostplayedmode;
 }
 function getCurrentSongsElement() {
     return $(Object.values($('.songs')).filter(function (e) { return $(e).hasClass('songs') && $(e).css('display') != 'none'; })[0]);
@@ -279,11 +333,25 @@ function loadSong(idx, songs, songListElem) {
     if (song.liked)
         songHTML.find(" .buttons .like").attr('src', './images/red-heart.png');
     var SSP = songHeight / 5;
+    var RSH = songHeight - SSP;
+    var buttonsHeight = RSH;
+    var buttonsWidth = 40;
+    var buttonsPadding = 0;
+    var likeButtonSize = (RSH - 8) / 2 - 10;
+    var moreButtonSize = (RSH - 8) / 2;
+    if ((likeButtonSize + 10 + moreButtonSize + 8) < 50) {
+        console.log('SIDEWAYS');
+        likeButtonSize = (RSH - 8) / 1.3 - 10;
+        moreButtonSize = (RSH - 8) / 1.3;
+        buttonsWidth = 80;
+        buttonsPadding = (RSH - RSH / 1.3) / 2;
+        buttonsHeight = RSH - buttonsPadding * 2;
+    }
     songHTML.css({ 'height': songHeight - SSP, 'padding': SSP / 2 - 1 });
-    songHTML.find('.like').css({ 'height': (songHeight - 8 - SSP) / 2 - 10, 'width': (songHeight - 8 - SSP) / 2 - 10 });
-    songHTML.find('.buttons').css({ 'height': songHeight - SSP });
-    songHTML.find('.more').css({ 'height': (songHeight - 8 - SSP) / 2, 'width': (songHeight - 8 - SSP) / 2 });
-    songHTML.find('.image').css({ 'height': songHeight - SSP, 'width': songHeight - SSP });
+    songHTML.find('.like').css({ 'height': likeButtonSize, 'width': likeButtonSize });
+    songHTML.find('.buttons').css({ 'height': buttonsHeight, 'width': buttonsWidth, 'padding': buttonsPadding });
+    songHTML.find('.more').css({ 'height': moreButtonSize, 'width': moreButtonSize });
+    songHTML.find('.image').css({ 'height': RSH, 'width': RSH });
     songListElem.find("#song-" + song.youtubeID).replaceWith(songHTML);
     songHTML.on('click', function (e) { onSongClick(e, currentSongList); });
     songHTML.find('.like').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {

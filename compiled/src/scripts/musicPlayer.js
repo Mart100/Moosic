@@ -68,7 +68,7 @@ var MusicPlayer = (function (_super) {
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists, songDuration;
+            var queueIDlist, idx, songQueueIDX, minuteDate, playedTimes, lastPlayedDate, songLoc, mp3Exists, songDuration;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
@@ -89,6 +89,13 @@ var MusicPlayer = (function (_super) {
                             this.queuePosition = songQueueIDX;
                         console.log(songQueueIDX);
                         if (this.currentSong.saved) {
+                            minuteDate = Math.floor(Date.now() / 1000 / 60);
+                            playedTimes = this.currentSong.playedTimes;
+                            lastPlayedDate = playedTimes[playedTimes.length - 1];
+                            if (lastPlayedDate == undefined)
+                                lastPlayedDate = 0;
+                            if (minuteDate > lastPlayedDate)
+                                playedTimes.push(minuteDate);
                             this.currentSong.lastPlayed = Date.now();
                             this.currentSong.save();
                         }

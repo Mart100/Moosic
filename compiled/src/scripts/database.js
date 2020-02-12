@@ -153,7 +153,8 @@ function createEmptyDatabase() {
             "songs": {},
             "collections": [],
             "settings": {
-                "discordRPC": false
+                "discordRPC": false,
+                "songTileSize": 80
             }
         };
         fs.writeJson(databaseFileLoc, obj, function (err) { return __awaiter(_this, void 0, void 0, function () {

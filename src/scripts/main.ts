@@ -58,8 +58,16 @@ $(() => {
   setTimeout(() => {
     $('#navigator .mySongs').trigger('click')
   }, 100)
+  
+  started()
 
 })
+
+
+async function started() {
+  let database = await getData()
+  songHeight = database.settings.songTileSize
+}
 
 
 async function getSongs() {

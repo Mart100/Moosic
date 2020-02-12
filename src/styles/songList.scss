@@ -43,7 +43,7 @@
 }
 
 .songs .topBar .filters.expanded {
-  height: 150px;
+  height: auto;
 }
 
 .songs .topBar .filters .sortBy {
@@ -66,13 +66,26 @@
   margin: 2px;
   color: rgb(150, 150, 150);
   cursor: pointer;
-}
 
-.songs .topBar .filters .button2.selected {
-  color: white;
-}
-.songs .topBar .filters .button2:hover {
-  background-color: rgb(30, 30, 30);
+  span {
+    pointer-events: none;
+  }
+
+  &.selected > span {
+    color: white;
+  }
+
+  div {
+    font-size: 15px;
+
+    &.selected {
+      color: white;
+    }
+  }
+
+  &:hover {
+    background-color: rgb(30, 30, 30);
+  }
 }
 
 .topBar .search {
@@ -174,7 +187,7 @@
   position: absolute;
   margin-top: 0px;
   right: 10px;
-  width: 50px;
+  width: 40px;
   height: 80px;
   transition-duration: 0.3s;
   border-radius: 10%;

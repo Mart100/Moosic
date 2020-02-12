@@ -97,7 +97,22 @@ $(function () {
     setTimeout(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);
+    started();
 });
+function started() {
+    return __awaiter(this, void 0, void 0, function () {
+        var database;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getData()];
+                case 1:
+                    database = _a.sent();
+                    songHeight = database.settings.songTileSize;
+                    return [2];
+            }
+        });
+    });
+}
 function getSongs() {
     return __awaiter(this, void 0, void 0, function () {
         var database, rawSongs, songs, _i, rawSongs_1, rawSong, song;

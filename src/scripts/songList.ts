@@ -36,24 +36,40 @@ async function showSongs(songs, options) {
         <div class="sortBy">
           <span class="title">Sort by:</span>
           <hr>
-          <div id="sortby-lastadded" class="button2">Last added</div>
-          <div id="sortby-alphabetic" class="button2">Alphabetic</div>
-          <div id="sortby-lastplayed" class="button2">Last played</div>
+          <div id="sortby-lastadded" class="button2"><span>Last added</span></div>
+          <div id="sortby-alphabetic" class="button2"><span>Alphabetic</span></div>
+          <div id="sortby-lastplayed" class="button2"><span>Last played</span></div>
+          <div id="sortby-mostplayed" class="button2"><span>Most played</span></div>
         </div>
         <div class="filter">
           <span class="title">Filter:</span>
           <hr>
-          <div id="filter-downloaded" class="button2">Downloaded</div>
-          <div id="filter-liked" class="button2">Liked</div>
+          <div id="filter-downloaded" class="button2"><span>Downloaded</span></div>
+          <div id="filter-liked" class="button2"><span>Liked</span></div>
         </div>
       </div>
     </div>
   `)
+
+  $("#sortby-mostplayed").html('<span>Most played</span>')
   $('.filters .button2').each((i, a) => {
     let b = a.id.split('-')
     let c = filters[b[0]][b[1]]
+
     if(c) $(a).addClass('selected')
     else $(a).removeClass('selected')
+
+    if(filters['sortby']['mostplayed']) {
+      $("#sortby-mostplayed").html(`
+      <span>Most played:</span>
+      <div class="day">Today</div>
+      <div class="week">This week</div>
+      <div class="month">This month</div>
+      <div class="year">This year</div>
+      <div class="alltime">All time</div>
+      `)
+      $(`#sortby-mostplayed div.${filters.mostplayedmode}`).addClass('selected')
+    }
   })
 
   songsElem.find('.topBar .clearSearch').off().on('click', () => {
@@ -91,11 +107,11 @@ async function showSongs(songs, options) {
   }
   let searchFilter = (searchTxt != undefined) && (searchTxt != "")
 
-  console.log(filters)
-  console.log(options)
+  //console.log(filters)
+  //console.log(options)
 
   let refreshSongList = (songListElem.html().length < 1 || options.refresh)
-  console.log('refreshSongList: ', refreshSongList)
+  //console.log('refreshSongList: ', refreshSongList)
 
   if(refreshSongList) {
 
@@ -126,6 +142,15 @@ async function showSongs(songs, options) {
       if(filters.sortby.lastadded) {
         refinedSongs.sort((a,b) => {
           return b.saveDate - a.saveDate
+        })
+      }
+      if(filters.sortby.mostplayed) {
+        let mode = filters.mostplayedmode
+        let now = Date.now()
+        refinedSongs.sort((a, b) => {
+          let scoreA = countMostPlayedScores(a, mode, now)
+          let scoreB = countMostPlayedScores(b, mode, now)
+          return scoreB-scoreA
         })
       }
       if(filters.sortby.lastplayed) {
@@ -159,7 +184,8 @@ async function showSongs(songs, options) {
 
   songListElem.on('scroll', () => {
     let songNum = Math.floor(songListElem.scrollTop()/songHeight)
-    for(let i=-2;i<10;i++) loadSong(songNum+i, refinedSongs, songListElem)
+    let loadSize = Math.ceil(songListElem.height()/songHeight)+2
+    for(let i=-2;i<loadSize;i++) loadSong(songNum+i, refinedSongs, songListElem)
   })
 
   songListElem.trigger('scroll')
@@ -191,10 +217,19 @@ async function showSongs(songs, options) {
   $('.button2').off().on('click', (e) => {
     $(e.target).toggleClass('selected')
 
-    let a = e.target.id.split('-')[0]
-    let b = e.target.id.split('-')[1]
 
-    if($(e.target).hasClass('selected')) {
+    let elem = e.target
+    let subElem = false
+    if(!$(elem).parent().hasClass("sortBy") && !$(elem).parent().hasClass("filter")) {
+      elem = $(elem).parent()[0]
+      subElem = true
+    }
+
+    let a = elem.id.split('-')[0]
+    let b = elem.id.split('-')[1]
+
+    if($(e.target).hasClass('selected') || subElem) {
+      console.log(a, b)
       filters[a][b] = true
 
       if(a == 'sortby') {
@@ -203,7 +238,30 @@ async function showSongs(songs, options) {
         filters.sortby.alphabetic = false
         filters.sortby.lastplayed = false
         filters.sortby.lastadded = false
+        filters.sortby.mostplayed = false
         filters[a][b] = true
+
+        if(b == 'mostplayed') {
+          if(subElem) {
+            console.log(e.target.classList)
+            let mode = e.target.classList[0]
+            $(e.target).addClass('selected')
+            filters.mostplayedmode = mode
+          } else {
+            $("#sortby-mostplayed").html(`
+            <span>Most played:</span>
+            <div class="day">Today</div>
+            <div class="week">This week</div>
+            <div class="month">This month</div>
+            <div class="year">This year</div>
+            <div class="alltime">All time</div>
+            `)
+      
+            return
+          }
+
+        }
+
       }
 
 
@@ -230,6 +288,18 @@ async function showSongs(songs, options) {
   console.log('SHOW SONGLIST')
 }
 
+function countMostPlayedScores(song:Song, mode:string, now:number):number {
+  let score = 0
+  for(let dateM of song.playedTimes) {
+    let dateMs = dateM*60*1000
+    if(mode == 'day' && now-dateMs < 1000*60*60*24) score++
+    if(mode == 'week' && now-dateMs < 1000*60*60*24*7) score++
+    if(mode == 'month' && now-dateMs < 1000*60*60*24*31) score++
+    if(mode == 'year' && now-dateMs < 1000*60*60*24*365) score++
+    if(mode == 'alltime') score++
+  }
+  return score
+}
 function resetFilters() {
   filters = {
     filter: {
@@ -240,16 +310,20 @@ function resetFilters() {
       lastadded: true,
       alphabetic: false,
       lastplayed: false,
+      mostplayed: false,
       none: false
-    }
+    },
+    mostplayedmode: 'day'
   }
 }
 
 function setSortByNone() {
-  filters.lastadded = false
-  filters.alphabetic = false
-  filters.lastplayed = false
-  filters.none = true
+  filters.sortby.lastadded = false
+  filters.sortby.alphabetic = false
+  filters.sortby.lastplayed = false
+  filters.sortby.mostplayed = false
+  filters.sortby.none = true
+  filters.mostplayedmode
 }
 function getCurrentSongsElement() {
   return $(Object.values($('.songs')).filter(e => $(e).hasClass('songs') && $(e).css('display') != 'none')[0])
@@ -283,11 +357,25 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
   if(song.liked) songHTML.find(` .buttons .like`).attr('src', './images/red-heart.png')
 
   let SSP = songHeight/5 // Song Style Padding
+  let RSH = songHeight-SSP // Real Song Height
+  let buttonsHeight = RSH
+  let buttonsWidth = 40
+  let buttonsPadding = 0
+  let likeButtonSize = (RSH-8)/2-10
+  let moreButtonSize = (RSH-8)/2
+  if((likeButtonSize + 10 + moreButtonSize + 8) < 50) {
+    console.log('SIDEWAYS')
+    likeButtonSize = (RSH-8)/1.3-10
+    moreButtonSize = (RSH-8)/1.3
+    buttonsWidth = 80
+    buttonsPadding = (RSH - RSH/1.3)/2
+    buttonsHeight = RSH-buttonsPadding*2
+  }
   songHTML.css({'height': songHeight-SSP, 'padding': SSP/2-1})
-  songHTML.find('.like').css({'height': (songHeight-8-SSP)/2-10, 'width':(songHeight-8-SSP)/2-10})
-  songHTML.find('.buttons').css({'height': songHeight-SSP})
-  songHTML.find('.more').css({'height': (songHeight-8-SSP)/2, 'width': (songHeight-8-SSP)/2})
-  songHTML.find('.image').css({'height': songHeight-SSP, 'width': songHeight-SSP})
+  songHTML.find('.like').css({'height': likeButtonSize, 'width':likeButtonSize })
+  songHTML.find('.buttons').css({'height': buttonsHeight, 'width': buttonsWidth, 'padding': buttonsPadding})
+  songHTML.find('.more').css({'height': moreButtonSize, 'width': moreButtonSize })
+  songHTML.find('.image').css({'height': RSH, 'width': RSH})
 
   songListElem.find(`#song-${song.youtubeID}`).replaceWith(songHTML)
 
