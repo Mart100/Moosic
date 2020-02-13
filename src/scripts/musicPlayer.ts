@@ -39,6 +39,8 @@ class MusicPlayer extends EventEmitter {
 
     console.log(song)
 
+    
+    if(song.title == undefined) return
     if(song.youtubeID == undefined) return
 
     // check if song is is queue
@@ -56,13 +58,6 @@ class MusicPlayer extends EventEmitter {
     console.log(songQueueIDX)
 
     if(this.currentSong.saved) {
-      
-      let minuteDate = Math.floor(Date.now()/1000/60)
-      let playedTimes = this.currentSong.playedTimes
-      let lastPlayedDate = playedTimes[playedTimes.length-1]
-      if(lastPlayedDate == undefined) lastPlayedDate = 0
-      if(minuteDate > lastPlayedDate) playedTimes.push(minuteDate)
-
       this.currentSong.lastPlayed = Date.now()
       this.currentSong.save()
     } 
@@ -244,6 +239,15 @@ class MusicPlayer extends EventEmitter {
   }
   onEndListenerMp3() {
     this.HowlSound.on('end', () => {
+
+      // add timestamp to playedTimes
+      let minuteDate = Math.floor(Date.now()/1000/60)
+      let playedTimes = this.currentSong.playedTimes
+      let lastPlayedDate = playedTimes[playedTimes.length-1]
+      if(lastPlayedDate == undefined) lastPlayedDate = 0
+      if(minuteDate > lastPlayedDate) playedTimes.push(minuteDate)
+
+
       this.nextInQueue()
       this.emit('end')
     })
