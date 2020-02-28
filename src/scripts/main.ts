@@ -181,12 +181,18 @@ $(() => {
     if(dragEnterTime > new Date().getTime()-10) return
     console.log('Leave')
     $('#dropToImportDiv').remove()
-  }).on('drop', (event:any) => {
+  }).on('drop', async (event:any) => {
     let text = event.originalEvent.dataTransfer.getData("text/plain")
     $('#dropToImportDiv').remove()
     if(!text.includes('youtube.com/watch')) return
     let youtubeID = text.split('?v=')[1]
+    if(youtubeID.includes("&")) youtubeID = youtubeID.split("&")[0]
     if(youtubeID.length != 11) return
-    new Song({youtubeID: youtubeID, fillData: true, liked: true}).like()
+    await new Song({youtubeID: youtubeID, fillData: true, liked: true}).like()
+    await sleep(500)
+    let song = await getSongByID(youtubeID)
+    currentSongList.push(song)
+    refreshCurrentSongList()
+    showSongs(currentSongList, {refresh: true})
   })
 })

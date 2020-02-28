@@ -270,15 +270,35 @@ $(function () {
             return;
         console.log('Leave');
         $('#dropToImportDiv').remove();
-    }).on('drop', function (event) {
-        var text = event.originalEvent.dataTransfer.getData("text/plain");
-        $('#dropToImportDiv').remove();
-        if (!text.includes('youtube.com/watch'))
-            return;
-        var youtubeID = text.split('?v=')[1];
-        if (youtubeID.length != 11)
-            return;
-        new Song({ youtubeID: youtubeID, fillData: true, liked: true }).like();
-    });
+    }).on('drop', function (event) { return __awaiter(_this, void 0, void 0, function () {
+        var text, youtubeID, song;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    text = event.originalEvent.dataTransfer.getData("text/plain");
+                    $('#dropToImportDiv').remove();
+                    if (!text.includes('youtube.com/watch'))
+                        return [2];
+                    youtubeID = text.split('?v=')[1];
+                    if (youtubeID.includes("&"))
+                        youtubeID = youtubeID.split("&")[0];
+                    if (youtubeID.length != 11)
+                        return [2];
+                    return [4, new Song({ youtubeID: youtubeID, fillData: true, liked: true }).like()];
+                case 1:
+                    _a.sent();
+                    return [4, sleep(500)];
+                case 2:
+                    _a.sent();
+                    return [4, getSongByID(youtubeID)];
+                case 3:
+                    song = _a.sent();
+                    currentSongList.push(song);
+                    refreshCurrentSongList();
+                    showSongs(currentSongList, { refresh: true });
+                    return [2];
+            }
+        });
+    }); });
 });
 //# sourceMappingURL=main.js.map

@@ -291,6 +291,8 @@ $(() => {
     console.log('Tried adding to lost songs')
   })
 
+  
+
   $('#advancedSettings-deleteLost').on('click', async () => {
     let songs = await getSongs()
     for(let songID in songs) {
@@ -369,6 +371,16 @@ $(() => {
 
     fs.emptyDir(storagePos + '/songs')
   })
+
+    // set youtube API key
+    $('#advancedSettings-apikey').on('click', async () => {
+      eprompt('Youtube API key', 'Youtube API key').then(async (userInput) => {
+        await saveData1((data) => {
+          data.settings.apiKey = userInput
+          return data
+        })
+      })
+    })
 })
 
 async function removeSongsWithMP3end() {

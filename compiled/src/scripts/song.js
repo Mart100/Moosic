@@ -57,7 +57,7 @@ var Song = (function () {
             this.fillSongDataWithID();
         return this;
     }
-    Song.prototype.fillSongDataWithID = function () {
+    Song.prototype.fillSongDataWithID = function (options) {
         return __awaiter(this, void 0, void 0, function () {
             var YTsongData;
             return __generator(this, function (_a) {
@@ -68,7 +68,12 @@ var Song = (function () {
                         return [4, this.importFromYoutube(YTsongData)];
                     case 2:
                         _a.sent();
-                        return [2];
+                        if (!(options && options.save)) return [3, 4];
+                        return [4, this.save()];
+                    case 3:
+                        _a.sent();
+                        _a.label = 4;
+                    case 4: return [2];
                 }
             });
         });
@@ -110,6 +115,10 @@ var Song = (function () {
                             this.saved = DBsong.saved || this.saved;
                             this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool;
                             this.liked = DBsong.liked || this.liked;
+                        }
+                        if (currentSongList.includes(this)) {
+                            refreshCurrentSongList();
+                            showSongs(currentSongList, { refresh: true });
                         }
                         return [2, this];
                 }

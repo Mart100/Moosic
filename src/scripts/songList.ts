@@ -3,15 +3,16 @@ let filters:any = {}
 resetFilters()
 
 interface showSongsOptions {
-  topBar:boolean
-  sort:boolean
+  topBar?:boolean
+  sort?:boolean
+  refresh?:boolean
+  scrollCurrentSong?:boolean
+  songFocusID?:string
 }
 
-async function showSongs(songs, options) {
+async function showSongs(songs, options:showSongsOptions) {
 
   console.log()
-
-  if(!options) options = {}
 
   if(options.topBar == undefined) options.topBar = true
   if(options.sort == undefined) options.sort = true
@@ -286,6 +287,18 @@ async function showSongs(songs, options) {
   })
 
   console.log('SHOW SONGLIST')
+}
+
+async function refreshCurrentSongList() {
+  let list:Song[]
+  let songs = await getSongs()
+  
+  for(let song of currentSongList) {
+    let song2 = new Song(songs[song.youtubeID])
+    list.push(song2)
+  }
+
+  return list
 }
 
 function countMostPlayedScores(song:Song, mode:string, now:number):number {

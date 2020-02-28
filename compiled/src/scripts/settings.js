@@ -521,6 +521,25 @@ $(function () {
             }
         });
     }); });
+    $('#advancedSettings-apikey').on('click', function () { return __awaiter(_this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            eprompt('Youtube API key', 'Youtube API key').then(function (userInput) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, saveData1(function (data) {
+                                data.settings.apiKey = userInput;
+                                return data;
+                            })];
+                        case 1:
+                            _a.sent();
+                            return [2];
+                    }
+                });
+            }); });
+            return [2];
+        });
+    }); });
 });
 function removeSongsWithMP3end() {
     return __awaiter(this, void 0, void 0, function () {

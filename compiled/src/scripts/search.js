@@ -37,11 +37,28 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var _this = this;
 var searchResults = [];
 $(function () {
-    setTimeout(function () {
-        gapi.client.load('youtube', 'v3', function () {
-            gapi.client.setApiKey('AIzaSy' + 'CIM4EzN' + 'qi1in22' + 'f4Z3Ru' + '3iYvLa' + 'Y8tc3bo');
+    setTimeout(function () { return __awaiter(_this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            gapi.client.load('youtube', 'v3', function () { return __awaiter(_this, void 0, void 0, function () {
+                var data, apiKey;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0: return [4, getData()];
+                        case 1:
+                            data = _a.sent();
+                            apiKey = data.settings.apiKey;
+                            if (!apiKey) {
+                                apiKey = ["A", "I", "z", "a", "S", "y", "C", "U", "Z", "Q", "R", "3", "2", "G", "k", "e", "E", "X", "h", "9", "Z", "A", "9", "W", "a", "p", "v", "T", "P", "E", "l", "a", "w", "h", "T", "c", "r", "R", "4"].join("");
+                            }
+                            gapi.client.setApiKey(apiKey);
+                            return [2];
+                    }
+                });
+            }); });
+            return [2];
         });
-    }, 1000);
+    }); }, 1000);
     $('#search .input').on('change', function () { return __awaiter(_this, void 0, void 0, function () {
         var results, _i, results_1, video, song;
         return __generator(this, function (_a) {
@@ -88,6 +105,10 @@ function getYoutubeResults() {
             maxResults: 50
         });
         request.execute(function (response) {
+            if (!response.result) {
+                console.error(response);
+                return resolve({});
+            }
             resolve(response.result.items);
         });
     });

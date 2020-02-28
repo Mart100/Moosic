@@ -38,6 +38,7 @@ class MusicPlayer extends EventEmitter {
     this.stop()
 
     console.log(song)
+    if(!song.title) await song.fillSongDataWithID({save: true})
 
     
     if(song.title == undefined) return
@@ -94,6 +95,8 @@ class MusicPlayer extends EventEmitter {
       this.emit('durationUpdate', eventPacket)
     }, 100)
 
+    return this
+
   }
   setQueue(newQueue) {
     this.queue = []
@@ -137,7 +140,7 @@ class MusicPlayer extends EventEmitter {
     this.isShuffled = true
     this.unShuffledQueue = this.queue.slice(0)
     this.queue = this.queue.sort((a, b) => Math.random()-0.5)
-    showSongs(musicPlayer.queue, {refresh: true, scrollToCurrentSong: true, topBar: false, sort: false})
+    showSongs(musicPlayer.queue, {refresh: true, scrollCurrentSong: true, topBar: false, sort: false})
     this.emit('shuffle')
     
   }

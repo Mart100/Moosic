@@ -68,13 +68,21 @@ var MusicPlayer = (function (_super) {
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var queueIDlist, idx, songQueueIDX, minuteDate, playedTimes, lastPlayedDate, songLoc, mp3Exists, songDuration;
+            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists, songDuration;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.stop();
                         console.log(song);
+                        if (!!song.title) return [3, 2];
+                        return [4, song.fillSongDataWithID({ save: true })];
+                    case 1:
+                        _a.sent();
+                        _a.label = 2;
+                    case 2:
+                        if (song.title == undefined)
+                            return [2];
                         if (song.youtubeID == undefined)
                             return [2];
                         queueIDlist = Array.from(this.queue, function (s) { return s.youtubeID; });
@@ -89,32 +97,25 @@ var MusicPlayer = (function (_super) {
                             this.queuePosition = songQueueIDX;
                         console.log(songQueueIDX);
                         if (this.currentSong.saved) {
-                            minuteDate = Math.floor(Date.now() / 1000 / 60);
-                            playedTimes = this.currentSong.playedTimes;
-                            lastPlayedDate = playedTimes[playedTimes.length - 1];
-                            if (lastPlayedDate == undefined)
-                                lastPlayedDate = 0;
-                            if (minuteDate > lastPlayedDate)
-                                playedTimes.push(minuteDate);
                             this.currentSong.lastPlayed = Date.now();
                             this.currentSong.save();
                         }
                         songLoc = songStoragePos + '\\' + song.youtubeID + '.mp3';
                         return [4, song.isDownloaded()];
-                    case 1:
+                    case 3:
                         mp3Exists = _a.sent();
                         console.log(songLoc, mp3Exists);
-                        if (!mp3Exists) return [3, 2];
+                        if (!mp3Exists) return [3, 4];
                         this.playMp3(songLoc);
-                        return [3, 4];
-                    case 2:
+                        return [3, 6];
+                    case 4:
                         this.playYT(song.youtubeID);
                         return [4, this.currentSong.download({ priority: true })];
-                    case 3:
+                    case 5:
                         _a.sent();
                         musicPlayer.play(this.currentSong);
-                        _a.label = 4;
-                    case 4:
+                        _a.label = 6;
+                    case 6:
                         setTimeout(function () {
                             scrollToCurrentSong();
                         }, 10);
@@ -130,7 +131,7 @@ var MusicPlayer = (function (_super) {
                             var eventPacket = { time: currentTime, duration: songDuration };
                             _this.emit('durationUpdate', eventPacket);
                         }, 100);
-                        return [2];
+                        return [2, this];
                 }
             });
         });
@@ -185,7 +186,7 @@ var MusicPlayer = (function (_super) {
         this.isShuffled = true;
         this.unShuffledQueue = this.queue.slice(0);
         this.queue = this.queue.sort(function (a, b) { return Math.random() - 0.5; });
-        showSongs(musicPlayer.queue, { refresh: true, scrollToCurrentSong: true, topBar: false, sort: false });
+        showSongs(musicPlayer.queue, { refresh: true, scrollCurrentSong: true, topBar: false, sort: false });
         this.emit('shuffle');
     };
     MusicPlayer.prototype.unShuffleQueue = function () {
@@ -303,6 +304,13 @@ var MusicPlayer = (function (_super) {
     MusicPlayer.prototype.onEndListenerMp3 = function () {
         var _this = this;
         this.HowlSound.on('end', function () {
+            var minuteDate = Math.floor(Date.now() / 1000 / 60);
+            var playedTimes = _this.currentSong.playedTimes;
+            var lastPlayedDate = playedTimes[playedTimes.length - 1];
+            if (lastPlayedDate == undefined)
+                lastPlayedDate = 0;
+            if (minuteDate > lastPlayedDate)
+                playedTimes.push(minuteDate);
             _this.nextInQueue();
             _this.emit('end');
         });

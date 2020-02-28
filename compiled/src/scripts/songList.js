@@ -44,8 +44,6 @@ function showSongs(songs, options) {
             switch (_b.label) {
                 case 0:
                     console.log();
-                    if (!options)
-                        options = {};
                     if (options.topBar == undefined)
                         options.topBar = true;
                     if (options.sort == undefined)
@@ -255,6 +253,24 @@ function showSongs(songs, options) {
                     });
                     console.log('SHOW SONGLIST');
                     return [2];
+            }
+        });
+    });
+}
+function refreshCurrentSongList() {
+    return __awaiter(this, void 0, void 0, function () {
+        var list, songs, _i, currentSongList_1, song, song2;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4, getSongs()];
+                case 1:
+                    songs = _a.sent();
+                    for (_i = 0, currentSongList_1 = currentSongList; _i < currentSongList_1.length; _i++) {
+                        song = currentSongList_1[_i];
+                        song2 = new Song(songs[song.youtubeID]);
+                        list.push(song2);
+                    }
+                    return [2, list];
             }
         });
     });

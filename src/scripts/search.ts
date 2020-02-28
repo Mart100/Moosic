@@ -3,9 +3,14 @@ let searchResults = []
 $(() => {
 
   // load youtube api
-  setTimeout(() => {
-    gapi.client.load('youtube', 'v3', () => {
-      gapi.client.setApiKey('AIzaSy'+'CIM4EzN'+'qi1in22'+'f4Z3Ru'+'3iYvLa'+'Y8tc3bo') //AIzaSyC_aHKYFGGEZ_dShlVukoYmlR1ZufAIbzA
+  setTimeout(async () => {
+    gapi.client.load('youtube', 'v3', async () => {
+      let data = await getData()
+      let apiKey = data.settings.apiKey
+      if(!apiKey) {
+        apiKey = ["A", "I", "z", "a", "S", "y", "C", "U", "Z", "Q", "R", "3", "2", "G", "k", "e", "E", "X", "h", "9", "Z", "A", "9", "W", "a", "p", "v", "T", "P", "E", "l", "a", "w", "h", "T", "c", "r", "R", "4"].join("")
+      }
+      gapi.client.setApiKey(apiKey)
     })
   }, 1000)
 
@@ -44,6 +49,10 @@ function getYoutubeResults() {
     })
 
     request.execute((response) => {
+      if(!response.result) {
+        console.error(response)
+        return resolve({})
+      }
       resolve(response.result.items)
     })
   })

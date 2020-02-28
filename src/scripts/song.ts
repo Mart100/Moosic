@@ -36,9 +36,10 @@ class Song {
 
     return this
   }
-  async fillSongDataWithID() {
+  async fillSongDataWithID(options?) {
     let YTsongData = await this.getVideoDataFromYoutube()
     await this.importFromYoutube(YTsongData)
+    if(options && options.save) await this.save()
     return
   }
   getVideoDataFromYoutube() {
@@ -74,7 +75,13 @@ class Song {
       this.liked = DBsong.liked || this.liked
     }
 
+    if(currentSongList.includes(this)) {
+      refreshCurrentSongList()
+      showSongs(currentSongList, {refresh: true})
+    }
+
     //if(this.liked) this.like()
+    
 
     return this
   }
