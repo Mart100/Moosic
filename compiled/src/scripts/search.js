@@ -97,6 +97,8 @@ $(function () {
 function getYoutubeResults() {
     return new Promise(function (resolve, reject) {
         var q = $('#search .input').val();
+        if (gapi.client.youtube == undefined)
+            return remote.getCurrentWindow().reload();
         var request = gapi.client.youtube.search.list({
             q: q,
             part: 'snippet',

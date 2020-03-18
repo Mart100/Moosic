@@ -14,12 +14,13 @@ class SongDownloader {
   }
 
   async queueNewDownload(songID, options:any={}) {
-    // push song to downloads queue
-    this.pending.push(songID)
 
     // check if song is already in queue / downloading
     let duplicateStatus = this.getSongDownloadStatus(songID)
-    if(duplicateStatus == 0 || duplicateStatus == 1) return 
+    if(duplicateStatus == 0 || duplicateStatus == 1) return
+    
+    // push song to downloads queue
+    this.pending.push(songID)
 
     // if less then 6 downloads are in progress. Download song immediatly
     if(this.inProgress.length < this.downloadWidth) return await this.startDownloadingSong(songID)

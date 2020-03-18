@@ -40,6 +40,7 @@ $(() => {
 function getYoutubeResults() {
   return new Promise((resolve, reject) => {
     let q = $('#search .input').val()
+    if(gapi.client.youtube == undefined) return remote.getCurrentWindow().reload()
     let request = gapi.client.youtube.search.list({
       q: q,
       part: 'snippet',

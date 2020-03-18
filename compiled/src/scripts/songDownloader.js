@@ -44,9 +44,13 @@ var SongDownloader = (function () {
     SongDownloader.prototype.queueNewDownload = function (songID, options) {
         if (options === void 0) { options = {}; }
         return __awaiter(this, void 0, void 0, function () {
+            var duplicateStatus;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        duplicateStatus = this.getSongDownloadStatus(songID);
+                        if (duplicateStatus == 0 || duplicateStatus == 1)
+                            return [2];
                         this.pending.push(songID);
                         if (!(this.inProgress.length < this.downloadWidth)) return [3, 2];
                         return [4, this.startDownloadingSong(songID)];
@@ -89,6 +93,7 @@ var SongDownloader = (function () {
             return 1;
         if (this.finished.includes(songID))
             return 2;
+        return -1;
     };
     SongDownloader.prototype.moveQueue = function () {
         return __awaiter(this, void 0, void 0, function () {
