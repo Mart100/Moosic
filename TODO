@@ -1,31 +1,31 @@
 /   Fix Lagg
 /   Spotify importer
 /   Fix YT error 150
-    clean code
+/   clean code
 x   discord rich presence
-    faster downloading
 x   show time when playing song
-    show song at volume slider windows
 x   Drag youtube link and download
 x   higher quality thumbnails
-    Invite to listen on discord
 x   Click volume icons at volume slider to set volume
 x   View saved songs in search
 x   fix shuffle bug
 x   Cross to remove search
 x   Multiple songs playing fix
-    Wacthrij en toevoegen aan queue
 x   the song stops playing when u add to a new collection
 x   redownload
-    bassboosted/earpain
 x   Import from mp3 folder
 x   Automatic backups
-    Edit song info
-    custom queue
 x   Show songList in appearance settings
 x   Save appearance settings
 x   Track played amount of song
 x   Sort on amount played
 x   Dark scrollbars
 x   Better appearance resizing
+x   Don't download song while downloading
     integrate last.fm
+    show song at volume slider windows
+    custom queue
+    Wacthrij en toevoegen aan queue
+    Edit song info
+    faster downloading
+    Invite to listen on discord
