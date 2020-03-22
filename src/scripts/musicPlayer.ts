@@ -18,7 +18,6 @@ class MusicPlayer extends EventEmitter {
 
   constructor() {
     super()
-    this.YTplayer
     this.HowlSound
     this.currentPlayer = 'none'
     this.volume = 50
@@ -37,7 +36,7 @@ class MusicPlayer extends EventEmitter {
 
     this.stop()
 
-    console.log(song)
+    console.log("PLAYING NOW:\n", song)
     if(!song.title) await song.fillSongDataWithID({save: true})
 
     
@@ -56,14 +55,13 @@ class MusicPlayer extends EventEmitter {
 
     let songQueueIDX = this.queue.indexOf(this.queue.find(s => s.youtubeID == song.youtubeID))
     if(songQueueIDX > -1) this.queuePosition = songQueueIDX
-    console.log(songQueueIDX)
 
     if(this.currentSong.saved) {
       this.currentSong.lastPlayed = Date.now()
       this.currentSong.save()
     } 
 
-    let songLoc = songStoragePos+'\\'+song.youtubeID+'.mp3'
+    let songLoc = songStoragePos+'/'+song.youtubeID+'.mp3'
     let mp3Exists = await song.isDownloaded()
 
 
@@ -71,8 +69,10 @@ class MusicPlayer extends EventEmitter {
 
     if(mp3Exists) this.playMp3(songLoc) 
     else { 
-      this.playYT(song.youtubeID)
-      await this.currentSong.download({priority: true})
+      let res = await this.currentSong.download({priority: true})
+      if(res.res == "ERROR") {
+        if(res.err = "IN_PROGRESS") return
+      }
       musicPlayer.play(this.currentSong)
     }
 
@@ -117,22 +117,16 @@ class MusicPlayer extends EventEmitter {
   }
   setVolume(volume) {
     this.volume = volume
-
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.setVolume) this.YTplayer.setVolume(volume)
     if(this.currentPlayer == 'MP3' && this.HowlSound) this.HowlSound.volume(volume/100)
 
   }
   pause() {
     this.isPaused = true
-    
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.pauseVideo) this.YTplayer.pauseVideo()
     if(this.currentPlayer == 'MP3' && this.HowlSound) this.HowlSound.pause()
     this.emit('pause')
   }
   unpause() {
     this.isPaused = false
-
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.playVideo) this.YTplayer.playVideo()
     if(this.currentPlayer == 'MP3' && this.HowlSound) this.HowlSound.play()
     this.emit('unpause')
   }
@@ -150,12 +144,9 @@ class MusicPlayer extends EventEmitter {
     this.emit('unshuffle')
   }
   stop() {
-    if(this.YTplayer != undefined && this.YTplayer.stopVideo != undefined) this.YTplayer.stopVideo()
     if(this.HowlSound != undefined) this.HowlSound.stop()
     clearInterval(this.durationUpdateInterval)
 
-    this.YTplayer = undefined
-    //this.HowlSound = undefined
     this.currentSong = undefined
 
     this.emit('stop')
@@ -166,15 +157,12 @@ class MusicPlayer extends EventEmitter {
 
   }
   getDuration() {
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration) return this.YTplayer.getDuration()
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.duration()
   } 
   setCurrentTime(to) {
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.seekTo) return this.YTplayer.seekTo(to)
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek(to)
   }
   getCurrentTime() {
-    if(this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getCurrentTime) return this.YTplayer.getCurrentTime()
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek()
   }
   playMp3(url) {
@@ -205,41 +193,6 @@ class MusicPlayer extends EventEmitter {
 
     this.onEndListenerMp3()
   }
-  playYT(videoID) {
-    if($('#player')[0] != undefined) $('#player').remove()
-    $('html').append('<div id="player"></div>')
-
-    this.YTplayer = new YT.Player('player', {
-      height: '1',
-      width: '1',
-      videoId: videoID,
-      controls: 0,
-      disablekb: 1,
-      modestbranding: 1,
-      widget_referrer: 'https://martve.me',
-      events: {
-        'onError': (e) => { this.onYTerror(e) },
-        'onReady': (e) => { this.onYTready(e) },
-        'onStateChange': (e) => { this.onPlayerStateChangeYT(e) }
-      }
-    })
-    this.currentPlayer = 'YT'
-
-  }
-  async onYTready(e) {
-    e.target.playVideo()
-    this.setVolume(this.volume)
-  }
-  async onYTerror(e) {
-    console.log('ERROR', e)
-
-    if(e.data == 150) {
-      if(this.currentSong) {
-        await this.currentSong.download({priority: true})
-        musicPlayer.play(this.currentSong)
-      }
-    }
-  }
   onEndListenerMp3() {
     this.HowlSound.on('end', () => {
 
@@ -254,12 +207,5 @@ class MusicPlayer extends EventEmitter {
       this.nextInQueue()
       this.emit('end')
     })
-  }
-  onPlayerStateChangeYT(event) {
-    // video end
-    if(event.data == 0) {
-      this.nextInQueue()
-      this.emit('end')
-    }
   }
 }

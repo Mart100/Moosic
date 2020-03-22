@@ -207,7 +207,7 @@ var Song = (function () {
     };
     Song.prototype.download = function (options) {
         return __awaiter(this, void 0, void 0, function () {
-            var isDownloaded, songPos, redownload;
+            var isDownloaded, songPos, redownload, res;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4, this.isDownloaded()];
@@ -221,7 +221,9 @@ var Song = (function () {
                             redownload = true;
                         return [4, songDownloader.queueNewDownload(this.youtubeID, options)];
                     case 2:
-                        _a.sent();
+                        res = _a.sent();
+                        if (res.res == "ERROR")
+                            return [2, res];
                         if (!redownload) return [3, 4];
                         console.log('Unloading Howler Because redownloaded song');
                         Howler.unload();
@@ -237,13 +239,13 @@ var Song = (function () {
                     case 5:
                         _a.sent();
                         _a.label = 6;
-                    case 6: return [2];
+                    case 6: return [2, res];
                 }
             });
         });
     };
     Song.prototype.getDownloadLocation = function () {
-        return songStoragePos + '\\' + this.youtubeID + '.mp3';
+        return songStoragePos + '/' + this.youtubeID + '.mp3';
     };
     Song.prototype.isDownloaded = function () {
         return __awaiter(this, void 0, void 0, function () {

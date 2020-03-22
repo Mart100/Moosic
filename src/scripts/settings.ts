@@ -52,6 +52,7 @@ $(() => {
   $('#importData-youtubePlaylist-button').on('click', async () => {
     eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then(async (userInput) => {
       let playlistLink = userInput
+      if(playlistLink == null) return
       let playlistID = userInput.split('list=')[1].split('&')[0]
       let playlistVideoLength = 1
       let playlistLastResponse:any
@@ -113,7 +114,7 @@ $(() => {
         for(let idx in files) {
           let file = files[idx]
           let youtubeID = file.split('.')[0]
-          let stats = fs.statSync(pos+'\\'+file)
+          let stats = fs.statSync(pos+'/'+file)
           console.log(stats)
           let creationdate = stats.ctimeMs
           let accessedDate = stats.atimeMs
@@ -263,7 +264,7 @@ $(() => {
       for(let file of files) {
         if(file.includes('.mp3.mp3')) {
           let newFileName = file.replace('.mp3.mp3', '') + '.mp3'
-          fs.rename(songStoragePos+'\\'+file, songStoragePos+'\\'+newFileName, (err) => {
+          fs.rename(songStoragePos+'/'+file, songStoragePos+'/'+newFileName, (err) => {
             if(err) throw err
           })
         }

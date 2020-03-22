@@ -37,14 +37,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var player;
 function onSongClick(event, queue) {
     return __awaiter(this, void 0, void 0, function () {
-        var id, song;
+        var id, songsElem, filters_1, song;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     id = event.target.id.replace('song-', '');
-                    console.log(id);
-                    if (id == undefined || id == '')
+                    if (id == undefined || id == '') {
+                        songsElem = getCurrentSongsElement();
+                        filters_1 = songsElem.find('.topBar .filters');
+                        if (filters_1.hasClass("expanded"))
+                            filters_1.removeClass("expanded");
                         return [2];
+                    }
+                    console.log("SongClick: " + id);
                     return [4, getSongByID(id)];
                 case 1:
                     song = _a.sent();

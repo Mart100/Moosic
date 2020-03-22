@@ -50,19 +50,23 @@ var SongDownloader = (function () {
                     case 0:
                         duplicateStatus = this.getSongDownloadStatus(songID);
                         if (duplicateStatus == 0 || duplicateStatus == 1)
-                            return [2];
+                            return [2, { res: "ERROR", err: "IN_PROGRESS" }];
                         this.pending.push(songID);
                         if (!(this.inProgress.length < this.downloadWidth)) return [3, 2];
                         return [4, this.startDownloadingSong(songID)];
-                    case 1: return [2, _a.sent()];
+                    case 1:
+                        _a.sent();
+                        return [2, { res: "SUCCESS" }];
                     case 2:
                         if (!options.priority) return [3, 4];
                         return [4, this.startDownloadingSong(songID)];
-                    case 3: return [2, _a.sent()];
+                    case 3:
+                        _a.sent();
+                        return [2, { res: "SUCCESS" }];
                     case 4: return [4, this.waitSongFinished(songID)];
                     case 5:
                         _a.sent();
-                        return [2];
+                        return [2, { res: "SUCCESS" }];
                 }
             });
         });

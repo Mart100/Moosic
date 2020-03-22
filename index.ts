@@ -54,8 +54,8 @@ app.on('ready', () => {
     if(!backedUpDatabase) e.preventDefault()
     else return
     
-    let storagePos = process.env.APPDATA+'\\moosic'+'\\storage'
-    let databasePos = storagePos+'\\'+'database.json'
+    let storagePos = process.env.APPDATA+'/moosic'+'/storage'
+    let databasePos = storagePos+'/'+'database.json'
 
     console.log('Tried closing: ', databasePos)
     fs_.readFile(databasePos, 'utf8', (err, obj) => {
@@ -73,7 +73,7 @@ app.on('ready', () => {
         return
       }
       
-      fs_.copyFile(databasePos, storagePos+'\\'+'database_backup.json', (err) => {
+      fs_.copyFile(databasePos, storagePos+'/'+'database_backup.json', (err) => {
         if(err) throw err;
         console.log('Successfully backed up database.json')
         backedUpDatabase = true

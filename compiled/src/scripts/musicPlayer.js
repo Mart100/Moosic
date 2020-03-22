@@ -52,7 +52,6 @@ var MusicPlayer = (function (_super) {
     __extends(MusicPlayer, _super);
     function MusicPlayer() {
         var _this = _super.call(this) || this;
-        _this.YTplayer;
         _this.HowlSound;
         _this.currentPlayer = 'none';
         _this.volume = 50;
@@ -68,13 +67,13 @@ var MusicPlayer = (function (_super) {
     }
     MusicPlayer.prototype.play = function (song) {
         return __awaiter(this, void 0, void 0, function () {
-            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists, songDuration;
+            var queueIDlist, idx, songQueueIDX, songLoc, mp3Exists, res, songDuration;
             var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         this.stop();
-                        console.log(song);
+                        console.log("PLAYING NOW:\n", song);
                         if (!!song.title) return [3, 2];
                         return [4, song.fillSongDataWithID({ save: true })];
                     case 1:
@@ -95,12 +94,11 @@ var MusicPlayer = (function (_super) {
                         songQueueIDX = this.queue.indexOf(this.queue.find(function (s) { return s.youtubeID == song.youtubeID; }));
                         if (songQueueIDX > -1)
                             this.queuePosition = songQueueIDX;
-                        console.log(songQueueIDX);
                         if (this.currentSong.saved) {
                             this.currentSong.lastPlayed = Date.now();
                             this.currentSong.save();
                         }
-                        songLoc = songStoragePos + '\\' + song.youtubeID + '.mp3';
+                        songLoc = songStoragePos + '/' + song.youtubeID + '.mp3';
                         return [4, song.isDownloaded()];
                     case 3:
                         mp3Exists = _a.sent();
@@ -108,11 +106,13 @@ var MusicPlayer = (function (_super) {
                         if (!mp3Exists) return [3, 4];
                         this.playMp3(songLoc);
                         return [3, 6];
-                    case 4:
-                        this.playYT(song.youtubeID);
-                        return [4, this.currentSong.download({ priority: true })];
+                    case 4: return [4, this.currentSong.download({ priority: true })];
                     case 5:
-                        _a.sent();
+                        res = _a.sent();
+                        if (res.res == "ERROR") {
+                            if (res.err = "IN_PROGRESS")
+                                return [2];
+                        }
                         musicPlayer.play(this.currentSong);
                         _a.label = 6;
                     case 6:
@@ -161,23 +161,17 @@ var MusicPlayer = (function (_super) {
     };
     MusicPlayer.prototype.setVolume = function (volume) {
         this.volume = volume;
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.setVolume)
-            this.YTplayer.setVolume(volume);
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             this.HowlSound.volume(volume / 100);
     };
     MusicPlayer.prototype.pause = function () {
         this.isPaused = true;
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.pauseVideo)
-            this.YTplayer.pauseVideo();
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             this.HowlSound.pause();
         this.emit('pause');
     };
     MusicPlayer.prototype.unpause = function () {
         this.isPaused = false;
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.playVideo)
-            this.YTplayer.playVideo();
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             this.HowlSound.play();
         this.emit('unpause');
@@ -195,12 +189,9 @@ var MusicPlayer = (function (_super) {
         this.emit('unshuffle');
     };
     MusicPlayer.prototype.stop = function () {
-        if (this.YTplayer != undefined && this.YTplayer.stopVideo != undefined)
-            this.YTplayer.stopVideo();
         if (this.HowlSound != undefined)
             this.HowlSound.stop();
         clearInterval(this.durationUpdateInterval);
-        this.YTplayer = undefined;
         this.currentSong = undefined;
         this.emit('stop');
         for (var _i = 0, _a = Howler._howls; _i < _a.length; _i++) {
@@ -209,20 +200,14 @@ var MusicPlayer = (function (_super) {
         }
     };
     MusicPlayer.prototype.getDuration = function () {
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getDuration)
-            return this.YTplayer.getDuration();
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             return this.HowlSound.duration();
     };
     MusicPlayer.prototype.setCurrentTime = function (to) {
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.seekTo)
-            return this.YTplayer.seekTo(to);
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             return this.HowlSound.seek(to);
     };
     MusicPlayer.prototype.getCurrentTime = function () {
-        if (this.currentPlayer == 'YT' && this.YTplayer && this.YTplayer.getCurrentTime)
-            return this.YTplayer.getCurrentTime();
         if (this.currentPlayer == 'MP3' && this.HowlSound)
             return this.HowlSound.seek();
     };
@@ -253,54 +238,6 @@ var MusicPlayer = (function (_super) {
         }); });
         this.onEndListenerMp3();
     };
-    MusicPlayer.prototype.playYT = function (videoID) {
-        var _this = this;
-        if ($('#player')[0] != undefined)
-            $('#player').remove();
-        $('html').append('<div id="player"></div>');
-        this.YTplayer = new YT.Player('player', {
-            height: '1',
-            width: '1',
-            videoId: videoID,
-            controls: 0,
-            disablekb: 1,
-            modestbranding: 1,
-            widget_referrer: 'https://martve.me',
-            events: {
-                'onError': function (e) { _this.onYTerror(e); },
-                'onReady': function (e) { _this.onYTready(e); },
-                'onStateChange': function (e) { _this.onPlayerStateChangeYT(e); }
-            }
-        });
-        this.currentPlayer = 'YT';
-    };
-    MusicPlayer.prototype.onYTready = function (e) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                e.target.playVideo();
-                this.setVolume(this.volume);
-                return [2];
-            });
-        });
-    };
-    MusicPlayer.prototype.onYTerror = function (e) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        console.log('ERROR', e);
-                        if (!(e.data == 150)) return [3, 2];
-                        if (!this.currentSong) return [3, 2];
-                        return [4, this.currentSong.download({ priority: true })];
-                    case 1:
-                        _a.sent();
-                        musicPlayer.play(this.currentSong);
-                        _a.label = 2;
-                    case 2: return [2];
-                }
-            });
-        });
-    };
     MusicPlayer.prototype.onEndListenerMp3 = function () {
         var _this = this;
         this.HowlSound.on('end', function () {
@@ -314,12 +251,6 @@ var MusicPlayer = (function (_super) {
             _this.nextInQueue();
             _this.emit('end');
         });
-    };
-    MusicPlayer.prototype.onPlayerStateChangeYT = function (event) {
-        if (event.data == 0) {
-            this.nextInQueue();
-            this.emit('end');
-        }
     };
     return MusicPlayer;
 }(EventEmitter));

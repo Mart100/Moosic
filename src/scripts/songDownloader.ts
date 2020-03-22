@@ -17,22 +17,28 @@ class SongDownloader {
 
     // check if song is already in queue / downloading
     let duplicateStatus = this.getSongDownloadStatus(songID)
-    if(duplicateStatus == 0 || duplicateStatus == 1) return
+    if(duplicateStatus == 0 || duplicateStatus == 1) return {res: "ERROR", err: "IN_PROGRESS"}
     
     // push song to downloads queue
     this.pending.push(songID)
 
     // if less then 6 downloads are in progress. Download song immediatly
-    if(this.inProgress.length < this.downloadWidth) return await this.startDownloadingSong(songID)
+    if(this.inProgress.length < this.downloadWidth) {
+      await this.startDownloadingSong(songID)
+      return {res: "SUCCESS"}
+    }
 
     // if priority, start download
-    if(options.priority) return await this.startDownloadingSong(songID)
+    if(options.priority) {
+      await this.startDownloadingSong(songID)
+      return {res: "SUCCESS"}
+    }
 
     // wait until song is finished downloading
     await this.waitSongFinished(songID)
 
     // finished with download
-    return
+    return {res: "SUCCESS"}
 
   }
 
@@ -99,7 +105,6 @@ class SongDownloader {
 
         // move queue
         this.moveQueue()
-
         resolve() 
       } 
 

@@ -47,7 +47,7 @@ function getData() {
                 case 0:
                     if (databaseCacheValid)
                         return [2, resolve(databaseCache)];
-                    return [4, fs.pathExists(storagePos + '\\database.json')];
+                    return [4, fs.pathExists(storagePos + '/database.json')];
                 case 1:
                     if (!!(_a.sent())) return [3, 3];
                     return [4, createEmptyDatabase()];
@@ -82,8 +82,8 @@ function getData() {
                                         if (revertToBackupConfirm == false)
                                             return [2];
                                         revertToBackupConfirm = false;
-                                        databasePos = storagePos + '\\' + 'database.json';
-                                        databaseBackupPos = storagePos + '\\' + 'database_backup.json';
+                                        databasePos = storagePos + '/' + 'database.json';
+                                        databaseBackupPos = storagePos + '/' + 'database_backup.json';
                                         stats = fs.statSync(databaseBackupPos);
                                         backupDate = new Date(stats.mtimeMs);
                                         txt = "\nAn error has occured:\n" + e + "\n\nThis most likely means the database where your songs are stored has become corrupted.\n\nWould you like to revert to a backup from:\n" + backupDate + "\n?";

@@ -22,7 +22,7 @@ function getData(): Promise<any> {
 
     if(databaseCacheValid) return resolve(databaseCache)
 
-    if(!await fs.pathExists(storagePos+'\\database.json')) {
+    if(!await fs.pathExists(storagePos+'/database.json')) {
       await createEmptyDatabase()
     }
 
@@ -44,8 +44,8 @@ function getData(): Promise<any> {
         console.error(e)
         if(revertToBackupConfirm == false) return
         revertToBackupConfirm = false
-        let databasePos = storagePos+'\\'+'database.json'
-        let databaseBackupPos = storagePos+'\\'+'database_backup.json'
+        let databasePos = storagePos+'/'+'database.json'
+        let databaseBackupPos = storagePos+'/'+'database_backup.json'
         let stats = fs.statSync(databaseBackupPos)
         let backupDate = new Date(stats.mtimeMs)
         let txt = `

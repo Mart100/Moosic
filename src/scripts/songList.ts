@@ -377,11 +377,10 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
   let likeButtonSize = (RSH-8)/2-10
   let moreButtonSize = (RSH-8)/2
   if((likeButtonSize + 10 + moreButtonSize + 8) < 50) {
-    console.log('SIDEWAYS')
-    likeButtonSize = (RSH-8)/1.3-10
-    moreButtonSize = (RSH-8)/1.3
+    likeButtonSize = (RSH-8)/1.4-10
+    moreButtonSize = (RSH-8)/1.4
     buttonsWidth = 80
-    buttonsPadding = (RSH - RSH/1.3)/2
+    buttonsPadding = (RSH - RSH/1.4)/2
     buttonsHeight = RSH-buttonsPadding*2
   }
   songHTML.css({'height': songHeight-SSP, 'padding': SSP/2-1})

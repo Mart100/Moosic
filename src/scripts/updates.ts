@@ -20,8 +20,8 @@ Do you want to install this update?
 
   let response = await window.confirm(confirmMessage)
 
-  let installersLocation = storagePos + '\\installers'
-  let installerLocation = installersLocation + `\\moosic-Setup-${latestVersion}.exe`
+  let installersLocation = storagePos + '/installers'
+  let installerLocation = installersLocation + `/moosic-Setup-${latestVersion}.exe`
 
   if(response) {
     // check if file already exists
@@ -49,7 +49,7 @@ async function downloadFileFromURL(file_url) {
   return new Promise(async (resolve, reject) => {
     // some things
     let file_name = file_url.split('/').pop()
-    let downloadLoc = storagePos + '\\installers'
+    let downloadLoc = storagePos + '/installers'
 
     // prepare download window
     let win = remote.getCurrentWindow()
@@ -83,7 +83,7 @@ async function downloadFileFromURL(file_url) {
     download.on('end', (output) => {
       console.log(output)
       console.log(`Setup ${file_url.split('/').pop()} installed`)
-      console.log(`${downloadLoc}\\${file_name}`)
+      console.log(`${downloadLoc}/${file_name}`)
       setTimeout(() => { resolve() }, 1000)
     })
 

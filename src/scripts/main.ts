@@ -23,11 +23,11 @@ const songDownloader = new SongDownloader()
 let songHeight = 80
 
 // storage position
-let storagePos:string = process.env.APPDATA+'\\moosic'+'\\storage'
+let storagePos:string = process.env.APPDATA+'/moosic'+'/storage'
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 
-let songStoragePos = storagePos+'\\songs'
+let songStoragePos = storagePos+'/songs'
 
 async function getSongStoragePos() {
   let database = await getData()
@@ -168,7 +168,6 @@ $(() => {
     e.preventDefault()
   }).on('dragenter', (event:any) => {
     dragEnterTime = new Date().getTime()
-    console.log('Enter')
     if($('#dropToImportDiv')[0]) return
     $('body').append(`
 <div id="dropToImportDiv" style="width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;">
@@ -185,6 +184,8 @@ $(() => {
     let text = event.originalEvent.dataTransfer.getData("text/plain")
     $('#dropToImportDiv').remove()
     if(!text.includes('youtube.com/watch')) return
+    let isPlaylist = text.includes('list=')
+    if(isPlaylist) return importYoutubePlaylist(text)
     let youtubeID = text.split('?v=')[1]
     if(youtubeID.includes("&")) youtubeID = youtubeID.split("&")[0]
     if(youtubeID.length != 11) return
@@ -196,3 +197,26 @@ $(() => {
     showSongs(currentSongList, {refresh: true})
   })
 })
+
+async function importYoutubePlaylist(playlistLink) {
+  if(playlistLink == null || playlistLink == undefined) return
+  let playlistID = playlistLink.split('list=')[1].split('&')[0]
+  let playlistVideoLength = 1
+  let playlistLastResponse:any
+  let playlistNextPageToken:any = undefined
+  let playlistVideos:Song[] = []
+  console.log(playlistLink, playlistID || playlistNextPageToken == 0)
+  while(playlistVideoLength > playlistVideos.length) {
+    let response:any = await requestPlaylistVideos(playlistID, playlistNextPageToken)
+    console.log(response)
+    playlistVideoLength = response.pageInfo.totalResults
+    playlistNextPageToken = response.nextPageToken
+    if(playlistNextPageToken == undefined) playlistNextPageToken = 0
+    playlistLastResponse = response
+    for(let vid of response.items) playlistVideos.push(vid)
+  }
+  let playlistSongs = parseArrayToSongs(playlistVideos)
+  console.log(playlistSongs)
+  let collName = await createNewCollection('Youtube playlist')
+  addSongsToCollection(playlistSongs, collName)
+}

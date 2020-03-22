@@ -8,9 +8,9 @@ onmessage = async function(e) {
   let songID = e.data.songID
   let songStoragePos = e.data.songStoragePos
 
-  let songLoc = songStoragePos + `\\${songID}.mp3`
+  let songLoc = songStoragePos + `/${songID}.mp3`
 
-  console.log(songLoc)
+  console.log("YTDL DOWNLOAD: ", songLoc)
 
   //if(await fs1.pathExists(songLoc)) return postMessage('1', undefined)
 
@@ -18,9 +18,10 @@ onmessage = async function(e) {
     filter: 'audio',
   })
 
-  let ws = fs1.createWriteStream(songLoc)
+  let writeOpts = {highWaterMark: Math.pow(2,16)} // 65536  
+  let ws = fs1.createWriteStream(songLoc, writeOpts)
   stream.pipe(ws)
-  ws.on('finish', () => { 
+  ws.on('finish', () => {
     postMessage('1', undefined)
   })
 

@@ -131,7 +131,8 @@ class Song {
     if(isDownloaded && options.redownload && fs.existsSync(songPos)) redownload = true
 
 
-    await songDownloader.queueNewDownload(this.youtubeID, options)
+    let res = await songDownloader.queueNewDownload(this.youtubeID, options)
+    if(res.res == "ERROR") return res
 
     if(redownload) {
       console.log('Unloading Howler Because redownloaded song')
@@ -143,11 +144,10 @@ class Song {
     this.isDownloadedBool = true
 
     if(this.saved) await this.save()
-
-    return
+    return res
   }
   getDownloadLocation() {
-    return songStoragePos+'\\'+this.youtubeID+'.mp3'
+    return songStoragePos+'/'+this.youtubeID+'.mp3'
   }
   async isDownloaded() {
     if(this.isDownloadedBool) return this.isDownloadedBool

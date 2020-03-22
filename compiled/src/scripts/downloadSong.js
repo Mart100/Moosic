@@ -38,17 +38,18 @@ var fs1 = require("fs-extra");
 var ytdl1 = require("ytdl-core");
 onmessage = function (e) {
     return __awaiter(this, void 0, void 0, function () {
-        var start, songID, songStoragePos, songLoc, stream, ws;
+        var start, songID, songStoragePos, songLoc, stream, writeOpts, ws;
         return __generator(this, function (_a) {
             start = Date.now();
             songID = e.data.songID;
             songStoragePos = e.data.songStoragePos;
-            songLoc = songStoragePos + ("\\" + songID + ".mp3");
-            console.log(songLoc);
+            songLoc = songStoragePos + ("/" + songID + ".mp3");
+            console.log("YTDL DOWNLOAD: ", songLoc);
             stream = ytdl1("https://www.youtube.com/watch?v=" + songID, {
                 filter: 'audio',
             });
-            ws = fs1.createWriteStream(songLoc);
+            writeOpts = { highWaterMark: Math.pow(2, 16) };
+            ws = fs1.createWriteStream(songLoc, writeOpts);
             stream.pipe(ws);
             ws.on('finish', function () {
                 postMessage('1', undefined);

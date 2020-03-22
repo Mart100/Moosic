@@ -127,6 +127,8 @@ $(function () {
                     switch (_b.label) {
                         case 0:
                             playlistLink = userInput;
+                            if (playlistLink == null)
+                                return [2];
                             playlistID = userInput.split('list=')[1].split('&')[0];
                             playlistVideoLength = 1;
                             playlistNextPageToken = undefined;
@@ -220,7 +222,7 @@ $(function () {
                                 idx = _a[_i];
                                 file = files[idx];
                                 youtubeID = file.split('.')[0];
-                                stats = fs.statSync(pos + '\\' + file);
+                                stats = fs.statSync(pos + '/' + file);
                                 console.log(stats);
                                 creationdate = stats.ctimeMs;
                                 accessedDate = stats.atimeMs;
@@ -375,7 +377,7 @@ $(function () {
                                 file = files_1[_i];
                                 if (file.includes('.mp3.mp3')) {
                                     newFileName = file.replace('.mp3.mp3', '') + '.mp3';
-                                    fs.rename(songStoragePos + '\\' + file, songStoragePos + '\\' + newFileName, function (err) {
+                                    fs.rename(songStoragePos + '/' + file, songStoragePos + '/' + newFileName, function (err) {
                                         if (err)
                                             throw err;
                                     });

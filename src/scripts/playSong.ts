@@ -2,8 +2,15 @@ let player
 
 async function onSongClick(event, queue) {
   let id = event.target.id.replace('song-', '')
-  console.log(id)
-  if(id == undefined || id == '') return
+
+  if(id == undefined || id == '') {
+    let songsElem = getCurrentSongsElement()
+    let filters = songsElem.find('.topBar .filters')
+    if(filters.hasClass("expanded")) filters.removeClass("expanded")
+    return
+    
+  }
+  console.log("SongClick: "+id)
 
   let song = await getSongByID(id)
 

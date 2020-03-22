@@ -53,9 +53,9 @@ var ipc = require('electron').ipcRenderer;
 var musicPlayer = new MusicPlayer();
 var songDownloader = new SongDownloader();
 var songHeight = 80;
-var storagePos = process.env.APPDATA + '\\moosic' + '\\storage';
+var storagePos = process.env.APPDATA + '/moosic' + '/storage';
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa');
-var songStoragePos = storagePos + '\\songs';
+var songStoragePos = storagePos + '/songs';
 function getSongStoragePos() {
     return __awaiter(this, void 0, void 0, function () {
         var database;
@@ -261,7 +261,6 @@ $(function () {
         e.preventDefault();
     }).on('dragenter', function (event) {
         dragEnterTime = new Date().getTime();
-        console.log('Enter');
         if ($('#dropToImportDiv')[0])
             return;
         $('body').append("\n<div id=\"dropToImportDiv\" style=\"width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;\">\n  <span style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);\">\n  Drop to import song\n  </span>\n</div>\n    ");
@@ -271,7 +270,7 @@ $(function () {
         console.log('Leave');
         $('#dropToImportDiv').remove();
     }).on('drop', function (event) { return __awaiter(_this, void 0, void 0, function () {
-        var text, youtubeID, song;
+        var text, isPlaylist, youtubeID, song;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -279,6 +278,9 @@ $(function () {
                     $('#dropToImportDiv').remove();
                     if (!text.includes('youtube.com/watch'))
                         return [2];
+                    isPlaylist = text.includes('list=');
+                    if (isPlaylist)
+                        return [2, importYoutubePlaylist(text)];
                     youtubeID = text.split('?v=')[1];
                     if (youtubeID.includes("&"))
                         youtubeID = youtubeID.split("&")[0];
@@ -301,4 +303,46 @@ $(function () {
         });
     }); });
 });
+function importYoutubePlaylist(playlistLink) {
+    return __awaiter(this, void 0, void 0, function () {
+        var playlistID, playlistVideoLength, playlistLastResponse, playlistNextPageToken, playlistVideos, response, _i, _a, vid, playlistSongs, collName;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0:
+                    if (playlistLink == null || playlistLink == undefined)
+                        return [2];
+                    playlistID = playlistLink.split('list=')[1].split('&')[0];
+                    playlistVideoLength = 1;
+                    playlistNextPageToken = undefined;
+                    playlistVideos = [];
+                    console.log(playlistLink, playlistID || playlistNextPageToken == 0);
+                    _b.label = 1;
+                case 1:
+                    if (!(playlistVideoLength > playlistVideos.length)) return [3, 3];
+                    return [4, requestPlaylistVideos(playlistID, playlistNextPageToken)];
+                case 2:
+                    response = _b.sent();
+                    console.log(response);
+                    playlistVideoLength = response.pageInfo.totalResults;
+                    playlistNextPageToken = response.nextPageToken;
+                    if (playlistNextPageToken == undefined)
+                        playlistNextPageToken = 0;
+                    playlistLastResponse = response;
+                    for (_i = 0, _a = response.items; _i < _a.length; _i++) {
+                        vid = _a[_i];
+                        playlistVideos.push(vid);
+                    }
+                    return [3, 1];
+                case 3:
+                    playlistSongs = parseArrayToSongs(playlistVideos);
+                    console.log(playlistSongs);
+                    return [4, createNewCollection('Youtube playlist')];
+                case 4:
+                    collName = _b.sent();
+                    addSongsToCollection(playlistSongs, collName);
+                    return [2];
+            }
+        });
+    });
+}
 //# sourceMappingURL=main.js.map

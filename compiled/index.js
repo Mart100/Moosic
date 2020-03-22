@@ -41,8 +41,8 @@ app.on('ready', function () {
             e.preventDefault();
         else
             return;
-        var storagePos = process.env.APPDATA + '\\moosic' + '\\storage';
-        var databasePos = storagePos + '\\' + 'database.json';
+        var storagePos = process.env.APPDATA + '/moosic' + '/storage';
+        var databasePos = storagePos + '/' + 'database.json';
         console.log('Tried closing: ', databasePos);
         fs_.readFile(databasePos, 'utf8', function (err, obj) {
             try {
@@ -57,7 +57,7 @@ app.on('ready', function () {
                 app.quit();
                 return;
             }
-            fs_.copyFile(databasePos, storagePos + '\\' + 'database_backup.json', function (err) {
+            fs_.copyFile(databasePos, storagePos + '/' + 'database_backup.json', function (err) {
                 if (err)
                     throw err;
                 console.log('Successfully backed up database.json');
