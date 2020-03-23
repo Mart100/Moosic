@@ -32,11 +32,12 @@
   width: 30px;
   height: 30px;
   padding: 5px;
-  margin: 5px;
+  //margin: 5px;
   cursor: pointer;
-  background-color: rgba(50, 50, 50, 0.3);
-  border: 2px solid rgb(0,0,0);
-  border-radius: 50%;
+  background-color: rgba(50, 50, 50, 0.4);
+  border-right: 3px solid rgb(0,0,0);
+  border-bottom: 3px solid rgb(0,0,0);
+  border-radius: 0px 0px 5px 0px;
   z-index: 10;
 }
 

@@ -23,7 +23,9 @@ x   Dark scrollbars
 x   Better appearance resizing
 x   Don't download song while downloading
     integrate last.fm
-    show song at volume slider windows
+    show song at volume slider windows:
+        https://github.com/NodeRT/NodeRT
+        https://docs.microsoft.com/en-us/uwp/api/Windows.Media.SystemMediaTransportControls
     custom queue
     Wacthrij en toevoegen aan queue
     Edit song info

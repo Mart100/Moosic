@@ -144,7 +144,6 @@ function loadCollections() {
                                 $('#mySongs .songs').show();
                                 collectionSongs = songs.filter(function (s) { return collection.songs.includes(s.youtubeID); });
                                 currentCollection = collection.name;
-                                console.log(collectionSongs);
                                 showSongs(collectionSongs, { refresh: true, scrollCurrentSong: false });
                                 return [2];
                             });

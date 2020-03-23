@@ -80,6 +80,8 @@ var Song = (function () {
     };
     Song.prototype.getVideoDataFromYoutube = function () {
         var _this = this;
+        console.trace();
+        console.log(this);
         return new Promise(function (resolve, reject) {
             var request = gapi.client.youtube.videos.list({
                 id: _this.youtubeID,
@@ -89,6 +91,8 @@ var Song = (function () {
             });
             request.execute(function (response) {
                 console.log(_this.youtubeID, response);
+                if (!response.items)
+                    return resolve();
                 resolve(response.items[0]);
             });
         });
@@ -99,6 +103,8 @@ var Song = (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (video == undefined || video.snippet == undefined)
+                            return [2];
                         this.image = video.snippet.thumbnails.default.url;
                         this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id));
                         this.title = video.snippet.title;
@@ -153,7 +159,6 @@ var Song = (function () {
                         return [4, this.save()];
                     case 1:
                         _a.sent();
-                        this.removeDownload();
                         return [2];
                 }
             });
@@ -183,6 +188,8 @@ var Song = (function () {
         return __awaiter(this, void 0, void 0, function () {
             var _this = this;
             return __generator(this, function (_a) {
+                console.log("Undownload: ", this.title);
+                console.trace();
                 return [2, new Promise(function (resolve, reject) {
                         var downloadPos = _this.getDownloadLocation();
                         console.log(downloadPos);

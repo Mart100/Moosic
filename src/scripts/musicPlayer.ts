@@ -34,15 +34,15 @@ class MusicPlayer extends EventEmitter {
   }
   async play(song:Song) {
 
+    if(song.youtubeID == undefined) return
+
     this.stop()
 
     console.log("PLAYING NOW:\n", song)
     if(!song.title) await song.fillSongDataWithID({save: true})
 
-    
     if(song.title == undefined) return
-    if(song.youtubeID == undefined) return
-
+    
     // check if song is is queue
     let queueIDlist = Array.from(this.queue, s => s.youtubeID)
 
@@ -163,7 +163,7 @@ class MusicPlayer extends EventEmitter {
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek(to)
   }
   getCurrentTime() {
-    if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek()
+    if(this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong) return this.HowlSound.seek()
   }
   playMp3(url) {
     //if(this.HowlSound != undefined) this.HowlSound.stop()

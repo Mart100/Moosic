@@ -3,7 +3,7 @@ let player
 async function onSongClick(event, queue) {
   let id = event.target.id.replace('song-', '')
 
-  if(id == undefined || id == '') {
+  if(id == undefined || id == '' || !$(event.target).hasClass("song")) {
     let songsElem = getCurrentSongsElement()
     let filters = songsElem.find('.topBar .filters')
     if(filters.hasClass("expanded")) filters.removeClass("expanded")

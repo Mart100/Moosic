@@ -43,6 +43,8 @@ class Song {
     return
   }
   getVideoDataFromYoutube() {
+    console.trace()
+    console.log(this)
     return new Promise((resolve, reject) => {
       let request = gapi.client.youtube.videos.list({
         id: this.youtubeID,
@@ -52,12 +54,13 @@ class Song {
       })
       request.execute((response) => {
         console.log(this.youtubeID, response)
+        if(!response.items) return resolve()
         resolve(response.items[0])
       })
     })
   }
   async importFromYoutube(video) {
-
+    if(video == undefined || video.snippet == undefined) return
     this.image = video.snippet.thumbnails.default.url
     this.youtubeID = video.kind == 'youtube#playlistItem' ? (video.snippet.resourceId.videoId) : (video.id.videoId ? (video.id.videoId) : (video.id))
     this.title = video.snippet.title
@@ -98,7 +101,7 @@ class Song {
   async dislike() {
     this.liked = false
     await this.save()
-    this.removeDownload()
+    //this.removeDownload()
     return
   }
   async save() {
@@ -110,6 +113,8 @@ class Song {
     })
   }
   async removeDownload() {
+    console.log("Undownload: ", this.title)
+    console.trace()
     return new Promise((resolve, reject) => {
       let downloadPos = this.getDownloadLocation()
       console.log(downloadPos)

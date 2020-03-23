@@ -107,7 +107,8 @@ function started() {
                 case 0: return [4, getData()];
                 case 1:
                     database = _a.sent();
-                    songHeight = database.settings.songTileSize;
+                    if (database.settings.songTileSize)
+                        songHeight = database.settings.songTileSize;
                     return [2];
             }
         });

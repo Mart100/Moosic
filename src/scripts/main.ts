@@ -66,7 +66,7 @@ $(() => {
 
 async function started() {
   let database = await getData()
-  songHeight = database.settings.songTileSize
+  if(database.settings.songTileSize) songHeight = database.settings.songTileSize
 }
 
 

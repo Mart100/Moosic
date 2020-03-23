@@ -72,6 +72,8 @@ var MusicPlayer = (function (_super) {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
+                        if (song.youtubeID == undefined)
+                            return [2];
                         this.stop();
                         console.log("PLAYING NOW:\n", song);
                         if (!!song.title) return [3, 2];
@@ -81,8 +83,6 @@ var MusicPlayer = (function (_super) {
                         _a.label = 2;
                     case 2:
                         if (song.title == undefined)
-                            return [2];
-                        if (song.youtubeID == undefined)
                             return [2];
                         queueIDlist = Array.from(this.queue, function (s) { return s.youtubeID; });
                         idx = queueIDlist.indexOf(song.youtubeID);
@@ -208,7 +208,7 @@ var MusicPlayer = (function (_super) {
             return this.HowlSound.seek(to);
     };
     MusicPlayer.prototype.getCurrentTime = function () {
-        if (this.currentPlayer == 'MP3' && this.HowlSound)
+        if (this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong)
             return this.HowlSound.seek();
     };
     MusicPlayer.prototype.playMp3 = function (url) {

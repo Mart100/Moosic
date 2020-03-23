@@ -74,7 +74,6 @@ async function loadCollections() {
       $('#mySongs .songs').show()
       let collectionSongs = songs.filter((s:any) => collection.songs.includes(s.youtubeID))
       currentCollection = collection.name
-      console.log(collectionSongs)
       showSongs(collectionSongs, {refresh: true, scrollCurrentSong: false})
     }).children().click(e => false)
 

@@ -12,8 +12,6 @@ interface showSongsOptions {
 
 async function showSongs(songs, options:showSongsOptions) {
 
-  console.log()
-
   if(options.topBar == undefined) options.topBar = true
   if(options.sort == undefined) options.sort = true
   if(options.refresh == undefined) options.refresh = false
@@ -23,7 +21,7 @@ async function showSongs(songs, options:showSongsOptions) {
 
   let songsElem = getCurrentSongsElement()
 
-  if(songsElem == undefined) return console.log('ERR: 564')
+  if(songsElem == undefined || songsElem[0] == undefined) return console.log('ERR: 564')
 
   if(songsElem[0].parentElement.id == 'search') options.topBar = false
 
@@ -257,15 +255,10 @@ async function showSongs(songs, options:showSongsOptions) {
             <div class="year">This year</div>
             <div class="alltime">All time</div>
             `)
-      
             return
           }
-
         }
-
       }
-
-
     }
     else {
       filters[a][b] = false
@@ -282,8 +275,27 @@ async function showSongs(songs, options:showSongsOptions) {
 
   let filterButton = topBar.find('.filterButton')
   let filtersDiv = topBar.find('.filters')
+  let filtersButtonCooldown = Date.now()
   filterButton.off().on('click', () => {
+    if(Date.now() - filtersButtonCooldown < 300) return 
     filtersDiv.toggleClass('expanded')
+    if(filtersDiv.hasClass('expanded')) {
+      let autoHeight = filtersDiv.css('height', 'auto').height()
+      filtersDiv.css('height', '0px')
+      filtersDiv.animate({'height': autoHeight}, 300, () => {
+        filtersDiv.css('height', 'auto')
+      })
+    } else {
+      filtersDiv.animate({'height': '0px'}, 300)
+    }
+
+  })
+  filtersDiv.parent().on('mouseleave', (event) => {
+    console.log("Yes", event)
+    if(!filtersDiv.hasClass('expanded')) return
+    filtersDiv.removeClass('expanded')
+    filtersDiv.css('height', '167px')
+    filtersDiv.animate({'height': '0px'}, 200)
   })
 
   console.log('SHOW SONGLIST')

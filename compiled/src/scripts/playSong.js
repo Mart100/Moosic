@@ -42,7 +42,7 @@ function onSongClick(event, queue) {
             switch (_a.label) {
                 case 0:
                     id = event.target.id.replace('song-', '');
-                    if (id == undefined || id == '') {
+                    if (id == undefined || id == '' || !$(event.target).hasClass("song")) {
                         songsElem = getCurrentSongsElement();
                         filters_1 = songsElem.find('.topBar .filters');
                         if (filters_1.hasClass("expanded"))

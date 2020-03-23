@@ -39,11 +39,10 @@ var filters = {};
 resetFilters();
 function showSongs(songs, options) {
     return __awaiter(this, void 0, void 0, function () {
-        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, refreshSongList, _i, songs_1, s, song, filterOut, songTxt, mode_1, now_1, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv;
+        var songsElem, songListElem, database, refinedSongs, searchTxtVal, searchTxt, searchFilter, refreshSongList, _i, songs_1, s, song, filterOut, songTxt, mode_1, now_1, alphabet, songsHtml, _a, refinedSongs_1, s, songFocus, songFocusIDX, songHeight_1, topBar, filterButton, filtersDiv, filtersButtonCooldown;
         return __generator(this, function (_b) {
             switch (_b.label) {
                 case 0:
-                    console.log();
                     if (options.topBar == undefined)
                         options.topBar = true;
                     if (options.sort == undefined)
@@ -56,7 +55,7 @@ function showSongs(songs, options) {
                 case 1:
                     songs = _b.sent();
                     songsElem = getCurrentSongsElement();
-                    if (songsElem == undefined)
+                    if (songsElem == undefined || songsElem[0] == undefined)
                         return [2, console.log('ERR: 564')];
                     if (songsElem[0].parentElement.id == 'search')
                         options.topBar = false;
@@ -248,8 +247,29 @@ function showSongs(songs, options) {
                     });
                     filterButton = topBar.find('.filterButton');
                     filtersDiv = topBar.find('.filters');
+                    filtersButtonCooldown = Date.now();
                     filterButton.off().on('click', function () {
+                        if (Date.now() - filtersButtonCooldown < 300)
+                            return;
                         filtersDiv.toggleClass('expanded');
+                        if (filtersDiv.hasClass('expanded')) {
+                            var autoHeight = filtersDiv.css('height', 'auto').height();
+                            filtersDiv.css('height', '0px');
+                            filtersDiv.animate({ 'height': autoHeight }, 300, function () {
+                                filtersDiv.css('height', 'auto');
+                            });
+                        }
+                        else {
+                            filtersDiv.animate({ 'height': '0px' }, 300);
+                        }
+                    });
+                    filtersDiv.parent().on('mouseleave', function (event) {
+                        console.log("Yes", event);
+                        if (!filtersDiv.hasClass('expanded'))
+                            return;
+                        filtersDiv.removeClass('expanded');
+                        filtersDiv.css('height', '167px');
+                        filtersDiv.animate({ 'height': '0px' }, 200);
                     });
                     console.log('SHOW SONGLIST');
                     return [2];
