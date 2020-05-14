@@ -32,3 +32,7 @@ x   Don't download song while downloading
     faster downloading
     Invite to listen on discord
     Discover suggested
+x   Cancel drop song
+x   show times played in song info
+    don't delete timesPlayed data when redownload
+    Something with lyrics

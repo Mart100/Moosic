@@ -515,6 +515,7 @@ async function showTooltipForSong(song:Song) {
     Last played: ${new Date(song.lastPlayed).toString()}
     saveDate: ${new Date(song.saveDate).toString()}
     youtubeID: ${song.youtubeID}
+    total Played: ${song.playedTimes.length}
     `
     window.alert(info)
   })

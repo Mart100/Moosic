@@ -265,6 +265,9 @@ $(function () {
         if ($('#dropToImportDiv')[0])
             return;
         $('body').append("\n<div id=\"dropToImportDiv\" style=\"width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;\">\n  <span style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);\">\n  Drop to import song\n  </span>\n</div>\n    ");
+        $('#dropToImportDiv').off().on('click', function () {
+            $('#dropToImportDiv').remove();
+        });
     }).on('dragleave', function () {
         if (dragEnterTime > new Date().getTime() - 10)
             return;

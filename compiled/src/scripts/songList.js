@@ -550,7 +550,7 @@ function showTooltipForSong(song) {
                     tooltip.find('.songInfo').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
                         var info;
                         return __generator(this, function (_a) {
-                            info = "\n    song title: " + song.title + "\n    song thumbnail: " + song.image + "\n    song author: " + song.author + "\n    Last played: " + new Date(song.lastPlayed).toString() + "\n    saveDate: " + new Date(song.saveDate).toString() + "\n    youtubeID: " + song.youtubeID + "\n    ";
+                            info = "\n    song title: " + song.title + "\n    song thumbnail: " + song.image + "\n    song author: " + song.author + "\n    Last played: " + new Date(song.lastPlayed).toString() + "\n    saveDate: " + new Date(song.saveDate).toString() + "\n    youtubeID: " + song.youtubeID + "\n    total Played: " + song.playedTimes.length + "\n    ";
                             window.alert(info);
                             return [2];
                         });

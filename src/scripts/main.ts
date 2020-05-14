@@ -176,6 +176,9 @@ $(() => {
   </span>
 </div>
     `)
+    $('#dropToImportDiv').off().on('click', () => {
+      $('#dropToImportDiv').remove()
+    })
   }).on('dragleave', () => {
     if(dragEnterTime > new Date().getTime()-10) return
     console.log('Leave')
