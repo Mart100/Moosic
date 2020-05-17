@@ -44,6 +44,7 @@ $(function () {
                     $('#navigator li').removeClass('selected');
                     $(event.target).addClass('selected');
                     name = event.target.className.split(' ')[0];
+                    $('#cutSong').hide();
                     $('#search').hide();
                     $('#mySongs').hide();
                     $('#settings').hide();

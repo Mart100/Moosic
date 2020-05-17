@@ -98,6 +98,8 @@ $(function () {
         $('#navigator .mySongs').trigger('click');
     }, 100);
     started();
+    var win = remote.getCurrentWindow();
+    win.setBounds({ width: 400, height: 800 });
 });
 function started() {
     return __awaiter(this, void 0, void 0, function () {
@@ -213,9 +215,7 @@ DiscordRPCclient.on('ready', function () { return __awaiter(_this, void 0, void 
     var database;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                console.log('YOINKS');
-                return [4, getData()];
+            case 0: return [4, getData()];
             case 1:
                 database = _a.sent();
                 if (database.settings.discordRPC == false)
@@ -264,7 +264,7 @@ $(function () {
         dragEnterTime = new Date().getTime();
         if ($('#dropToImportDiv')[0])
             return;
-        $('body').append("\n<div id=\"dropToImportDiv\" style=\"width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;\">\n  <span style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);\">\n  Drop to import song\n  </span>\n</div>\n    ");
+        $('body').append("\n<div id=\"dropToImportDiv\" style=\"width: 100%; height: 100%; background-color: rgb(10, 10, 10); color: white; position: absolute; z-index: 1000;\">\n\t<span style=\"position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);\">\n\tDrop to import song\n\t</span>\n</div>\n\t\t");
         $('#dropToImportDiv').off().on('click', function () {
             $('#dropToImportDiv').remove();
         });

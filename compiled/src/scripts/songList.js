@@ -439,7 +439,7 @@ function showTooltipForSong(song) {
                         downloadText = 'Redownload';
                     if (songElem.find('.tooltip')[0])
                         songElem.find('.tooltip').remove();
-                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">" + downloadText + "</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">" + downloadText + "</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"cut\">Cut song</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
                     currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
@@ -495,6 +495,12 @@ function showTooltipForSong(song) {
                                     showSongs(currentSongList, { refresh: true });
                                     return [2];
                             }
+                        });
+                    }); });
+                    tooltip.find('.cut').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {
+                        return __generator(this, function (_a) {
+                            openCutSong(song);
+                            return [2];
                         });
                     }); });
                     tooltip.find('.playSimularSongs').on('click', function (e) { return __awaiter(_this, void 0, void 0, function () {

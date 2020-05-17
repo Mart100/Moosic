@@ -1,161 +1,197 @@
 <html>
-  <head>
-    <!-- Styles -->
-    <link rel="stylesheet" type="text/css" href="styles/main.css">
-    <link rel="stylesheet" type="text/css" href="styles/navigator.css">
-    <link rel="stylesheet" type="text/css" href="styles/titleBar.css">
-    <link rel="stylesheet" type="text/css" href="styles/currentSong.css">
-    <link rel="stylesheet" type="text/css" href="styles/index.css">
-    <link rel="stylesheet" type="text/css" href="styles/search.css">
-    <link rel="stylesheet" type="text/css" href="styles/mySongs.css">
-    <link rel="stylesheet" type="text/css" href="styles/buttons.css">
-    <link rel="stylesheet" type="text/css" href="styles/settings.css">
-    <link rel="stylesheet" type="text/css" href="styles/currentQueue.css">
-    <link rel="stylesheet" type="text/css" href="styles/songList.css">
-    <link rel="stylesheet" type="text/css" href="styles/playlistImport.css">
-    <link rel="stylesheet" type="text/css" href="styles/other.css">
-    <link rel="stylesheet" type="text/css" href="styles/loadingWin.css">
+	<head>
+		<!-- Styles -->
+		<link rel="stylesheet" type="text/css" href="styles/main.css">
+		<link rel="stylesheet" type="text/css" href="styles/navigator.css">
+		<link rel="stylesheet" type="text/css" href="styles/titleBar.css">
+		<link rel="stylesheet" type="text/css" href="styles/currentSong.css">
+		<link rel="stylesheet" type="text/css" href="styles/index.css">
+		<link rel="stylesheet" type="text/css" href="styles/search.css">
+		<link rel="stylesheet" type="text/css" href="styles/mySongs.css">
+		<link rel="stylesheet" type="text/css" href="styles/buttons.css">
+		<link rel="stylesheet" type="text/css" href="styles/settings.css">
+		<link rel="stylesheet" type="text/css" href="styles/currentQueue.css">
+		<link rel="stylesheet" type="text/css" href="styles/songList.css">
+		<link rel="stylesheet" type="text/css" href="styles/playlistImport.css">
+		<link rel="stylesheet" type="text/css" href="styles/other.css">
+		<link rel="stylesheet" type="text/css" href="styles/loadingWin.css">
+		<link rel="stylesheet" type="text/css" href="styles/cutSong.css">
 
-    <!-- Libraries -->
-    <script> var exports = {}; </script>
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-    <script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.core.min.js"></script>
+		<!-- Libraries -->
+		<script> var exports = {}; </script>
+		<script>window.$ = window.jQuery = require('jquery');</script>
+		<script src="https://www.youtube.com/iframe_api"></script>
+		<script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.core.min.js"></script>
 
-    <!-- Scripts -->
-    <script src="scripts/musicPlayer.js"></script>
-    <script src="scripts/songDownloader.js"></script>
-    <script src="scripts/main.js"></script>
-    <script src="scripts/song.js"></script>
-    <script src="scripts/titleBar.js"></script>
-    <script src="scripts/search.js"></script>
-    <script src="scripts/playSong.js"></script>
-    <script src="scripts/navigator.js"></script>
-    <script src="scripts/database.js"></script>
-    <script src="scripts/mySongs.js"></script>
-    <script src="scripts/settings.js"></script>
-    <script src="scripts/currentQueue.js"></script>
-    <script src="scripts/keyBinds.js"></script>
-    <script src="scripts/collections.js"></script>
-    <script src="scripts/songList.js"></script>
-    <script src="scripts/spotifyImport.js"></script>
-    <script src="scripts/getRelatedVideosYT.js"></script>
-    <script src="scripts/utils.js"></script>
-    <script src="scripts/updates.js"></script>
-  </head>
-  <body>
-    <div id="titleBar">
-      <img class="logo" src="./images/logo.png"/>
-      <div class="name">Moosic</div>
-      <div class="button" id="titleBarClose"><svg width="16" height="16" viewBox="0 0 12 12"><polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg></div>
-      <div class="button" id="titleBarMinimize"><svg width="16" height="16" viewBox="0 0 12 12"><rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect></svg></div>
-    </div>
-    <div id="index">
-      <div id="currentQueue" style="display: none;">
-        <div class="currentSong">
-          <img class="exit" src="./images/cross.png">
-          <div class="imageWrapper"><img class="image"></div>
-          <div class="progressBackground"><div class="progress"></div></div>
-          <span class="currentTime">0:14</span>
-          <span class="songDuration">1:76</span>
-        </div>
-        <div id="queue" class="songs"></div>
-        <div id="musicControls">
-          <div class="bar_wrapper">
-            <img class="repeat" src="./images/repeat.png"/>
-            <img class="previous" src="./images/previous.png"/>
-            <div class="play_pause">
-              <img class="play" src="./images/play.png"/>
-              <img class="pause" src="./images/pause.png" style="display: block;"/>
-            </div>
-            <img class="next" src="./images/next.png"/>
-            <img class="shuffle" src="./images/shuffle.png"/>
-          </div>
-          <div class="volume">
-            <img class="low_volume" src="./images/low-volume.png">
-            <input type="range" class="volume_input" min="0" max="100" value="50"> 
-            <img class="high_volume" src="./images/high-volume.png">
-          </div>
-        </div>
-      </div>
-      <div id="songsPopup">
-        <div class="songs"></div>
-      </div>
-      <div id="search" style="display: none;">
-        <input class="input" type="text" placeholder="Search youtube">
-        <div class="songs"></div>
-      </div>
-      <div id="mySongs" style="display: none;">
-        <div id="mySongsMenu">
-          <div class="button1" id="likedSongs-button">Liked songs</div>
-          <div class="button1" id="allSongs-button">All songs</div>
-          <div class="button1" id="newCollection-button">Create new collection +</div>
-        </div>
-        <div class="songs" style="display: none;"></div>
-      </div>
-      <div id="settings" style="display: none;">
-        <div id="settings-main"> 
-          <div class="button1" id="importData-button">Import songs</div>
-          <div class="button1" id="appearance-button">Appearance</div>
-          <div class="button1" style="font-size: 14px;" id="exportData-button">Export / Save your data to json</div>
-          <div class="button1" style="font-size: 15px;" id="deleteData-button">Delete all data</div>
-          <div class="button1" style="font-size: 15px;" id="info-button">Info</div>
-          <div class="button1" style="font-size: 15px;" id="setStoragePos-button">Change storage location</div>
-          <div class="button1" style="font-size: 15px;" id="discordRPC-button">Enable Discord RPC</div>
-          <div class="button1" style="font-size: 15px;" id="advanced-button">Advanced</div>
-        </div>
-        <div id="info" class="thing1" style="display: none;">
-          <div id="moosicVersion">Version: </div>
-          <div id="info-savedSongs">Saved Songs: </div>
-          <div id="info-downloadedSongs">Downloaded Songs: </div>
-          <div id="info-downloadedSongsStorageSize">Downloaded Songs storage size: </div>
-          <div id="info-songsLocation">Songs Location: </div>
-        </div>
-        <div id="advancedSettings" class="thing1" style="display: none;">
-          <div id="advancedSettings-apikey" class="button1">set youtube API key</div>
-          <div id="advancedSettings-repairSave" class="button1">Repair save/files</div>
-          <div id="advancedSettings-downloadAllSongs" class="button1">Download all saved songs</div>
-          <div id="advancedSettings-addYoutubeData" class="button1">Add youtube data to lost songs</div>
-          <div id="advancedSettings-deleteLost" class="button1">Delete lost songs</div>
-        </div>
-        <div id="appearanceSettings" class="thing1" style="display: none;">
-          <div class="button1" id="appearanceSettings-songSize">
-            Change songTile size
-            <input type="range" min="50" max="100" value="80">
-          </div>
-          <div class="songs"></div>
-        </div>
-        <div id="importData" class="thing1" style="display: none;">
-          <div class="button1" id="importData-moosic-button">Import Moosic Save</div>
-          <div class="button1" id="importData-youtubePlaylist-button">Import Youtube Playlist</div>
-          <div class="button1" id="importData-headset-button">Import headset save</div>
-          <div class="button1" id="importData-spotify-button">Import from Spotify</div>
-          <div class="button1" id="importData-mp3Folder-button">Import from mp3 folder</div>
-        </div>
-      </div>
-      <div id="playlistImportSpotify" style="display: none;">
-        <div class="importHeader">
-          <b>Import spotify playlists (It might not be able to find all the songs):</b>
-        </div>
-        <div id="playlistImportList" class="spotifyPlaylists"></div>
-      </div>
-    </div>
-    <div id="currentSong">
-      <div id="progress"></div>
-      <div class="controls">
-        <div class="play_pause">
-          <img class="play" src="./images/play.png"/>
-          <img class="pause" src="./images/pause.png"/>
-        </div>
-      </div>
-      <img class="image">
-      <span class="title">Nothing is playing...</span>
-    </div>
-    <ul id="navigator">
-      <li class="search">Search</li>
-      <li class="mySongs">My Songs</li>
-      <li class="settings">Settings</li>
-    </ul>
-  </body>
+		<!-- Scripts -->
+		<script src="scripts/musicPlayer.js"></script>
+		<script src="scripts/songDownloader.js"></script>
+		<script src="scripts/main.js"></script>
+		<script src="scripts/song.js"></script>
+		<script src="scripts/titleBar.js"></script>
+		<script src="scripts/search.js"></script>
+		<script src="scripts/playSong.js"></script>
+		<script src="scripts/navigator.js"></script>
+		<script src="scripts/database.js"></script>
+		<script src="scripts/mySongs.js"></script>
+		<script src="scripts/settings.js"></script>
+		<script src="scripts/cutSong.js"></script>
+		<script src="scripts/currentQueue.js"></script>
+		<script src="scripts/keyBinds.js"></script>
+		<script src="scripts/collections.js"></script>
+		<script src="scripts/songList.js"></script>
+		<script src="scripts/spotifyImport.js"></script>
+		<script src="scripts/getRelatedVideosYT.js"></script>
+		<script src="scripts/utils.js"></script>
+		<script src="scripts/updates.js"></script>
+	</head>
+	<body>
+		<div id="titleBar">
+			<img class="logo" src="./images/logo.png"/>
+			<div class="name">Moosic</div>
+			<div class="button" id="titleBarClose"><svg width="16" height="16" viewBox="0 0 12 12"><polygon fill="#ffffff" fill-rule="evenodd" points="11 1.576 6.583 6 11 10.424 10.424 11 6 6.583 1.576 11 1 10.424 5.417 6 1 1.576 1.576 1 6 5.417 10.424 1"></polygon></svg></div>
+			<div class="button" id="titleBarMinimize"><svg width="16" height="16" viewBox="0 0 12 12"><rect fill="#ffffff" width="10" height="1" x="1" y="6"></rect></svg></div>
+		</div>
+		<div id="index">
+			<div id="currentQueue" style="display: none;">
+				<div class="currentSong">
+					<img class="exit" src="./images/cross.png">
+					<div class="imageWrapper"><img class="image"></div>
+					<div class="progressBackground"><div class="progress"></div></div>
+					<span class="currentTime">0:14</span>
+					<span class="songDuration">1:76</span>
+				</div>
+				<div id="queue" class="songs"></div>
+				<div id="musicControls">
+					<div class="bar_wrapper">
+						<img class="repeat" src="./images/repeat.png"/>
+						<img class="previous" src="./images/previous.png"/>
+						<div class="play_pause">
+							<img class="play" src="./images/play.png"/>
+							<img class="pause" src="./images/pause.png" style="display: block;"/>
+						</div>
+						<img class="next" src="./images/next.png"/>
+						<img class="shuffle" src="./images/shuffle.png"/>
+					</div>
+					<div class="volume">
+						<img class="low_volume" src="./images/low-volume.png">
+						<input type="range" class="volume_input" min="0" max="100" value="50"> 
+						<img class="high_volume" src="./images/high-volume.png">
+					</div>
+				</div>
+			</div>
+			<div id="songsPopup">
+				<div class="songs"></div>
+			</div>
+			<div id="search" style="display: none;">
+				<input class="input" type="text" placeholder="Search youtube">
+				<div class="songs"></div>
+			</div>
+			<div id="mySongs" style="display: none;">
+				<div id="mySongsMenu">
+					<div class="button1" id="likedSongs-button">Liked songs</div>
+					<div class="button1" id="allSongs-button">All songs</div>
+					<div class="button1" id="newCollection-button">Create new collection +</div>
+				</div>
+				<div class="songs" style="display: none;"></div>
+			</div>
+			<div id="settings" style="display: none;">
+				<div id="settings-main"> 
+					<div class="button1" id="importData-button">Import songs</div>
+					<div class="button1" id="appearance-button">Appearance</div>
+					<div class="button1" style="font-size: 14px;" id="exportData-button">Export / Save your data to json</div>
+					<div class="button1" style="font-size: 15px;" id="deleteData-button">Delete all data</div>
+					<div class="button1" style="font-size: 15px;" id="info-button">Info</div>
+					<div class="button1" style="font-size: 15px;" id="setStoragePos-button">Change storage location</div>
+					<div class="button1" style="font-size: 15px;" id="discordRPC-button">Enable Discord RPC</div>
+					<div class="button1" style="font-size: 15px;" id="advanced-button">Advanced</div>
+				</div>
+				<div id="info" class="thing1" style="display: none;">
+					<div id="moosicVersion">Version: </div>
+					<div id="info-savedSongs">Saved Songs: </div>
+					<div id="info-downloadedSongs">Downloaded Songs: </div>
+					<div id="info-downloadedSongsStorageSize">Downloaded Songs storage size: </div>
+					<div id="info-songsLocation">Songs Location: </div>
+				</div>
+				<div id="advancedSettings" class="thing1" style="display: none;">
+					<div id="advancedSettings-apikey" class="button1">set youtube API key</div>
+					<div id="advancedSettings-repairSave" class="button1">Repair save/files</div>
+					<div id="advancedSettings-downloadAllSongs" class="button1">Download all saved songs</div>
+					<div id="advancedSettings-addYoutubeData" class="button1">Add youtube data to lost songs</div>
+					<div id="advancedSettings-deleteLost" class="button1">Delete lost songs</div>
+				</div>
+				<div id="appearanceSettings" class="thing1" style="display: none;">
+					<div class="button1" id="appearanceSettings-songSize">
+						Change songTile size
+						<input type="range" min="50" max="100" value="80">
+					</div>
+					<div class="songs"></div>
+				</div>
+				<div id="importData" class="thing1" style="display: none;">
+					<div class="button1" id="importData-moosic-button">Import Moosic Save</div>
+					<div class="button1" id="importData-youtubePlaylist-button">Import Youtube Playlist</div>
+					<div class="button1" id="importData-headset-button">Import headset save</div>
+					<div class="button1" id="importData-spotify-button">Import from Spotify</div>
+					<div class="button1" id="importData-mp3Folder-button">Import from mp3 folder</div>
+				</div>
+			</div>
+			<div id="playlistImportSpotify" style="display: none;">
+				<div class="importHeader">
+					<b>Import spotify playlists (It might not be able to find all the songs):</b>
+				</div>
+				<div id="playlistImportList" class="spotifyPlaylists"></div>
+			</div>
+			<div id="cutSong" style="display: none;">
+
+				<div class="currentSong">
+					<img class="thumbnail">
+					<div class="header">
+						<span class="title"></span>
+					</div>
+				</div>
+				<div class="text">Cut song:</div>
+				<div class="timeline">
+
+					<div class="cutoutL">
+						<div class="cursor">
+							<div class="time">0:00</div>
+						</div>
+					</div>
+
+					<div class="cursor"><div class="time">0:00</div></div>
+
+					<div class="cutoutR">
+						<div class="cursor">
+							<div class="time">0:00</div>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="buttons">
+					<div class="playpause"><img src="./images/play1.png"></div>
+					<br><br><br><br><br>
+					<div class="cancel">Cancel</div>
+					<div class="save">Save</div>
+				</div>
+			</div>
+		</div>
+		<div id="currentSong">
+			<div id="progress"></div>
+			<div class="controls">
+				<div class="play_pause">
+					<img class="play" src="./images/play.png"/>
+					<img class="pause" src="./images/pause.png"/>
+				</div>
+			</div>
+			<img class="image">
+			<span class="title">Nothing is playing...</span>
+		</div>
+		<ul id="navigator">
+			<li class="search">Search</li>
+			<li class="mySongs">My Songs</li>
+			<li class="settings">Settings</li>
+		</ul>
+	</body>
 </html>

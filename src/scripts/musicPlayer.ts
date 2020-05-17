@@ -163,7 +163,7 @@ class MusicPlayer extends EventEmitter {
     if(this.currentPlayer == 'MP3' && this.HowlSound) return this.HowlSound.seek(to)
   }
   getCurrentTime() {
-    if(this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong) return this.HowlSound.seek()
+    if(this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong && this.HowlSound.state() == 'loaded') return this.HowlSound.seek()
   }
   playMp3(url) {
     //if(this.HowlSound != undefined) this.HowlSound.stop()

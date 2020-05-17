@@ -444,6 +444,7 @@ async function showTooltipForSong(song:Song) {
     <button class="addToCollection">Add to collection</button>
     <button class="playSimularSongs">Play similar songs</button>
     <button class="saveSongAs">Save song as</button>
+    <button class="cut">Cut song</button>
     <button class="songInfo">Song info</button>
     <button class="deleteSong">Delete songs</button>
   </div>
@@ -485,6 +486,10 @@ async function showTooltipForSong(song:Song) {
     let songidx = currentSongList.indexOf(currentSongList.find(s => s.youtubeID == song.youtubeID))
     if(songidx > -1) currentSongList.splice(songidx, 1)
     showSongs(currentSongList, {refresh: true})
+  })
+
+  tooltip.find('.cut').on('click', async (e) => {
+    openCutSong(song)
   })
 
   tooltip.find('.playSimularSongs').on('click', async (e) => {

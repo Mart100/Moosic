@@ -5,6 +5,7 @@ $(() => {
 
     let name = event.target.className.split(' ')[0]
 
+    $('#cutSong').hide()
     $('#search').hide()
     $('#mySongs').hide()
     $('#settings').hide()

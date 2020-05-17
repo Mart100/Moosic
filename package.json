@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.6.6",
+  "version": "1.7.0",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -19,6 +19,7 @@
     "electron-prompt": "^1.4.0",
     "electron-updater": "^4.1.2",
     "file-saver": "^2.0.2",
+    "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^8.1.0",
     "get-folder-size": "^2.0.1",
     "jquery": "^3.4.1",

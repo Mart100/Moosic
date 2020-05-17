@@ -36,3 +36,5 @@ x   Cancel drop song
 x   show times played in song info
     don't delete timesPlayed data when redownload
     Something with lyrics
+    Cut video (ending no music)
+    Music name and options when focused

@@ -208,7 +208,7 @@ var MusicPlayer = (function (_super) {
             return this.HowlSound.seek(to);
     };
     MusicPlayer.prototype.getCurrentTime = function () {
-        if (this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong)
+        if (this.currentPlayer == 'MP3' && this.HowlSound && this.currentSong && this.HowlSound.state() == 'loaded')
             return this.HowlSound.seek();
     };
     MusicPlayer.prototype.playMp3 = function (url) {
