@@ -1,5 +1,4 @@
-const MP3Cutter = require('mp3-cutter')
-var ffmpeg = require('fluent-ffmpeg')
+const ffmpeg = require('fluent-ffmpeg')
 
 async function openCutSong(song:Song) {
 
