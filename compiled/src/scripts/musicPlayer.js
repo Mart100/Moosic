@@ -213,7 +213,7 @@ var MusicPlayer = (function (_super) {
     };
     MusicPlayer.prototype.playMp3 = function (url) {
         var _this = this;
-        this.HowlSound = new Howl({ src: url });
+        this.HowlSound = new Howl({ src: url, html5: true });
         this.HowlSound.play();
         this.currentPlayer = 'MP3';
         this.HowlSound.on('play', function () {
@@ -228,7 +228,9 @@ var MusicPlayer = (function (_super) {
         this.HowlSound.on('loaderror', function (err) { return __awaiter(_this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4, this.currentSong.download({ priority: true, redownload: true })];
+                    case 0:
+                        console.log('Howl ERR: 190', err);
+                        return [4, this.currentSong.download({ priority: true, redownload: true })];
                     case 1:
                         _a.sent();
                         this.currentSong.play();

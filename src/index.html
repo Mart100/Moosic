@@ -16,6 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="styles/other.css">
 		<link rel="stylesheet" type="text/css" href="styles/loadingWin.css">
 		<link rel="stylesheet" type="text/css" href="styles/cutSong.css">
+		<link rel="stylesheet" type="text/css" href="styles/songtooltip.css">
 
 		<!-- Libraries -->
 		<script> var exports = {}; </script>
@@ -56,8 +57,11 @@
 		<div id="index">
 			<div id="currentQueue" style="display: none;">
 				<div class="currentSong">
-					<img class="exit" src="./images/cross.png">
-					<div class="imageWrapper"><img class="image"></div>
+					<div class="gradient"></div>
+					<img class="exit button" src="./images/cross.png">
+					<img class="like button" src="./images/heart.png">
+					<img class="more button" src="./images/options.png">
+					<img class="image">					
 					<div class="progressBackground"><div class="progress"></div></div>
 					<span class="currentTime">0:14</span>
 					<span class="songDuration">1:76</span>
@@ -185,7 +189,7 @@
 					<img class="pause" src="./images/pause.png"/>
 				</div>
 			</div>
-			<img class="image">
+			<div class="image"><img></div>
 			<span class="title">Nothing is playing...</span>
 		</div>
 		<ul id="navigator">

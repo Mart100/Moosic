@@ -75,7 +75,7 @@ $(() => {
 })
 
 function setCurrentSong(song) {
-  $('#currentSong .image').attr('src', song.image)
+  $('#currentSong .image img').attr('src', song.image.replace('mq', '').replace('default', 'mqdefault'))
   $('#currentSong .title').html(song.title)
   $('#currentSong .play').fadeOut()
   $('#currentSong .pause').fadeIn()

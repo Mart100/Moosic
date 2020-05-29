@@ -29,12 +29,14 @@ x   Don't download song while downloading
     custom queue
     Wacthrij en toevoegen aan queue
     Edit song info
-    faster downloading
+x   faster downloading
     Invite to listen on discord
     Discover suggested
 x   Cancel drop song
 x   show times played in song info
-    don't delete timesPlayed data when redownload
+z   don't delete timesPlayed data when redownload
     Something with lyrics
-    Cut video (ending no music)
+x   Cut video (ending no music)
     Music name and options when focused
+    Use YTDL+YTSR+YTPL instead of youtube API
+    add tests

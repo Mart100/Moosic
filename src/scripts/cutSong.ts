@@ -2,7 +2,7 @@ const ffmpeg = require('fluent-ffmpeg')
 
 async function openCutSong(song:Song) {
 
-	$('#cutSong .currentSong .thumbnail').attr('src', `https://i.ytimg.com/vi/${song.youtubeID}/maxresdefault.jpg`)
+	$('#cutSong .currentSong .thumbnail').attr('src', `https://i.ytimg.com/vi/${song.youtubeID}/mqdefault.jpg`)
 	$('#cutSong .currentSong .title').html(song.title)
 	//$('#index > div').hide()
 	$('#index #cutSong').fadeIn()

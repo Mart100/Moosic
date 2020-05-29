@@ -17,6 +17,11 @@
 #currentSong .image {
   height: 50px;
   width: 50px;
+  overflow: hidden;
+}
+#currentSong .image img {
+  transform: translateX(-25%);
+  height: 50px;
 }
 
 #currentSong .title {

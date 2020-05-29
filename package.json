@@ -21,6 +21,7 @@
     "file-saver": "^2.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^8.1.0",
+    "genius-api": "^0.4.1",
     "get-folder-size": "^2.0.1",
     "jquery": "^3.4.1",
     "lodash": "^4.17.15",
@@ -30,7 +31,7 @@
     "v8-compile-cache": "^2.1.0",
     "wget-improved": "^3.0.2",
     "yargs": "^14.2.0",
-    "ytdl-core": "^1.0.5"
+    "ytdl-core": "^2.1.5"
   },
   "devDependencies": {
     "@types/fs-extra": "^8.0.0",

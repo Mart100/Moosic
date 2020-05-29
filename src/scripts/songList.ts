@@ -425,7 +425,7 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
   })
 }
 
-async function showTooltipForSong(song:Song) {
+async function showTooltipForSong(song:Song, options?) {
   console.log('tooltip func')
 
   let database = await getData()
@@ -438,7 +438,7 @@ async function showTooltipForSong(song:Song) {
 
   if(songElem.find('.tooltip')[0]) songElem.find('.tooltip').remove()
   let tooltipHTML = $(`
-  <div class="tooltip">
+  <div class="tooltip songtooltip">
     <button class="download">${downloadText}</button>
     <button class="openInYoutube">Open in youtube</button>
     <button class="addToCollection">Add to collection</button>
@@ -455,11 +455,25 @@ async function showTooltipForSong(song:Song) {
   let showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID)
   if(showRemoveFromColl) tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>')
 
-  songElem.prepend(tooltipHTML) 
+  
 
   let parent = songElem.parent()
-  let tooltip = parent.find('.tooltip')
+  let tooltip
   let moreButton = parent.find('.more')
+
+  if(options && options.pos) {
+    $('body').append(tooltipHTML)
+    tooltip = $('body').find('.tooltip')
+    tooltip.css({
+      position: 'absolute',
+      left: `${options.pos.x}px`,
+      top: `${options.pos.y}px`,
+      transform: 'translateX(-100%)'
+    })
+  } else {
+    songElem.prepend(tooltipHTML)
+    tooltip = parent.find('.tooltip')
+  }
 
   tooltip.on('mouseleave', () => {
     tooltip.remove()

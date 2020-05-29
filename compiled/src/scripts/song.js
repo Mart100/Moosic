@@ -43,6 +43,7 @@ var Song = (function () {
         this.title = data.title;
         this.author = data.author;
         this.liked = data.liked;
+        this.duration = data.duration;
         this.saved = data.saved;
         if (this.liked == undefined)
             this.liked = false;

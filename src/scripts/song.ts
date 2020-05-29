@@ -7,6 +7,7 @@ class Song {
   title: string
   author: string
   liked?: boolean
+  duration?: number
   saved?: boolean
   order?: number
   lastPlayed?: number
@@ -23,6 +24,7 @@ class Song {
     this.title = data.title
     this.author = data.author
     this.liked = data.liked
+    this.duration = data.duration
     this.saved = data.saved
     if(this.liked == undefined) this.liked = false
     this.order = data.order

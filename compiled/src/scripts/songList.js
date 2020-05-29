@@ -418,7 +418,7 @@ function loadSong(idx, songs, songListElem) {
         });
     }); });
 }
-function showTooltipForSong(song) {
+function showTooltipForSong(song, options) {
     return __awaiter(this, void 0, void 0, function () {
         var database, songsElem, songElem, isDownloaded, downloadText, tooltipHTML, currentColl, showRemoveFromColl, parent, tooltip, moreButton;
         var _this = this;
@@ -439,15 +439,27 @@ function showTooltipForSong(song) {
                         downloadText = 'Redownload';
                     if (songElem.find('.tooltip')[0])
                         songElem.find('.tooltip').remove();
-                    tooltipHTML = $("\n  <div class=\"tooltip\">\n    <button class=\"download\">" + downloadText + "</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"cut\">Cut song</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
+                    tooltipHTML = $("\n  <div class=\"tooltip songtooltip\">\n    <button class=\"download\">" + downloadText + "</button>\n    <button class=\"openInYoutube\">Open in youtube</button>\n    <button class=\"addToCollection\">Add to collection</button>\n    <button class=\"playSimularSongs\">Play similar songs</button>\n    <button class=\"saveSongAs\">Save song as</button>\n    <button class=\"cut\">Cut song</button>\n    <button class=\"songInfo\">Song info</button>\n    <button class=\"deleteSong\">Delete songs</button>\n  </div>\n  ");
                     currentColl = database.collections.find(function (c) { return c.name == currentCollection; });
                     showRemoveFromColl = currentColl && currentColl.songs.includes(song.youtubeID);
                     if (showRemoveFromColl)
                         tooltipHTML.append('<button class="removeFromColl">Remove from this collection</button>');
-                    songElem.prepend(tooltipHTML);
                     parent = songElem.parent();
-                    tooltip = parent.find('.tooltip');
                     moreButton = parent.find('.more');
+                    if (options && options.pos) {
+                        $('body').append(tooltipHTML);
+                        tooltip = $('body').find('.tooltip');
+                        tooltip.css({
+                            position: 'absolute',
+                            left: options.pos.x + "px",
+                            top: options.pos.y + "px",
+                            transform: 'translateX(-100%)'
+                        });
+                    }
+                    else {
+                        songElem.prepend(tooltipHTML);
+                        tooltip = parent.find('.tooltip');
+                    }
                     tooltip.on('mouseleave', function () {
                         tooltip.remove();
                     });
