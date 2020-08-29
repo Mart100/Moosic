@@ -4,7 +4,7 @@
     "removeComments": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "outDir": "./compiled",
+    "outDir": "../compiled/scripts",
     "lib": [
       "dom",
       "es2015"
@@ -15,10 +15,8 @@
     "typings",
     "node_modules/@types"
   ],
-  "include": [
-    "./src/scripts",
-  ],
   "files": [
-    "./index.ts",
+    "CLI.ts",
+    "signInUserWebserver.ts"
   ]
 }

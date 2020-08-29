@@ -7,6 +7,7 @@ var globalShortcut = electron.globalShortcut;
 var ipcMain = electron.ipcMain;
 var log = require('electron-log');
 var fs_ = require('fs-extra');
+var signInUserWebserver = require('./scripts/signInUserWebserver.js');
 require('v8-compile-cache');
 var mainWindow;
 try {
@@ -22,7 +23,10 @@ app.on('ready', function () {
         frame: false,
         webPreferences: {
             nodeIntegration: true,
-            nodeIntegrationInWorker: true
+            nodeIntegrationInWorker: true,
+            enableRemoteModule: true,
+            nativeWindowOpen: true,
+            worldSafeExecuteJavaScript: true
         },
         icon: './icon.ico'
     });
@@ -65,6 +69,10 @@ app.on('ready', function () {
                 app.quit();
             });
         });
+    });
+    electron.ipcMain.on('saveUserFirestore', function (event, arg) {
+        console.log('Yooo, roempompom');
+        signInUserWebserver.start(arg);
     });
     mainWindow.on('closed', function () { win = null; });
     globalShortcut.register('MediaPlayPause', function () {

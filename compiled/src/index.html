@@ -23,7 +23,7 @@
 		<script>window.$ = window.jQuery = require('jquery');</script>
 		<script src="https://www.youtube.com/iframe_api"></script>
 		<script src="https://apis.google.com/js/client.js?onload=onClientLoad" type="text/javascript"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.1.2/howler.core.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.0/howler.min.js"></script>
 
 		<!-- Scripts -->
 		<script src="scripts/musicPlayer.js"></script>
@@ -46,6 +46,8 @@
 		<script src="scripts/getRelatedVideosYT.js"></script>
 		<script src="scripts/utils.js"></script>
 		<script src="scripts/updates.js"></script>
+		<script src="scripts/settings-cloudsaving.js"></script>
+		<script src="scripts/cloudsaving.js"></script>
 	</head>
 	<body>
 		<div id="titleBar">
@@ -104,8 +106,8 @@
 				<div id="settings-main"> 
 					<div class="button1" id="importData-button">Import songs</div>
 					<div class="button1" id="appearance-button">Appearance</div>
+					<div class="button1" style="font-size: 15px;" id="cloudsaving-button">Cloud saving</div>
 					<div class="button1" style="font-size: 14px;" id="exportData-button">Export / Save your data to json</div>
-					<div class="button1" style="font-size: 15px;" id="deleteData-button">Delete all data</div>
 					<div class="button1" style="font-size: 15px;" id="info-button">Info</div>
 					<div class="button1" style="font-size: 15px;" id="setStoragePos-button">Change storage location</div>
 					<div class="button1" style="font-size: 15px;" id="discordRPC-button">Enable Discord RPC</div>
@@ -124,6 +126,11 @@
 					<div id="advancedSettings-downloadAllSongs" class="button1">Download all saved songs</div>
 					<div id="advancedSettings-addYoutubeData" class="button1">Add youtube data to lost songs</div>
 					<div id="advancedSettings-deleteLost" class="button1">Delete lost songs</div>
+					<div class="button1" style="font-size: 15px;" id="deleteData-button">Delete all data</div>
+				</div>
+				<div id="cloudSavingSettings" class="thing1" style="display: none;">
+					<div id="cloudSavingSettings-save" class="button1">Save to cloud</div>
+					<div id="cloudSavingSettings-load" class="button1">Load from cloud</div>
 				</div>
 				<div id="appearanceSettings" class="thing1" style="display: none;">
 					<div class="button1" id="appearanceSettings-songSize">
@@ -197,5 +204,7 @@
 			<li class="mySongs">My Songs</li>
 			<li class="settings">Settings</li>
 		</ul>
+
 	</body>
+
 </html>

@@ -14,3 +14,8 @@ fs.copy('./src', './compiled/src', copy_options, (err) => {
   if(err) console.error(err)
   else console.log('Copy completed!')
 })
+
+fs.copy('./scripts', './compiled/scripts', copy_options, (err) => {
+  if(err) console.error(err)
+  else console.log('Copy completed!')
+})

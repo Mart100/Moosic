@@ -9,6 +9,7 @@ const ipcMain = electron.ipcMain
 
 const log = require('electron-log')
 const fs_ = require('fs-extra')
+const signInUserWebserver = require('./scripts/signInUserWebserver.js')
 
 require('v8-compile-cache')
 
@@ -31,7 +32,10 @@ app.on('ready', () => {
     frame: false,
     webPreferences: {
       nodeIntegration: true,
-      nodeIntegrationInWorker: true
+      nodeIntegrationInWorker: true,
+      enableRemoteModule: true,
+      nativeWindowOpen: true,
+      worldSafeExecuteJavaScript: true
     },
     icon: './icon.ico'
   })
@@ -80,6 +84,11 @@ app.on('ready', () => {
         app.quit()
       })
     })
+  })
+
+  electron.ipcMain.on('saveUserFirestore', (event, arg) => {
+    console.log('Yooo, roempompom')
+    signInUserWebserver.start(arg)
   })
 
   mainWindow.on('closed', () => { win = null })

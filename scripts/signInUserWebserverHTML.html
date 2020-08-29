@@ -1,0 +1,106 @@
+<html>
+	<head>
+
+		<!-- Socket.io -->
+		<script src="/socket.io/socket.io.js"></script>
+		<script> var socket = io(); </script>
+
+		<!-- Jquery -->
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+		<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+		<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-firestore.js"></script>
+
+		<title>Moosic save data</title>
+		<script>
+
+			let data = null
+			let user = null
+			let loggedIn = null
+
+			const firebaseConfig = {
+				apiKey: "AIzaSyDnRejYmJiYNXxrtVBywS_ZUf3sHhwdJFw",
+				authDomain: "moosic-d6855.firebaseapp.com",
+				databaseURL: "https://moosic-d6855.firebaseio.com",
+				projectId: "moosic-d6855",
+				storageBucket: "moosic-d6855.appspot.com",
+				messagingSenderId: "1081493739263",
+				appId: "1:1081493739263:web:dbdef2b9e4430267e25eca",
+				measurementId: "G-XM911W2VYY"
+			}
+	
+			firebase.initializeApp(firebaseConfig)
+
+			firebase.auth().getRedirectResult().then(async (gsignres) => {
+
+				if(gsignres.user != null){
+					user = gsignres.user
+					loggedIn = true
+					if(data) saveUserData()
+				} else{
+					sendGoogleLogin()
+				}
+
+
+			}).catch((err) => {
+				alert(error)
+				
+			})
+
+			async function saveUserData() {
+
+				let db = firebase.firestore()
+
+				let parsedData = JSON.parse(data)
+
+				parsedData.uid = user.uid
+
+				parsedData.songs = Object.keys(parsedData.songs).join('+')
+
+				db.collection("desktop-users").doc(user.uid).set(parsedData).then(() => {
+					console.log("Document successfully written!")
+					let text = $('<div></div>')
+					text.html('Your Moosic data has been saved, you can now close this window!')
+					text.css({
+						'text-align': 'center',
+						'font-size': '50px',
+						'position': 'absolute',
+						'left': '50%',
+						'top': '50%',
+						'transform': 'translate(-50%, -50%)'
+					})
+					$('body').append(text)
+				})
+			}
+
+			function sendGoogleLogin() {
+				const provider = new firebase.auth.GoogleAuthProvider();
+
+				firebase.auth().signInWithRedirect(provider).then((result) => {
+					let token = result.credential.accessToken;
+					let user = result.user;
+					console.log(token, user)
+
+				}).catch((error) => {
+					var errorCode = error.code;
+					var errorMessage = error.message;
+					var email = error.email;
+					var credential = error.credential;
+					console.error(error)
+				});
+			}
+
+			socket.on('data', (newData) => {
+				data = newData
+				if(loggedIn) saveUserData()
+			})
+
+
+		</script>
+	</head>
+	<body>
+
+
+	</body>
+</html>

@@ -17,6 +17,14 @@ interface databaseCollection {
 let databaseFileLoc = storagePos + '/database.json'
 let revertToBackupConfirm:boolean
 
+function getRawData(): Promise<any> {
+  return new Promise(async (resolve, reject) => {
+    fs.readFile(databaseFileLoc, 'utf8', async (err, obj) => {
+      if(err) throw err
+      resolve(obj)
+    })
+  })
+}
 function getData(): Promise<any> {
   return new Promise(async (resolve, reject) => {
 

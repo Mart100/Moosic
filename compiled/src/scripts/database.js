@@ -38,6 +38,23 @@ var databaseCache;
 var databaseCacheValid = false;
 var databaseFileLoc = storagePos + '/database.json';
 var revertToBackupConfirm;
+function getRawData() {
+    var _this = this;
+    return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
+        var _this = this;
+        return __generator(this, function (_a) {
+            fs.readFile(databaseFileLoc, 'utf8', function (err, obj) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    if (err)
+                        throw err;
+                    resolve(obj);
+                    return [2];
+                });
+            }); });
+            return [2];
+        });
+    }); });
+}
 function getData() {
     var _this = this;
     return new Promise(function (resolve, reject) { return __awaiter(_this, void 0, void 0, function () {
