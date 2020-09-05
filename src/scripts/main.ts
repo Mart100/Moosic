@@ -154,7 +154,7 @@ async function setRPCactivity(options?) {
 		state: options.state || 'Nothing',
 		startTimestamp: options.startTimestamp,
 		largeImageKey: 'logo',
-		largeImageText: 'Download at martve.me/Moosic',
+		largeImageText: 'Download at martvenck.com/Moosic',
 		instance: true,
 	})
 }

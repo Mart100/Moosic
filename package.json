@@ -4,7 +4,7 @@
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "./compiled/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
-  "homepage": "https://martve.me/Moosic",
+  "homepage": "https://martvenck.com/Moosic",
   "repository": {
     "type": "git",
     "url": "https://github.com/Mart100/Moosic.git"
