@@ -44,7 +44,7 @@ app.on('ready', () => {
   mainWindow.setMaximizable(false)
   mainWindow.setResizable(false)
 
-  mainWindow.loadFile('./dist/src/index.html')
+  mainWindow.loadFile('./build/src/index.html')
 
   if(isDevv()) {
     mainWindow.webContents.once('dom-ready', () => {

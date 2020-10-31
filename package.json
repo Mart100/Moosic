@@ -2,7 +2,7 @@
   "name": "moosic",
   "version": "1.9.0",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
-  "main": "./dist/index.js",
+  "main": "./build/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
   "homepage": "https://martvenck.com/Moosic",
   "repository": {
@@ -56,12 +56,12 @@
     "tsc:w": "tsc -w",
     "tsc-scripts": "tsc -p scripts",
     "tsc-scripts:w": "tsc -w -p scripts",
-    "sass": "sass src/styles:dist/src/styles",
-    "sass:w": "sass --watch src/styles:dist/src/styles",
-    "assets": "cpx \"src/**/*.{html,png,jpg}\" dist/src",
-    "assets:w": "cpx \"src/**/*.{html,png,jpg}\" dist/src --watch",
+    "sass": "sass src/styles:build/src/styles",
+    "sass:w": "sass --watch src/styles:build/src/styles",
+    "assets": "cpx \"src/**/*.{html,png,jpg}\" build/src",
+    "assets:w": "cpx \"src/**/*.{html,png,jpg}\" build/src --watch",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
-    "compileSCSS": "sass src/styles:dist/src/styles",
+    "compileSCSS": "sass src/styles:build/src/styles",
     "dist": "npm run compile && electron-builder build",
     "publish": "npm run compile && electron-builder build -p always",
     "postinstall": "electron-builder install-app-deps",
@@ -69,7 +69,7 @@
     "registerNativeMessageHostFirefox": "REG ADD \"HKCU\\Software\\Mozilla\\NativeMessagingHosts\\com.midoxus.moosic\" /ve /t REG_SZ /d \"H:\\Programming\\Electron\\Moosic\\com.midoxus.moosic.json\" /f"
   },
   "bin": {
-    "moosic": "dist/CLI.js"
+    "moosic": "build/CLI.js"
   },
   "build": {
     "appId": "com.midoxus.moosic",
@@ -84,7 +84,7 @@
     "win": {
       "files": [
         "!**/src/storage/*",
-        "!**/dist/src/storage/*"
+        "!**/build/src/storage/*"
       ]
     },
     "nsis": {
