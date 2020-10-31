@@ -3,6 +3,7 @@ compiled/src/storage/
 node_modules/
 node_modules/fs-extra
 ./node_modules
-compiled/
+compiled
 dist/
 compiled/src/scripts/*
+compiled copy

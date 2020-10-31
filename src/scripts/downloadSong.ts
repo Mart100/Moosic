@@ -15,7 +15,7 @@ onmessage = async function(e) {
   //if(await fs1.pathExists(songLoc)) return postMessage('1', undefined)
 
   let stream = ytdl1(`https://www.youtube.com/watch?v=${songID}`, {
-    filter: 'audio',
+    filter: 'audioonly',
   })
 
   let writeOpts = {highWaterMark: Math.pow(2,16)} // 65536  

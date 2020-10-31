@@ -8,6 +8,7 @@ interface showSongsOptions {
   refresh?:boolean
   scrollCurrentSong?:boolean
   songFocusID?:string
+  extraSubtitle?:object
 }
 
 async function showSongs(songs, options:showSongsOptions) {
@@ -118,6 +119,10 @@ async function showSongs(songs, options:showSongsOptions) {
     for(let s of songs) {
       //if(s.image == undefined) console.log(s)
       let song: Song = new Song(s)
+      
+      let songLikedDB = database.songs.find((s) => s.id == song.youtubeID)?.liked
+      if(songLikedDB == true) song.liked = true
+
       let filterOut = false
 
       if(searchFilter) {
@@ -298,7 +303,8 @@ async function showSongs(songs, options:showSongsOptions) {
     filtersDiv.animate({'height': '0px'}, 200)
   })
 
-  console.log('SHOW SONGLIST')
+  console.log(`SHOW SONGLIST`)
+  console.log(songs)
 }
 
 async function refreshCurrentSongList() {

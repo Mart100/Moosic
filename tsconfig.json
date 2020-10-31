@@ -4,7 +4,7 @@
     "removeComments": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "outDir": "./compiled",
+    "outDir": "./dist",
     "lib": [
       "dom",
       "es2015"

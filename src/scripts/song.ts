@@ -74,7 +74,7 @@ class Song {
 
     let DBsong = await getSongByID(this.youtubeID)
     if(DBsong != undefined) {
-      this.saveDate = this.saveDate || DBsong.saveData || undefined
+      this.saveDate = this.saveDate || DBsong.saveDate || undefined
       this.saved = DBsong.saved || this.saved
       this.isDownloadedBool = DBsong.isDownloadedBool || this.isDownloadedBool
       this.liked = DBsong.liked || this.liked

@@ -25,7 +25,7 @@ function getRawData(): Promise<any> {
     })
   })
 }
-function getData(): Promise<any> {
+function getData(): Promise<database> {
   return new Promise(async (resolve, reject) => {
 
     if(databaseCacheValid) return resolve(databaseCache)
