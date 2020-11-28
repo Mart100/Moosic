@@ -51,7 +51,7 @@
     "start": "npm run compile && concurrently \"electron .\" \"npm run compile:watch\"",
     "fstart": "npm run compile && electron .",
     "compile:watch": "concurrently \"npm run tsc:w\" \"npm run sass:w\" \"npm run assets:w\" \"npm run assets-scripts:w\"",
-    "compile": "rm -r build && npm install && npm run assets && npm run assets-scripts && npm run tsc-scripts && npm run tsc && npm run sass",
+    "compile": "rm -r build || true && npm install && npm run assets && npm run assets-scripts && npm run tsc-scripts && npm run tsc && npm run sass",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "tsc-scripts": "tsc -p scripts",
@@ -89,7 +89,8 @@
         "provider": "github",
         "owner": "Mart100",
         "repo": "Moosic",
-        "publishAutoUpdate": false
+        "publishAutoUpdate": false,
+        "releaseType": "release"
       }
     ],
     "win": {
@@ -99,8 +100,7 @@
       ]
     },
     "nsis": {
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "oneClick": true
     }
   }
 }
