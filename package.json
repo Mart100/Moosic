@@ -1,8 +1,8 @@
 {
   "name": "moosic",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
-  "main": "./build/index.js",
+  "main": "build/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
   "homepage": "https://martvenck.com/Moosic",
   "repository": {
@@ -15,43 +15,43 @@
     "common-js": "^0.3.8",
     "discord-rich-presence": "0.0.8",
     "discord-rpc": "^3.1.4",
-    "electron-log": "^4.2.4",
+    "electron-log": "^4.3.0",
     "electron-prompt": "^1.6.0",
     "electron-updater": "^4.3.5",
     "express": "^4.17.1",
-    "file-saver": "^2.0.2",
-    "firebase": "^8.0.0",
+    "file-saver": "^2.0.5",
+    "firebase": "^8.1.1",
     "fluent-ffmpeg": "^2.1.2",
     "fs-extra": "^9.0.1",
     "genius-api": "^0.4.1",
     "get-folder-size": "^2.0.1",
     "jquery": "^3.5.1",
     "lodash": "^4.17.20",
-    "node-ipc": "^9.1.1",
-    "npm-check-updates": "^9.2.3",
+    "node-ipc": "^9.1.3",
+    "npm-check-updates": "^10.2.2",
     "open": "^7.3.0",
-    "socket.io": "^2.3.0",
-    "spotify-web-api-js": "^1.5.0",
+    "socket.io": "^3.0.3",
+    "spotify-web-api-js": "^1.5.1",
     "v8-compile-cache": "^2.2.0",
     "wget-improved": "^3.2.1",
-    "yargs": "^16.1.0",
-    "ytdl-core": "^4.0.1"
+    "yargs": "^16.1.1",
+    "ytdl-core": "^4.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "^9.0.2",
+    "@types/fs-extra": "^9.0.4",
     "@types/jquery": "^3.5.4",
-    "@types/yargs": "^15.0.9",
+    "@types/yargs": "^15.0.10",
     "concurrently": "^5.3.0",
     "cpx": "^1.5.0",
-    "electron": "^10.1.5",
+    "electron": "^11.0.3",
     "electron-builder": "^22.9.1",
     "electron-reload": "^1.5.0"
   },
   "scripts": {
     "start": "npm run compile && concurrently \"electron .\" \"npm run compile:watch\"",
     "fstart": "npm run compile && electron .",
-    "compile:watch": "concurrently \"npm run tsc:w\" \"npm run sass:w\" \"npm run assets:w\"",
-    "compile": "npm install && npm run assets && npm run tsc-scripts && npm run tsc && npm run sass",
+    "compile:watch": "concurrently \"npm run tsc:w\" \"npm run sass:w\" \"npm run assets:w\" \"npm run assets-scripts:w\"",
+    "compile": "rm -r build && npm install && npm run assets && npm run assets-scripts && npm run tsc-scripts && npm run tsc && npm run sass",
     "tsc": "tsc",
     "tsc:w": "tsc -w",
     "tsc-scripts": "tsc -p scripts",
@@ -60,6 +60,8 @@
     "sass:w": "sass --watch src/styles:build/src/styles",
     "assets": "cpx \"src/**/*.{html,png,jpg}\" build/src",
     "assets:w": "cpx \"src/**/*.{html,png,jpg}\" build/src --watch",
+    "assets-scripts": "cpx \"scripts/*.{html,png,jpg}\" build/scripts",
+    "assets-scripts:w": "cpx \"scripts/*.{html,png,jpg}\" build/scripts --watch",
     "copy_src_to_compiled": "node copy_src_to_compiled.js",
     "compileSCSS": "sass src/styles:build/src/styles",
     "dist": "npm run compile && electron-builder build",
@@ -72,6 +74,15 @@
     "moosic": "build/CLI.js"
   },
   "build": {
+    "files": [
+      "build/**/*",
+      "dist/**/*",
+      "package.json"
+    ],
+    "extends": null,
+    "extraMetadata": {
+      "main": "build/index.js"
+    },
     "appId": "com.midoxus.moosic",
     "publish": [
       {
