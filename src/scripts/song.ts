@@ -56,7 +56,7 @@ class Song {
       })
       request.execute((response) => {
         console.log(this.youtubeID, response)
-        if(!response.items) return resolve()
+        if(!response.items) return resolve(true)
         resolve(response.items[0])
       })
     })
@@ -117,14 +117,14 @@ class Song {
   async removeDownload() {
     console.log("Undownload: ", this.title)
     console.trace()
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) : void => {
       let downloadPos = this.getDownloadLocation()
       console.log(downloadPos)
-      fs.remove(downloadPos, async err => {
+      fs.remove(downloadPos, async (err) => {
         if(err) console.error(err)
         this.isDownloadedBool = false
         await this.save()
-        resolve()
+        resolve(true)
       })
     })
   }

@@ -51,7 +51,7 @@ class SongDownloader {
         let status = this.getSongDownloadStatus(songID)
 
         // if status == 2. Finished downloading. return
-        if(status == 2) resolve()
+        if(status == 2) resolve(true)
 
       }, 5000)
 
@@ -105,7 +105,7 @@ class SongDownloader {
 
         // move queue
         this.moveQueue()
-        resolve() 
+        resolve(true) 
       } 
 
       // stop after x seconds
@@ -113,7 +113,7 @@ class SongDownloader {
         if(this.finished.includes(songID)) return
         this.inProgress.splice(this.inProgress.indexOf(songID), 1)
         this.moveQueue()
-        resolve()
+        resolve(true)
       }, 10000)
     })
   }

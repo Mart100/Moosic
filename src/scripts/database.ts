@@ -99,7 +99,7 @@ ${backupDate}
 }
 
 function createStorageFolder() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => { 
 
     // create /storage
     fs.ensureDir(storagePos, err => {
@@ -112,13 +112,13 @@ function createStorageFolder() {
         // create /storage/database.json
         await createEmptyDatabase()
 
-        resolve()
+        resolve(true)
       })
     })
   })
 }
 function createEmptyDatabase() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => {
 
     let obj = {
       "songs": {},
@@ -135,17 +135,17 @@ function createEmptyDatabase() {
         if(err.toString().includes('no such file or directory')) await createStorageFolder()
       }
       databaseCacheValid = false
-      resolve()
+      resolve(true)
     })
   })
 }
 
 function saveData(obj) {
   obj = JSON.stringify(obj)
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => {
     fs.writeFile(databaseFileLoc, obj, (err) => {
       if(err) console.error(err)
-      resolve()
+      resolve(true)
     })
   })
 }
@@ -173,11 +173,11 @@ async function saveData1(func) {
 }
 
 async function awaitSavingStatus() {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve, reject) : void => {
     let interval = setInterval(() => {
       if(!savingStatus) {
         clearInterval(interval)
-        resolve()
+        resolve(true)
       }
     }, 100)
   })

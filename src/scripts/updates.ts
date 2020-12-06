@@ -84,7 +84,7 @@ async function downloadFileFromURL(file_url) {
       console.log(output)
       console.log(`Setup ${file_url.split('/').pop()} installed`)
       console.log(`${downloadLoc}/${file_name}`)
-      setTimeout(() => { resolve() }, 1000)
+      setTimeout(() => { resolve(true) }, 1000)
     })
 
     download.on('progress', (progress) => {
@@ -105,7 +105,7 @@ async function downloadFileFromURL(file_url) {
       else {
         console.log(`Setup ${file_url.split('/').pop()} installed`)
         console.log(`${downloadLoc}\\${file_name}`)
-        resolve()
+        resolve(true)
       }
     })
     proc.stderr.on('data', (data) => {

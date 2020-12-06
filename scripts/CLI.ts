@@ -46,6 +46,6 @@ async function main() {
 async function executeJavascriptInMainWindow(code) {
   return new Promise(async (resolve, reject) => {
     await ipc_CLI.of['electron_process'].emit('execJS', code)
-    setTimeout(() => { resolve() }, 500)
+    setTimeout(() => { resolve(true) }, 500)
   })
 }

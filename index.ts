@@ -7,7 +7,6 @@ const BrowserWindow = electron.BrowserWindow
 const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
 
-const log = require('electron-log')
 const fs_ = require('fs-extra')
 const signInUserWebserver = require('./scripts/signInUserWebserver.js')
 
