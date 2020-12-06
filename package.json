@@ -1,6 +1,6 @@
 {
   "name": "moosic",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "build/index.js",
   "author": "Mart van Enckevort <marvanenck@gmail.com>",
@@ -27,6 +27,7 @@
     "open": "^7.3.0",
     "socket.io": "^3.0.3",
     "spotify-web-api-js": "^1.5.1",
+    "v8-compile-cache": "^2.2.0",
     "wget-improved": "^3.2.1",
     "yargs": "^16.1.1",
     "ytdl-core": "^4.1.0"
@@ -41,8 +42,7 @@
     "electron-builder": "^22.9.1",
     "electron-reload": "^1.5.0",
     "modclean": "^3.0.0-beta.1",
-    "typescript": "^4.1.2",
-    "v8-compile-cache": "^2.2.0"
+    "typescript": "^4.1.2"
   },
   "scripts": {
     "start": "npm run compile && concurrently \"electron .\" \"npm run compile:watch\"",
