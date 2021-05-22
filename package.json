@@ -1,9 +1,9 @@
 {
   "name": "moosic",
-  "version": "1.9.4",
+  "version": "1.9.5",
   "description": "A simple futuristic music app that combines the infinite catalog of songs from youtube in a simple application",
   "main": "build/index.js",
-  "author": "Mart van Enckevort <marvanenck@gmail.com>",
+  "author": "Mart van Enckevort <martvanenck@gmail.com>",
   "homepage": "https://martvenck.com/Moosic",
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.11",
     "@types/jquery": "^3.5.5",
+    "@types/node": "^15.6.0",
     "@types/yargs": "^17.0.0",
     "concurrently": "^6.1.0",
     "cpx": "^1.5.0",
@@ -41,8 +42,8 @@
     "electron-builder": "^22.10.5",
     "electron-reload": "^1.5.0",
     "modclean": "^3.0.0-beta.1",
-    "typescript": "^4.2.4",
-    "npm-check-updates": "^11.5.13"
+    "npm-check-updates": "^11.5.13",
+    "typescript": "^4.2.4"
   },
   "scripts": {
     "start": "npm run compile && concurrently \"electron .\" \"npm run compile:watch\"",

@@ -34,7 +34,8 @@ app.on('ready', () => {
       nodeIntegrationInWorker: true,
       enableRemoteModule: true,
       nativeWindowOpen: true,
-      worldSafeExecuteJavaScript: true
+      worldSafeExecuteJavaScript: true,
+      contextIsolation: false,
     },
     icon: './icon.ico'
   })

@@ -202,7 +202,12 @@ class MusicPlayer extends EventEmitter {
 			let playedTimes = this.currentSong.playedTimes
 			let lastPlayedDate = playedTimes[playedTimes.length-1]
 			if(lastPlayedDate == undefined) lastPlayedDate = 0
-			if(minuteDate > lastPlayedDate) playedTimes.push(minuteDate)
+			if(minuteDate > lastPlayedDate) {
+				playedTimes.push(minuteDate)
+				this.currentSong.save()
+			}
+
+			console.log(playedTimes, minuteDate)
 
 
 			this.nextInQueue()

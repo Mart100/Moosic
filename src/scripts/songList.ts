@@ -304,7 +304,6 @@ async function showSongs(songs, options:showSongsOptions) {
   })
 
   console.log(`SHOW SONGLIST`)
-  console.log(songs)
 }
 
 async function refreshCurrentSongList() {
