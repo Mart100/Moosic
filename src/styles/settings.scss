@@ -11,6 +11,14 @@
   width: 100%;
   top: 0px;
   overflow-y: auto;
+
+  #info {
+    text-align: center;
+    padding: 20px;
+  }
+}
+#settings-main {
+  padding-bottom: 50px;
 }
 #setStoragePos-button input {
   pointer-events: none;

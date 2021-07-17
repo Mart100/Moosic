@@ -17,15 +17,16 @@
 }
 #titleBar .logo {
   position: absolute;
-  width: 24px;
-  height: 24px;
+  width: 18px;
+  height: 18px;
+  padding: 4px;
 }
 #titleBar .name {
   display: inline-block;
   color: white;
   margin-left: 26px;
-  font-size: 16px;
-  padding: 4px;
+  font-size: 14px;
+  padding: 5px;
   user-select: none;
 }
 #titleBarMinimize:hover {
