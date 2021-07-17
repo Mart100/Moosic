@@ -284,23 +284,10 @@ async function showSongs(songs, options:showSongsOptions) {
   filterButton.off().on('click', () => {
     if(Date.now() - filtersButtonCooldown < 300) return 
     filtersDiv.toggleClass('expanded')
-    if(filtersDiv.hasClass('expanded')) {
-      let autoHeight = filtersDiv.css('height', 'auto').height()
-      filtersDiv.css('height', '0px')
-      filtersDiv.animate({'height': autoHeight}, 300, () => {
-        filtersDiv.css('height', 'auto')
-      })
-    } else {
-      filtersDiv.animate({'height': '0px'}, 300)
-    }
-
   })
   filtersDiv.parent().on('mouseleave', (event) => {
     console.log("Yes", event)
-    if(!filtersDiv.hasClass('expanded')) return
     filtersDiv.removeClass('expanded')
-    filtersDiv.css('height', '167px')
-    filtersDiv.animate({'height': '0px'}, 200)
   })
 
   console.log(`SHOW SONGLIST`)

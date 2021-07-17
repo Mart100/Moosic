@@ -30,7 +30,7 @@
 }
 
 .songs .topBar .filters {
-  height: 0px;
+  //max-height: 0px;
   position: absolute;
   background-color: rgb(20, 20, 20);
   //transition-duration: 0.4s;
@@ -40,10 +40,14 @@
   text-align: center;
   font-size: 20px;
   z-index: 100;
+  transition-duration: 200ms;
+  transform: scaleY(0);
+  transform-origin: top;
 }
 
 .songs .topBar .filters.expanded {
-  height: auto;
+  //max-height: 1000;
+  transform: scaleY(1);
 }
 
 .songs .topBar .filters .sortBy {
