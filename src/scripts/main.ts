@@ -204,9 +204,9 @@ $(() => {
 	})
 })
 
-async function importYoutubePlaylist(playlistLink) {
+async function importYoutubePlaylist(playlistLink:string) {
 	if(playlistLink == null || playlistLink == undefined) return
-	let playlistID = playlistLink.split('list=')[1].split('&')[0]
+	let playlistID = playlistLink.split('list=')[1].split('&')[0].split('&index')[0]
 	let playlistVideoLength = 1
 	let playlistLastResponse:any
 	let playlistNextPageToken:any = undefined
@@ -221,8 +221,10 @@ async function importYoutubePlaylist(playlistLink) {
 		playlistLastResponse = response
 		for(let vid of response.items) playlistVideos.push(vid)
 	}
-	let playlistSongs = parseArrayToSongs(playlistVideos)
+	let playlistSongs = await parseArrayToSongs(playlistVideos)
 	console.log(playlistSongs)
-	let collName = await createNewCollection('Youtube playlist')
-	addSongsToCollection(playlistSongs, collName)
+	let newPlaylist = new Playlist('Youtube playlist')
+	await newPlaylist.save()
+	await newPlaylist.setSongs(playlistSongs)
+	$("#navigator .mySongs").trigger("click")
 }

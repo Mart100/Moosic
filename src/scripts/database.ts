@@ -4,6 +4,7 @@ let databaseCacheValid: boolean = false
 interface database {
   songs: Song[]
   collections: databaseCollection[]
+  playlists: Playlist[]
   songStoragePos: string
   settings: any
 
@@ -83,8 +84,11 @@ ${backupDate}
         DBsongs.push(new Song(songObj))
       }
 
+      let playlists: Playlist[] = objParsed.collections.map(collection => Playlist.importFromJSON(collection, objParsed.songs))
+
       let database:database = {
         songs: DBsongs,
+        playlists: playlists,
         collections: objParsed.collections,
         songStoragePos: objParsed.songStoragePos,
         settings: objParsed.settings

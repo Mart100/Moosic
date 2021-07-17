@@ -20,7 +20,8 @@ $(() => {
   
   $('#newCollection-button').on('click', async (event) => {
 
-    await createNewCollection()
+    let newPlaylist = new Playlist()
+    await newPlaylist.save()
     await loadCollections()
 
   })

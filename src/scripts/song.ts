@@ -38,6 +38,11 @@ class Song {
 
     return this
   }
+
+  get id() {
+    return this.youtubeID 
+  }
+
   async fillSongDataWithID(options?) {
     let YTsongData = await this.getVideoDataFromYoutube()
     await this.importFromYoutube(YTsongData)

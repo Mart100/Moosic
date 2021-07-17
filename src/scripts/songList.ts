@@ -546,16 +546,16 @@ async function showTooltipForSong(song:Song, options?) {
   tooltip.find('.addToCollection').on('click', async (e) => {
     tooltip.html('')
     database = await getData()
-    let collections = database.collections
-    
-    for(let collectionNum in collections) {
-      let collection = collections[collectionNum]
-      tooltip.append(`<button id="addTo-coll-${collectionNum}">Add to "${collection.name}"</button>`)
-      let addToCollButt = $(`#addTo-coll-${collectionNum}`)
+    let playlists = database.playlists
+    console.log(playlists)
+    for(let playlistnum in playlists) {
+      let playlist:Playlist = playlists[playlistnum]
+      console.log(playlist, playlist.name)
+      tooltip.append(`<button id="addTo-coll-${playlistnum}">Add to "${playlist.name}"</button>`)
+      let addToCollButt = $(`#addTo-coll-${playlistnum}`)
       addToCollButt.off().on('click', async (e1) => {
-        addSongToCollection(song, collectionNum)
+        playlist.addSong(song)
       })
     }
-
   })
 }

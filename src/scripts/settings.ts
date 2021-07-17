@@ -50,28 +50,12 @@ $(() => {
 
   // import from youtube playlist 
   $('#importData-youtubePlaylist-button').on('click', async () => {
-    eprompt('Youtube Playlist Import', 'Fill in youtube playlist link').then(async (userInput) => {
-      let playlistLink = userInput
-      if(playlistLink == null) return
-      let playlistID = userInput.split('list=')[1].split('&')[0]
-      let playlistVideoLength = 1
-      let playlistLastResponse:any
-      let playlistNextPageToken:any = undefined
-      let playlistVideos:Song[] = []
-      console.log(playlistLink, playlistID || playlistNextPageToken == 0)
-      while(playlistVideoLength > playlistVideos.length) {
-        let response:any = await requestPlaylistVideos(playlistID, playlistNextPageToken)
-        console.log(response)
-        playlistVideoLength = response.pageInfo.totalResults
-        playlistNextPageToken = response.nextPageToken
-        if(playlistNextPageToken == undefined) playlistNextPageToken = 0
-        playlistLastResponse = response
-        for(let vid of response.items) playlistVideos.push(vid)
-      }
-      let playlistSongs = parseArrayToSongs(playlistVideos)
-      console.log(playlistSongs)
-      let collName = await createNewCollection('Youtube playlist')
-      addSongsToCollection(playlistSongs, collName)
+    eprompt({
+      title:'Youtube Playlist Import',
+      label: 'Fill in youtube playlist link',
+      type: 'input'
+    }).then(async (userInput) => {
+      importYoutubePlaylist(userInput)
     })
   })
 
@@ -123,14 +107,15 @@ $(() => {
           await sleep(10)
         }
 
-        let collName = await createNewCollection('MP3 collection')
+        let newPlaylist = new Playlist('MP3 collection')
+        await newPlaylist.save()
 
         await saveData1((database) => {
 
           let mergedSongs = { ...database.songs, ...songs}
           database.songs = mergedSongs
 
-          database.collections.find(c => c.name == collName).songs = Object.keys(songs)
+          database.collections.find(c => c.name == newPlaylist.name).songs = Object.keys(songs)
 
           return database
         })
@@ -205,14 +190,15 @@ $(() => {
           songs[trackID] = song.getObject()
         }
 
-        let collName = await createNewCollection('Headset save')
+        let newPlaylist = new Playlist('Headset save')
+        await newPlaylist.save()
 
         await saveData1((database) => {
 
           let mergedSongs = { ...database.songs, ...songs}
           database.songs = mergedSongs
 
-          database.collections.find(c => c.name == collName).songs = Object.keys(songs)
+          database.collections.find(c => c.name == newPlaylist.name).songs = Object.keys(songs)
 
           return database
         })
