@@ -23,12 +23,16 @@ catch(e) {}
 
 app.on('ready', () => {
 
+  let title = "Moosic"
+
+  if(isDevv()) title = "Moosic Dev"
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 400,
     height: 800,
     frame: false,
+    title,
     webPreferences: {
       nodeIntegration: true,
       nodeIntegrationInWorker: true,

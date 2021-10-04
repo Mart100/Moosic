@@ -20,4 +20,8 @@ $(() => {
   $('#titleBarMinimize').on('click', () => {
     remote.getCurrentWindow().minimize()
   })
+
+  let title = remote.getCurrentWindow().title
+
+  $('#titleBar .name').html(title)
 })
