@@ -49,6 +49,29 @@ class Song {
     if(options && options.save) await this.save()
     return
   }
+
+  async fillSongDataWithYTSearch() {
+    return new Promise((resolve, reject) => {
+      let songID = this.youtubeID
+
+      ipcRenderer.send('getSongInfo', songID)
+      ipcRenderer.once('getSongInfoReply', async (event, songData) => {
+
+        if(songData == undefined) resolve(false)
+    
+        console.log(songData)
+        this.image = `https://i.ytimg.com/vi/${songID}/default.jpg`
+        this.duration = songData.duration
+        this.title = songData.title
+        this.author = songData.author
+        this.views = songData.views
+
+        resolve(true)
+    
+      })
+    })
+  }
+  
   getVideoDataFromYoutube() {
     console.trace()
     console.log(this)

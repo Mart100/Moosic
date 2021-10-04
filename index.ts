@@ -115,6 +115,59 @@ app.on('ready', () => {
     })
   })
 
+  electron.ipcMain.on('getSongInfo', async (event, youtubeID) => {
+
+    let songData:any
+
+    console.log(youtubeID)
+
+    try {
+      songData = await yts( { videoId: youtubeID } )
+    } catch(e) {
+      console.log(e)
+      event.reply('getSongInfoReply', undefined)
+      return
+    }
+
+    let neededSongData = {
+      duration: songData.seconds,
+      views: songData.views,
+      id: youtubeID,
+      author: songData.author.name,
+      title: songData.title
+    }
+    
+    event.reply('getSongInfoReply', neededSongData)
+
+  })
+
+  electron.ipcMain.on('getSongsQuery', async (event, searchQuery) => {
+
+    let result:any
+
+    try {
+      result = await yts( searchQuery )
+    } catch(e) {
+      console.log(e)
+      event.reply('getSongsQueryReply', undefined)
+      return
+    }
+
+    let songsList = []
+
+    for(let video of result.videos) {
+      songsList.push({
+        duration: video.seconds,
+        views: video.views,
+        id: video.videoId,
+        author: video.author.name,
+        title: video.title
+      })
+    }
+    
+    event.reply('getSongsQueryReply', songsList)
+
+  })
 
   mainWindow.on('closed', () => { win = null })
 
