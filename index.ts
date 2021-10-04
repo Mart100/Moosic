@@ -1,11 +1,16 @@
 #!/usr/bin/env node
 
+const yts = require('yt-search')
+const path = require('path')
+
 const electron = require('electron')
 const dialog = electron.dialog
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const globalShortcut = electron.globalShortcut
 const ipcMain = electron.ipcMain
+
+require('@electron/remote/main').initialize()
 
 const fs_ = require('fs-extra')
 const signInUserWebserver = require('./scripts/signInUserWebserver.js')
@@ -16,10 +21,17 @@ let mainWindow
 
 try {
   require('electron-reload')(__dirname, {
-    ignored: /node_modules|storage|[\/\\]\./
+    ignored: /node_modules|storage|[\/\\]\./,
+    electron: path.join(__dirname, 'node_modules', '.bin', 'electron')
   })
 }
 catch(e) {}
+
+app.on('certificate-error', function(event, webContents, url, error, certificate, callback) {
+  console.log(url)
+  event.preventDefault();
+  callback(true);
+});
 
 app.on('ready', () => {
 
@@ -40,6 +52,8 @@ app.on('ready', () => {
       nativeWindowOpen: true,
       worldSafeExecuteJavaScript: true,
       contextIsolation: false,
+      allowRunningInsecureContent: true,
+      webSecurity: false,
     },
     icon: './icon.ico'
   })
@@ -91,9 +105,16 @@ app.on('ready', () => {
   })
 
   electron.ipcMain.on('saveUserFirestore', (event, arg) => {
-    console.log('Yooo, roempompom')
-    signInUserWebserver.start(arg)
+    signInUserWebserver.start(signInUserWebserver.actions.save, arg)
   })
+  
+  electron.ipcMain.on('loadUserFirestore', (event, arg) => {
+    signInUserWebserver.start(signInUserWebserver.actions.load, null, (data) => {
+      console.log('RESPONSE')
+      event.reply('loadUserFirestoreReply', data)
+    })
+  })
+
 
   mainWindow.on('closed', () => { win = null })
 

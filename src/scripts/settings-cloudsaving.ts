@@ -8,4 +8,7 @@ $(() => {
 	$('#cloudSavingSettings-save').on('click', () => {
 		saveDataToFirestore();
 	})
+	$('#cloudSavingSettings-load').on('click', () => {
+		loadDataFromFirestore();
+	})
 })

@@ -3,42 +3,78 @@ const Socket = require('socket.io')
 const openURL = require('open')
 const path = require('path')
 const app = express()
-const port = 3052
+const electron = require('electron')
+const BrowserWindow = electron.BrowserWindow
 
+enum actions {
+	save,
+	load
+}
 let server = null
 let io = null
 
+let port
 let userInfoCallback
+let loginWindow
+let globalCallback:Function
 
 module.exports = {
 	start: start,
+	actions: actions,
 	userInfoCallback: (callbackFunction) => {
 		userInfoCallback = callbackFunction
 	}
 }
 
-function start(data) {
-	console.log('Yooo, tatatatata')
-	if(server == null) startWebserver(data)
+async function start(action:actions, data, callback:Function) {
+
+	globalCallback = callback
+
+	if(server == null) await startWebserver(action, data)
 	sendUserToServer()
 }
 
-function startWebserver(data) {
-	server = app.listen(port, () => {
-		console.log(`signInUserWebserver is running on ${port}`)
-	})
+function startWebserver(action:actions, data) {
+	return new Promise((resolve, reject) => {
+		server = app.listen(0, () => {
+			port = server.address().port
+			console.log(`signInUserWebserver is running on ${port}`)
 
-	let io = Socket(server)
+			let io = Socket(server)
+	
+	
+			io.on('connection', (socket) => {
+				if(action == actions.save) socket.emit('data', {data, action: actions[action]})
+				if(action == actions.load) socket.emit('data', {action: actions[action]})
+		
+				socket.on('finished', (data) => {
+					globalCallback(data)
+					closeWebserver()
+				})
+			})
 
-
-	io.on('connection', (socket) => {
-		socket.emit('data', data)
+			resolve(true)
+		})
 	})
 }
 
 async function sendUserToServer() {
-	await openURL('http://localhost:3052')
-	console.log('OPEN LOCALHOST HMMM')
+	console.log(`send user to localhost:${port}`)
+	let response = await openURL(`http://localhost:${port}`)
+
+	/*
+	loginWindow = new BrowserWindow({
+		width: 400,
+		height: 800,
+		icon: './icon.ico'
+	})
+	
+	loginWindow.setMenu(null)
+	loginWindow.loadURL(`http://localhost:${port}`)
+	loginWindow.loadFile('index.html');
+	loginWindow.webContents.openDevTools();
+	*/
+
 }
 function closeWebserver() {
 	server.close()
