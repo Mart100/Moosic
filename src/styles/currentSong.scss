@@ -31,11 +31,23 @@
   position: absolute;
   top: 5px;
   width: 250px;
-  height: 14px;
+  height: 20px;
   overflow-y: hidden;
-  font-size: 14px;
+  font-size: 15px;
   left: 55px;
 }
+
+#currentSong .subtitle {
+  color: #b4b4b4;
+  position: absolute;
+  top: 19px;
+  width: 250px;
+  height: 14px;
+  overflow-y: hidden;
+  font-size: 13px;
+  left: 55px;
+}
+
 
 #currentSong .controls {
   position: absolute;

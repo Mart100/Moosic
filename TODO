@@ -22,6 +22,18 @@ x   Sort on amount played
 x   Dark scrollbars
 x   Better appearance resizing
 x   Don't download song while downloading
+x   faster downloading
+x   Cancel drop song
+x   show times played in song info
+z   don't delete timesPlayed data when redownload
+x   Cut video (ending no music)
+x   DOWNLOADING text when a song is pending download
+x   smart song-title
+x   use yt-search
+x   get fully rid of the youtube API
+    Invite to listen on discord
+    Discover suggested
+    Something with lyrics
     integrate last.fm
     show song at volume slider windows:
         https://github.com/NodeRT/NodeRT
@@ -29,14 +41,13 @@ x   Don't download song while downloading
     custom queue
     Wacthrij en toevoegen aan queue
     Edit song info
-x   faster downloading
-    Invite to listen on discord
-    Discover suggested
-x   Cancel drop song
-x   show times played in song info
-z   don't delete timesPlayed data when redownload
-    Something with lyrics
-x   Cut video (ending no music)
     Music name and options when focused
-    Use YTDL+YTSR+YTPL instead of youtube API
     add tests
+    port everything to react framework
+    option for deleting after download
+    option for youtube embed
+    see song duration
+    use an url protocol 
+    custom filters for playlists
+    show yt playlists on search
+    view channels

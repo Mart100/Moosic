@@ -1,9 +1,13 @@
 $(() => {
   $('#navigator li').on('click', async (event) => {
+
+    let currentSelected = $('#navigator li.selected')[0]
+    let name = event.target.className.split(' ')[0]
+
+    //if(currentSelected == event.target) return
+
     $('#navigator li').removeClass('selected')
     $(event.target).addClass('selected')
-
-    let name = event.target.className.split(' ')[0]
 
     $('#cutSong').hide()
     $('#search').hide()
@@ -17,6 +21,7 @@ $(() => {
 
     let database = await getData()
 
+    console.log('switched page -> ', name)
 
     if(name == 'search') {
       $('#search .songs').show()

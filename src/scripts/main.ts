@@ -11,7 +11,8 @@ const url = require('url')
 const http = require('http')
 const cp = require('child_process')
 const worker = require('worker_threads')
-const remote = require('electron').remote
+const remote = require('@electron/remote')
+const stringSimilarity = require("string-similarity")
 const openURL = require('open')
 const Spotify = require('spotify-web-api-js')
 const spotifyApi = new Spotify()
@@ -23,36 +24,27 @@ const songDownloader = new SongDownloader()
 let songHeight = 80
 
 // storage position
-let storagePos:string = process.env.APPDATA+'/moosic'+'/storage'
+let storagePos:string
+let songStoragePos:string
+let databaseFileLoc:string
 
 spotifyApi.setAccessToken('cd17a520fcd8414da0099ffe45ea73fa')
 
-let songStoragePos = storagePos+'/songs'
+$(async () => {
 
-async function getSongStoragePos() {
-	let database = await getData()
-	if(database.songStoragePos != undefined) {
-		songStoragePos = database.songStoragePos
-	}
-}
+	if(isDev()) storagePos = remote.app.getAppPath() + '/storage'
+	else process.env.APPDATA+'/moosic'+'/storage'
 
-const sleep = (ms) => {
-	return new Promise(resolve => setTimeout(resolve, ms))
-}
+	songStoragePos = await getSongStoragePos()
+	databaseFileLoc = storagePos + '/database.json'
+	console.log(storagePos, databaseFileLoc)
 
-function isDev() {
-	try { require('electron-builder')}
-	catch(e) { return false }
-	return true
-} 
-
-$(() => {
 	$(document).on("keydown", (e) => {
 		if(e.keyCode === 123) remote.getCurrentWindow().toggleDevTools()
 		else if (e.keyCode === 116) location.reload()
 	})
 
-	getSongStoragePos()
+
 	if(isDev() == false) checkForUpdates()
 
 	setTimeout(() => {
@@ -71,6 +63,8 @@ async function started() {
 	let database = await getData()
 	if(database.settings.songTileSize) songHeight = database.settings.songTileSize
 	
+	loadYoutubeAPI()
+
 }
 
 

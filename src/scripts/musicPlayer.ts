@@ -52,6 +52,7 @@ class MusicPlayer extends EventEmitter {
 		this.currentSong = song
 		this.isPaused = false
 		this.emit('play')
+		this.emit('downloadFinished')
 
 		let songQueueIDX = this.queue.indexOf(this.queue.find(s => s.youtubeID == song.youtubeID))
 		if(songQueueIDX > -1) this.queuePosition = songQueueIDX
@@ -69,7 +70,9 @@ class MusicPlayer extends EventEmitter {
 
 		if(mp3Exists) this.playMp3(songLoc) 
 		else { 
+			this.emit('downloadStart')
 			let res = await this.currentSong.download({priority: true})
+			this.emit('downloadFinished')
 			if(res.res == "ERROR") {
 				if(res.err = "IN_PROGRESS") return
 			}
@@ -187,7 +190,12 @@ class MusicPlayer extends EventEmitter {
 		this.HowlSound.on('loaderror', async (err) => {
 			// Redownload song if error
 			console.log('Howl ERR: 190', err)
-			await this.currentSong.download({priority: true, redownload: true})
+
+			return
+
+			this.emit('downloadStart')
+			await this.currentSong.download({priority: true, redownload: false})
+			this.emit('downloadFinished')
 
 			this.currentSong.play()
 		})

@@ -8,3 +8,5 @@ dist/
 build/
 compiled/src/scripts/*
 compiled copy
+undefined/
+storage/

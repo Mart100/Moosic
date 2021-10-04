@@ -14,6 +14,7 @@ class Song {
   saveDate?: number
   isDownloadedBool?: boolean
   playedTimes?: number[]
+  views?: number
 
   constructor(data?) {
 
@@ -33,14 +34,67 @@ class Song {
     if(!this.playedTimes) this.playedTimes = []
     this.saveDate = data.saveDate
     this.isDownloadedBool = data.isDownloadedBool
+    this.views = data.views
 
     if(data.fillData) this.fillSongDataWithID()
 
     return this
   }
 
-  get id() {
+  get id():string {
     return this.youtubeID 
+  }
+
+  get timestamp():string {
+    let minutesNum:number = Math.floor(this.duration/60)
+    let secondsNum:number = this.duration-minutesNum*60
+
+    let minutesStr:string = minutesNum.toString()
+    let secondsStr:string = secondsNum.toString()
+
+    if(secondsNum < 10) secondsStr = '0'+secondsStr
+
+
+    return `${minutesStr}:${secondsStr}`
+  }
+
+  get prettyViews():string {
+    if(this.views == undefined) return ""
+    let prettyViews:string = this.views.toString()
+
+    if(prettyViews.length > 9) prettyViews = prettyViews.substring(0, ((prettyViews.length-1)%3)+1) + 'b'
+    else if(prettyViews.length > 6) prettyViews = prettyViews.substring(0, ((prettyViews.length-1)%3)+1) + 'm'
+    else if(prettyViews.length > 3) prettyViews = prettyViews.substring(0, ((prettyViews.length-1)%3)+1) + 'k'
+
+    return prettyViews
+  }
+
+  get smartTitle() {
+    let newTitle = (this.title+'')
+
+    if(newTitle.includes('-')) {
+      let titleSplit = newTitle.split('-')
+      
+      let simularity0 = stringSimilarity.compareTwoStrings(titleSplit[0], this.author)
+      if(titleSplit[0].trim().includes(this.author.trim())) simularity0 = 1
+      if(this.author.trim().includes(titleSplit[0].trim())) simularity0 = 1
+
+      let simularity1 = stringSimilarity.compareTwoStrings(titleSplit[1], this.author)
+      if(titleSplit[1].trim().includes(this.author.trim())) simularity1 = 1
+      if(this.author.trim().includes(titleSplit[1].trim())) simularity1 = 1
+
+      let treshhold = 0.50
+      if(simularity0 > simularity1 && simularity0 > treshhold) newTitle = titleSplit[1]
+      if(simularity1 > simularity0 && simularity1 > treshhold) newTitle = titleSplit[0]
+    
+    }
+
+    if(newTitle.includes('(')) newTitle = newTitle.split('(')[0]
+    if(newTitle.includes('[')) newTitle = newTitle.split('[')[0]
+
+    newTitle = newTitle.trim()
+
+    return newTitle
   }
 
   async fillSongDataWithID(options?) {
@@ -218,15 +272,6 @@ class Song {
     return JSON.parse(JSON.stringify(this))
   }
   getHTML() {
-    let title = this.title
-
-  /*
-    if(title == undefined) return ''
-
-    if(title.length > 50) title = title.split('').splice(0, 20).join('') + '...'
-
-    let channel = this.author
-    if(channel.length > 50) channel = channel.split('').splice(0, 20).join('') + '...'*/
 
     let html = `
     <div class="song" id="song-${this.youtubeID}">
@@ -235,9 +280,10 @@ class Song {
         <img class="like" src="./images/heart.png"/>
         <img class="more" src="./images/options.png"/>
       </div>
-      <div class="title">${title}</div>
+      <div class="title">${this.smartTitle}</div>
       <br>
       <div class="channel">${this.author}</div>
+      <div class="additionalInfo">${this.timestamp} <span class="playstext">${this.prettyViews} plays</span></div>
     </div>
     `
 

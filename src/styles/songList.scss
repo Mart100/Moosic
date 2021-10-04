@@ -120,6 +120,7 @@
 
 
 .songList {
+
   height: calc(100% - 40px);
   overflow-y: auto;
   overflow-x: hidden;
@@ -127,97 +128,130 @@
   width: 100%;
   color: white;
   text-align: center;
-}
 
-.songList .song {
-  width: 100%;
-  padding: 9px;
-  height: 50px;
-  border: 1px rgb(30, 30, 30) solid;
-  transition-duration: 0.3s;
-  text-align: left;
-  cursor: pointer;
-}
+  .song {
+    width: 100%;
+    padding: 9px;
+    height: 50px;
+    border: 1px rgb(30, 30, 30) solid;
+    transition-duration: 0.3s;
+    text-align: left;
+    cursor: pointer;
+    
+    &:hover {
+      border-left: 5px rgb(255, 0, 0) solid;
+    }
+    
 
-.songList .song:hover {
-  border-left: 5px rgb(255, 0, 0) solid;
-}
+    .image {
+      position: relative;
+      width: 50px;     
+      height: 50px;
+      overflow: hidden;
+      float: left;
+      border-radius: 10%;
+      pointer-events: none;
 
-.songList .song .image {
-  position: relative;
-  width: 50px;     
-  height: 50px;
-  overflow: hidden;
-  float: left;
-  border-radius: 10%;
-  pointer-events: none;
-}
+      img {
+        position: absolute;
+        display: inline-block;
+        height: 80px;
+        width: auto;
+        top: 50%;     
+        left: 50%;
+        transform: translate( -50%, -50%);
+      }
+    }
+    
+    .title {
+      color: white;
+      display: inline-block;
+      max-width: 240px;
+      //height: 18px;
+      margin-left: 10px;
+      font-size: 14px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
 
-.songList .song .image img {
-  position: absolute;
-  display: inline-block;
-  height: 80px;
-  width: auto;
-  top: 50%;     
-  left: 50%;
-  transform: translate( -50%, -50%);
-}
+      &.long {
+        white-space: unset;
+        overflow: unset;
+        text-overflow: unset;
+      }
+    }
 
-.songList .song .title {
-  color: white;
-  display: inline-block;
-  width: 240px;
-  height: 18px;
-  margin-left: 10px;
-  font-size: 14px;
-  pointer-events: none;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap
-}
-.songList .song .channel {
-  color: rgb(180, 180, 180);
-  margin-left: 10px;
-  font-size: 12px;
-  width: 240px;
-  height: 20px;
-  display: inline-block;
-  pointer-events: none;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap
-}
-.songList .song .buttons {
-  position: absolute;
-  margin-top: 0px;
-  right: 10px;
-  width: 40px;
-  height: 80px;
-  transition-duration: 0.3s;
-  border-radius: 10%;
-  text-align: center;
-  z-index: 10;
-}
-.songList .song .more {
-  top: 30px;
-  width: 30px;
-  height: 30px;
-  transition-duration: 0.3s;
-  border-radius: 10%;
-  margin: 2px;
-}
-.songList .song .like {
-  top: 0px;
-  width: 20px;
-  height: 20px;
-  padding: 5px;
-  transition-duration: 0.3s;
-  border-radius: 10%;
-  margin: 2px;
-}
-.songList .song .like:hover {
-  background-color: rgb(45, 45, 45);
-}
-.songList .song .more:hover {
-  background-color: rgb(45, 45, 45);
+    .channel {
+      color: rgb(180, 180, 180);
+      margin-left: 10px;
+      font-size: 12px;
+      width: 240px;
+      height: 14px;
+      display: inline-block;
+      pointer-events: none;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap
+    }
+
+    .additionalInfo {
+      color: rgb(180, 180, 180);
+      margin-left: 10px;
+      font-size: 12px;
+      width: 240px;
+      height: 20px;
+      display: inline-block;
+      pointer-events: none;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+    
+      .playstext {
+        font-size: 10px;
+        color: rgb(150, 150, 150);
+      }
+    }
+
+
+    .buttons {
+      position: absolute;
+      margin-top: 0px;
+      right: 10px;
+      width: 40px;
+      height: 80px;
+      transition-duration: 0.3s;
+      border-radius: 10%;
+      text-align: center;
+      z-index: 10;
+
+      .more {
+        top: 30px;
+        width: 30px;
+        height: 30px;
+        transition-duration: 0.3s;
+        border-radius: 10%;
+        margin: 2px;
+  
+        &:hover {
+          background-color: rgb(45, 45, 45);
+        }
+      }
+  
+      .like {
+        top: 0px;
+        width: 20px;
+        height: 20px;
+        padding: 5px;
+        transition-duration: 0.3s;
+        border-radius: 10%;
+        margin: 2px;
+  
+        &:hover {
+          background-color: rgb(45, 45, 45);
+        }
+      }
+    }
+
+
+  }
 }

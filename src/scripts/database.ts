@@ -7,6 +7,7 @@ interface database {
   playlists: Playlist[]
   songStoragePos: string
   settings: any
+  dataVersion: number
 
 }
 
@@ -15,7 +16,6 @@ interface databaseCollection {
   songs: string[]
 }
 
-let databaseFileLoc = storagePos + '/database.json'
 let revertToBackupConfirm:boolean
 
 function getRawData(): Promise<any> {
@@ -91,7 +91,8 @@ ${backupDate}
         playlists: playlists,
         collections: objParsed.collections,
         songStoragePos: objParsed.songStoragePos,
-        settings: objParsed.settings
+        settings: objParsed.settings,
+        dataVersion: objParsed.dataVersion
       }
 
       databaseCache = database
@@ -130,7 +131,8 @@ function createEmptyDatabase() {
       "settings": {
         "discordRPC": false,
         "songTileSize": 80
-      }
+      },
+      "dataVersion": 1,
     }
 
     fs.writeJson(databaseFileLoc, obj, async (err) => {

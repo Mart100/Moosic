@@ -47,6 +47,31 @@ $(() => {
     $('#musicControls .pause').fadeIn()
   })
 
+  let downloadAnimationInterval
+
+  musicPlayer.on('downloadStart', () => {
+    console.log('TESHJRTDSHFADSLFJSDALKFJSVLSMKKFL')
+    $('#currentSong .subtitle').css('color', 'red')
+    $('#currentSong .subtitle').html('Downloading...')
+    let i = 0
+    if(!downloadAnimationInterval) clearInterval(downloadAnimationInterval)
+    downloadAnimationInterval = setInterval(() => {
+      if(downloadAnimationInterval == undefined) return
+      $('#currentSong .subtitle').html('Downloading'+(i%3==0 ? "." : (i%3==1 ? ".." : "...")))
+      i++
+    }, 500)
+  })
+
+  musicPlayer.on('downloadFinished', () => {
+    clearInterval(downloadAnimationInterval)
+    $('#currentSong .subtitle').html('')
+    $('#currentSong .subtitle').css('color', '#b4b4b4')
+    downloadAnimationInterval = undefined
+  })
+
+
+
+
   musicPlayer.on('shuffle', () => {
     updateSongFocus()
     $('#musicControls .shuffle').addClass('on')

@@ -19,6 +19,7 @@ async function showSongs(songs, options:showSongsOptions) {
   if(options.scrollCurrentSong == undefined) options.scrollCurrentSong = true
 
   songs = await refreshSongs(songs, {})
+  console.log(songs)
 
   let songsElem = getCurrentSongsElement()
 
@@ -397,6 +398,25 @@ function loadSong(idx:number, songs:Song[], songListElem:JQuery) {
 
   // on song click. Play song
   songHTML.on('click', (e) => { onSongClick(e, currentSongList) })
+
+  songHTML.find('.title').on('mouseenter', (e) => {
+
+    setTimeout(() => {
+      if($(e.target).parent().find('.title:hover').length) {
+        $(e.target).parent().find('.title').html(song.title)
+        $(e.target).parent().find('.title').addClass('long')
+        $(e.target).parent().find('.channel').hide()
+        $(e.target).parent().find('.additionalInfo').hide()
+      }
+    }, 500)
+    
+  })
+  songHTML.find('.title').on('mouseleave', (e) => {
+    $(e.target).parent().find('.title').html(song.smartTitle)
+    $(e.target).parent().find('.title').removeClass('long')
+    $(e.target).parent().find('.channel').show()
+    $(e.target).parent().find('.additionalInfo').show()
+  })
 
   // like button
   songHTML.find('.like').on('click', async (e) => {
